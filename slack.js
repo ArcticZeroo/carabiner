@@ -206,6 +206,10 @@ class SlackAPI extends EventEmitter{
             delete: true, meMessage: true, postMessage: (args, callback)=>{
                     args = args || {};
                     args.token = true;
+                    if(!args.text) return callback({
+                        ok: false,
+                        error: "api_no_text"
+                    });
 
                     if(args.text.length > 2999){
                         var queue = [];
