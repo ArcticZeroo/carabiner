@@ -295,7 +295,12 @@ class SlackAPI extends EventEmitter{
                             continue;
                         }
 
-                        this[category][method][subMethod] = (args,callback)=>{
+                        this[category][method][subMethod] = (args, callback)=>{
+                            if(typeof args == "function"){
+                                callback = args;
+                                args     = {};
+                            }
+
                             args = args || {};
                             args.token = methodData[subMethod];
                             return this.utils.makeRequest(`${category}.${method}.${subMethod}`, args, callback);
@@ -305,6 +310,11 @@ class SlackAPI extends EventEmitter{
                 }
 
                 this[category][method] = (args,callback)=>{
+                    if(typeof args == "function"){
+                        callback = args;
+                        args     = {};
+                    }
+
                     args = args || {};
                     args.token = methodData;
                     return this.utils.makeRequest(`${category}.${method}`, args, callback);
