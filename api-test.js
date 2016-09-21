@@ -6,5 +6,5 @@ var apiUtils   = slackAPI.utils;
 var slackUtils = apiUtils.getUtils(slackBot);
 
 slackUtils.chat.postMessage('general', 'Hello World!', (response)=>{
-    if(response.ok) log.info(`Successfully sent message to ${log.chalk.cyan(slackBot.utils.getTeamName())}!`);
+    if(response.ok) log.info(`Successfully sent message to '${log.chalk.cyan('#general')}'!`);
 });
