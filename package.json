@@ -1,5 +1,5 @@
 {
-  "name": "Node-Slack-API",
+  "name": "frozor-slack",
   "description": "Slack API for node that isn't stupid.",
   "version": "0.0.1",
   "dependencies": {
