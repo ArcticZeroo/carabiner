@@ -5,6 +5,11 @@ var slackBot   = slackAPI.createBot(token);
 var apiUtils   = slackAPI.utils;
 var slackUtils = apiUtils.getUtils(slackBot);
 
-slackUtils.chat.postMessage('general', 'Hello World!', (response)=>{
-    if(response.ok) log.info(`Successfully sent message to '${log.chalk.cyan('#general')}'!`);
+slackBot.auth.test((response)=>{
+    if(response.ok){
+        log.info('Successfully authenticated with the Slack API!');
+    }else{
+        log.error(`Unable to authenticate with Slack API: ${response.error}`);
+        process.exit();
+    }
 });

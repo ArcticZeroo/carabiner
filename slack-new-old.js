@@ -1,3 +1,6 @@
+/**
+ * Created by Spencer on 9/20/2016.
+ */
 var r = require('request');
 var WebSocketClient = require('websocket').client;
 var socket = new WebSocketClient();
@@ -183,8 +186,6 @@ class SlackAPI extends EventEmitter{
     constructor(token){
         super();
 
-        this._token = token;
-
         this.info = new Info();
 
         this.events = new Events(this);
@@ -203,7 +204,7 @@ class SlackAPI extends EventEmitter{
             channels:{
                 archive: true, create: true, history: true, info: true, invite: true, join: true, kick: true, leave: true, list: true, mark: true, rename: true, setPurpose: true, setTopic: true, unarchive: true},
             chat:{
-            delete: true, meMessage: true, postMessage: (args, callback)=>{
+                delete: true, meMessage: true, postMessage: (args, callback)=>{
                     args = args || {};
                     args.token = true;
 
@@ -243,11 +244,11 @@ class SlackAPI extends EventEmitter{
             groups:{
                 archive: true, close: true, create: true, createChild: true, history: true, info: true, invite: true, kick: true, leave: true, list: true, mark: true, open: true, rename: true, setPurpose: true, setTopic: true, unarchive: true},
             im:{
-            close: true, history: true, list: true, mark: true, open: true},
+                close: true, history: true, list: true, mark: true, open: true},
             mpim:{
-            close: true, history: true, list: true, mark: true, open: true},
+                close: true, history: true, list: true, mark: true, open: true},
             oauth:{
-            access: false},
+                access: false},
             pins:{
                 add: true, list: true, remove: true
             },
@@ -258,7 +259,7 @@ class SlackAPI extends EventEmitter{
                 add: true, complete: true, delete: true, info: true, list: true
             },
             search:{
-              all: true, files: true, messages: true
+                all: true, files: true, messages: true
             },
             stars:{
                 add: true, list: true, remove: true
@@ -297,37 +298,78 @@ class SlackAPI extends EventEmitter{
                             continue;
                         }
 
-                        this[category][method][subMethod] = new Function(['args', 'callback'], `
-                        if(typeof args == "function"){
-                            callback = args;
-                            args     = {};
+                        this[category][method][subMethod] = (args, callback)=>{
+                            if(typeof args == "function"){
+                                callback = args;
+                                args     = {};
+                            }
+
+                            args = args || {};
+                            args.token = methodData[subMethod];
+                            return this.utils.makeRequest(`${category}.${method}.${subMethod}`, args, callback);
                         }
-                        args = args || {};
-                        args.token = ${methodData[subMethod]}; 
-                        
-                        var utils = new SlackAPIUtils('${this._token}');
-                        return utils.makeRequest('${category}.${method}.${subMethod}', args, callback);`);
                     }
                     continue;
                 }
 
-                this[category][method] = new Function(['args', 'callback'], `
-                    if(typeof args == "function"){
-                        callback = args;
-                        args     = {};
-                    }
-                    args = args || {};
-                    args.token = ${methodData}; 
-                    
-                    var utils = new SlackAPIUtils('${this._token}');
-                    return utils.makeRequest('${category}.${method}', args, callback);`);
+                this[category][method] = new Method({
+                    category: category,
+                    method: method,
+                    token: methodData
+                }, this.utils);
             }
         }
     }
-
 }
 
-global.SlackAPIUtils = Utils;
+class Method{
+    constructor(method_args, utils){
+        this._category  = method_args.category;
+        this._method    = method_args.method;
+        this._submethod = method_args.submethod;
+        this._override  = method_args.override;
+        this._token     = method_args.token;
+        this._utils     = utils;
+    }
+
+    getUtils(){
+        return this._utils;
+    }
+
+    getRequiresToken(){
+        if(!this._token) return false;
+        return true;
+    }
+
+    getCategory(){
+        return this._category;
+    }
+
+    getMethod(){
+        return this._method;
+    }
+
+    getSubMethod(){
+        if(!this._submethod) return null;
+        return this._submethod;
+    }
+
+    getMethodName() {
+        if (this.getSubMethod()) return `${this.getCategory()}.${this.getMethod()}.${this.getSubMethod()}`;
+        return `${this.getCategory()}.${this.getMethod()}`;
+    }
+
+    process(args, callback){
+        if(typeof args == "function"){
+            callback = args;
+            args     = {};
+        }
+
+        args = args || {};
+        args.token = this.getRequiresToken();
+        return this._utils.makeRequest(this.getMethodName(), args, callback);
+    }
+}
 
 module.exports = {
     createBot: function(token){return new SlackAPI(token)},
