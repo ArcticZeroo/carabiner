@@ -1,0 +1,11 @@
+{
+  "name": "Node-Slack-API",
+  "description": "Slack API for node that isn't stupid.",
+  "version": "0.0.1",
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "frozor-logger": "^1.0.1",
+    "request": "^2.75.0",
+    "websocket": "^1.0.23"
+  }
+}
