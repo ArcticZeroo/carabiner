@@ -3,6 +3,13 @@ class Chat{
         this.api = slack;
     }
 
+    /**
+     * @param channel
+     * @param message
+     * @param as_user
+     * @param other_args
+     * @param callback
+     */
     postMessage(channel, message, as_user, other_args, callback){
         if(typeof as_user == "function"){
             callback = as_user;

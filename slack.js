@@ -316,5 +316,6 @@ class SlackAPI extends EventEmitter{
 }
 
 module.exports = {
-    createBot: function(token){return new SlackAPI(token)}
+    createBot: function(token){return new SlackAPI(token)},
+    utils: require('./utils')
 }
