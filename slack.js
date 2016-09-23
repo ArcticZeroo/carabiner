@@ -1,6 +1,5 @@
 var r = require('request');
 var WebSocketClient = require('websocket').client;
-var socket = new WebSocketClient();
 var EventEmitter = require('events');
 var log = require('frozor-logger');
 
@@ -151,6 +150,7 @@ class RTM extends EventEmitter {
 
     connect(url){
         log.info("Connecting to RTM server...", "slack/RTM::connect()");
+        var socket = new WebSocketClient();
         socket.connect(url);
         socket.on('connect', (connection)=>{
             log.info('Connected to RTM socket!', "slack/RTM::connect()");
@@ -174,7 +174,7 @@ class RTM extends EventEmitter {
                     log.error("Restarting _bot after waiting 10 seconds with no response from server...", "slack/RTM::connect()");
                     process.exit();
                 }
-            }, 10*1000)
+            }, 10*1000);
         });
     }
 }
