@@ -41,8 +41,7 @@ class Info{
 class Utils{
     constructor(token){
         this.token = token;
-        //console.log("Token: " + token)
-        this.rtm;
+        this.rtm   = null;
     }
 
     getToken(){
