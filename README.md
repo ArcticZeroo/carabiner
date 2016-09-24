@@ -37,6 +37,7 @@ slackBot.auth.test((response)=>{
   }else{
     log.error(`Unable to authenticate with Slack API: ${response.error}`);
     process.exit();
+  }
 });
 ```
 
