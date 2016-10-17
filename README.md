@@ -1,11 +1,13 @@
 # Frozor-Slack
 A slack API for node that isn't (completely) stupid.
 
+
 Depdendencies:
-* chalk
 * frozor-logger
 * request
 * websocket
+
+This is kind of a low-level API. You might be looking for something higher-level like [Frozor-Slackbot](http://npmjs.org/package/frozor-slackbot)
 
 Usage:
 ```
