@@ -1,7 +1,7 @@
 {
   "name": "frozor-slack",
   "description": "Slack API for node that isn't stupid.",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "dependencies": {
     "frozor-logger": "^1.0.1",
     "request": "^2.75.0",
