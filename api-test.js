@@ -1,4 +1,5 @@
-var log        = require('frozor-logger');
+var Logger     = require('frozor-logger');
+var log        = new Logger('API TEST');
 var token      = require('./token');
 var slackAPI   = require('./slack');
 var slackBot   = slackAPI.createBot(token);
@@ -13,3 +14,5 @@ slackBot.auth.test((response)=>{
         process.exit();
     }
 });
+
+slackBot.rtm.start();

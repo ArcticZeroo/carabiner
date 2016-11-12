@@ -1,9 +1,10 @@
-var r = require('request');
+var request         = require('request');
 var WebSocketClient = require('websocket').client;
-var EventEmitter = require('events');
-var log = require('frozor-logger');
+var EventEmitter    = require('events');
+var Logger          = require('frozor-logger');
+var log             = new Logger('SLACK');
 
-var base_url = "https://slack.com/api/";
+var base_url = 'https://slack.com/api/';
 
 class Info{
     setUserID(id){
@@ -49,13 +50,13 @@ class Utils{
         return this.token;
     }
 
-    stringifyIfNecessary(object){
-        if(typeof object != "string") return JSON.stringify(object);
+    static stringifyIfNecessary(object){
+        if(typeof object != 'string') return JSON.stringify(object);
         return object;
     }
 
-    encodeAndStringify(object){
-        return encodeURIComponent(this.stringifyIfNecessary(object));
+    static encodeAndStringify(object){
+        return encodeURIComponent(Utils.stringifyIfNecessary(object));
     }
 
     createSlackRequestURL(method, args){
@@ -67,17 +68,17 @@ class Utils{
         if(args.token == true) request_args.push(`token=${this.getToken()}`);
         if(args.token != undefined) delete args.token;
 
-        for(var arg in args) if(args[arg]) request_args.push(`${arg}=${this.encodeAndStringify(args[arg])}`);
+        for(var arg in args) if(args[arg]) request_args.push(`${arg}=${Utils.encodeAndStringify(args[arg])}`);
 
-        if(request_args.length > 0) request_url = `${base_url}${method}?${request_args.join("&")}`;
+        if(request_args.length > 0) request_url = `${base_url}${method}?${request_args.join('&')}`;
 
         return request_url;
     }
 
     get(url, callback){
-        r(url, (error, response, body) =>{
+        request(url, (error, response, body) =>{
             if(!error && body != ''){
-                try{var bodyParse = JSON.parse(body);}catch(e){return log.error(`Unable to parse request body for URL ${url}: ${e}`);}
+                try{var bodyParse = JSON.parse(body);}catch(e){return log.error(`Unable to parse request body for URL ${url}: ${e}`, 'GET');}
                 if(bodyParse.ok == false || bodyParse.error) log.error(`An error was returned by the recipient: ${bodyParse.error}`);
                 callback(bodyParse);
             }else if(error){
@@ -85,11 +86,11 @@ class Utils{
                     ok: false,
                     error: error
                 });
-                log.error(`Request returned an error: ${error}`, "slack/Utils.get()");
+                log.error(`Request returned an error: ${error}`, 'GET');
             }else{
                 if (callback) callback({
                     ok: false,
-                    error: "An unexpected error occurred. Please try again later."
+                    error: 'An unexpected error occurred. Please try again later.'
                 });
             }
         });
@@ -122,19 +123,19 @@ class Events extends EventEmitter{
     }
 }
 
-class RTM extends EventEmitter {
+class RTM {
     constructor(token, events, info, utils){
-        super();
         this.token  = token;
         this.events = events;
         this.info   = info;
         this.utils  = utils;
+        this.socket = null;
     }
 
     start(args){
         args = args || {};
         args.token = true;
-        return this.utils.makeRequest("rtm.start", args, (response)=>(this.init(response)));
+        return this.utils.makeRequest('rtm.start', args, (response)=>(this.init(response)));
     }
 
     init(response){
@@ -147,33 +148,35 @@ class RTM extends EventEmitter {
         }
     }
 
+    resetConnection(connection, url){
+        connection.drop();
+        this.socket.removeAllListeners();
+        this.socket = null;
+        this.connect(url);
+    }
+
     connect(url){
-        log.info("Connecting to RTM server...", "slack/RTM::connect()");
-        var socket = new WebSocketClient();
-        socket.connect(url);
-        socket.on('connect', (connection)=>{
-            log.info('Connected to RTM socket!', "slack/RTM::connect()");
+        log.info('Connecting to RTM server...', 'RTM');
+        this.socket = new WebSocketClient();
+        this.socket.connect(url);
+        this.socket.on('connect', (connection)=>{
+            log.info('Connected to RTM socket!', 'RTM');
             connection.on('message', (message)=>{
                 if(message.type == 'utf8') this.events.emitEvent(message.utf8Data);
             });
             connection.on('error', (error)=>{
-                log.error("Error in connection to RTM server: " + error + ", restarting RTM", "slack/RTM.connect()");
-                this.connect(url);
+                log.error(`RTM server encountered an error: ${log.chalk.red(error)}. Restarting RTM...`, 'RTM');
+                this.resetConnection(connection, url);
             });
             connection.on('close', ()=>{
-                log.info("Rtm connection closed. Restarting RTM", "slack/RTM.connect()");
-                this.connect(url);
+                log.info('RTM connection closed, restarting RTM...', 'RTM');
+                this.resetConnection(connection, url);
             });
+
             connection.on('connectFailed', ()=>{
-                log.info("Unable to connect to RTM. Retrying in 10 seconds...", "slack/RTM.connect()");
-                setTimeout(()=>{this.connect(url)}, 10000);
+                log.info('Unable to connect to RTM. Retrying in 10 seconds...', 'RTM');
+                setTimeout(()=>{this.resetConnection(connection, url)}, 10000);
             });
-            setTimeout(()=>{
-                if(!connection.connected){
-                    log.error("Restarting _bot after waiting 10 seconds with no response from server...", "slack/RTM::connect()");
-                    process.exit();
-                }
-            }, 10*1000);
         });
     }
 }
@@ -208,7 +211,7 @@ class SlackAPI extends EventEmitter{
                     if(!args.text){
                         if(callback) callback({
                             ok: false,
-                            error: "api_no_text"
+                            error: 'api_no_text'
                         });
                         return;
                     }
@@ -234,11 +237,11 @@ class SlackAPI extends EventEmitter{
                         function sendNext(utils){
                             var toSend = queue.splice(0,1)[0];
                             toSend.token = true;
-                            utils.makeRequest("chat.postMessage", toSend, ()=>{if(queue.length > 0){sendNext(utils)}});
+                            utils.makeRequest('chat.postMessage', toSend, ()=>{if(queue.length > 0){sendNext(utils)}});
                         }
 
                         sendNext(this.utils);
-                    }else this.utils.makeRequest("chat.postMessage", args, callback);
+                    }else this.utils.makeRequest('chat.postMessage', args, callback);
                 }, update: true},
             dnd:{
                 endDnd: true, endSnooze: true, info: true, setSnooze: true, teamInfo: true},
@@ -291,20 +294,20 @@ class SlackAPI extends EventEmitter{
 
                 var methodData = this.template_methods[category][method];
 
-                if(typeof methodData == "function"){
+                if(typeof methodData == 'function'){
                     this[category][method] = methodData;
                     continue;
                 }
 
-                if(typeof methodData == "object"){
+                if(typeof methodData == 'object'){
                     for(var subMethod in methodData){
-                        if(typeof methodData[subMethod] == "function"){
+                        if(typeof methodData[subMethod] == 'function'){
                             this[category][method][subMethod] = methodData[subMethod];
                             continue;
                         }
 
                         this[category][method][subMethod] = new Function(['args', 'callback'], `
-                        if(typeof args == "function"){
+                        if(typeof args == 'function'){
                             callback = args;
                             args     = {};
                         }
@@ -318,7 +321,7 @@ class SlackAPI extends EventEmitter{
                 }
 
                 this[category][method] = new Function(['args', 'callback'], `
-                    if(typeof args == "function"){
+                    if(typeof args == 'function'){
                         callback = args;
                         args     = {};
                     }
@@ -338,4 +341,4 @@ global.SlackAPIUtils = Utils;
 module.exports = {
     createBot: function(token){return new SlackAPI(token)},
     utils: require('./utils')
-}
+};
