@@ -149,15 +149,14 @@ class RTM {
     }
 
     resetConnection(connection, url){
-        connection.drop();
+        if(connection) connection.drop();
         this.socket.removeAllListeners();
-        this.socket = null;
+        this.socket = new WebSocketClient();
         this.connect(url);
     }
 
     connect(url){
         log.info('Connecting to RTM server...', 'RTM');
-        this.socket = new WebSocketClient();
         this.socket.connect(url);
         this.socket.on('connect', (connection)=>{
             log.info('Connected to RTM socket!', 'RTM');
