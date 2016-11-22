@@ -4,6 +4,7 @@
   "version": "1.2.2",
   "dependencies": {
     "frozor-logger": "^2.0.0",
+    "frozor-websocket": "^1.0.0",
     "request": "^2.78.0",
     "websocket": "^1.0.23"
   },
