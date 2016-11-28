@@ -279,7 +279,7 @@ class SlackAPI extends EventEmitter{
             },
             users:{
                 deletePhoto: true, getPresence: true, identity: true, info: true, list: true, setActive: true, setPhoto: true, setPresence: true, admin:{invite: true}, profile:{get: true, set: true}}
-        }
+        };
 
         this.generateMethods();
     }
