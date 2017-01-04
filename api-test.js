@@ -1,6 +1,7 @@
 let SlackAPI = require('./lib/SlackAPI');
 
-let slackBot = new SlackAPI('xoxb-47049102661-4j7PIjq3o6cdhXKgilfABeVL');
+let token    = require('./token');
+let slackBot = new SlackAPI(token);
 
 /*slackBot.methods.auth.test({}, (success, res)=>{
     console.log(success);
