@@ -8,5 +8,5 @@
     "request": "^2.78.0",
     "websocket": "^1.0.23"
   },
-  "main": "slack.js"
+  "main": "index.js"
 }
