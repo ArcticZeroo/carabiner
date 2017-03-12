@@ -8,13 +8,19 @@ let slackBot = new SlackAPI(token);
     console.log(JSON.stringify(res));
 });*/
 
-//slackBot.rtm.start();
+slackBot.rtm.start();
 
-slackBot.methods.chat.postMessage({channel: 'chat', text: `Long text here`}, (success, res)=>{
-    console.log(success);
+slackBot.methods.chat.postMessage({channel: 'chat', text: `Seven cats meow meow meow`, as_user: true}, (err, res)=>{
+    console.log(err);
     console.log(res);
 });
 
 slackBot.on('hello', ()=>{
+    console.log('Slack said hi!');
 
+    slackBot.storage.self.get((err, res)=>{
+        if(err) console.log('could not get self storage');
+        else console.log(JSON.stringify(res));
+    });
 });
+
