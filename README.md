@@ -2,61 +2,40 @@
 A slack API for node that isn't (completely) stupid.
 
 
-Depdendencies:
-* frozor-logger
+Dependencies:
 * request
-* websocket
-
-This is kind of a low-level API. You might be looking for something higher-level like [Frozor-Slackbot](http://npmjs.org/package/frozor-slackbot)
+* frozor-websocket
+    * frozor-logger
+    
+If you aren't a fan of frozor-logger (which is understandable, it needs a rewrite and I made it specifically for my own uses), just modify frozor-websocket to use a different module, or have frozor-logger return a different module's exports.
 
 Usage:
-```
-var log          = require('frozor-logger');
+```$xslt
+const log = new (require('frozor-logger'))('SLACK');
+const SlackAPI = require('frozor-slack');
 
-//The API you can use to create infinite bots.
-var slackAPI      = require('frozor-slack');
-//The API Utils you can use for infinite bots.
-var apiUtils      = slackAPI.utils;
+let bot = new SlackAPI(process.env.SLACK_TOKEN);
 
-//An actual slack bot you can manipulate.
-var slackBot      = slackAPI.createBot(YOUR_TOKEN_HERE);
+bot.rtm.start();
 
-//Utils for the slackBot. Requires a slackBot as an argument for getUtils, and each separate slackBot you want a util for needs its own getUtils call. You could do it dynamically, but why would you want to do that to yourself?
-var slackUtils    = apiUtils.getUtils(slackBot);
-```
+bot.rtm.start();
 
-You can do everything without utils, but the utils make it slightly more user-friendly in my opinion. The best part is that it automatically adds the as_user and sets it to true for chat.postMessage!
+bot.methods.chat.postMessage({channel: 'chat', text: `Seven cats meow meow meow`, as_user: true}, (err, res)=>{
+    log.debug(err);
+    log.debug(res);
+});
 
-API Methods are documented on slack's official API documentation; https://api.slack.com/methods
-Everything is UNMODIFIED JSON. This means there are no user objects, channel objects, etc. and you'll have to create those yourself (or steal one from my Self-Bot project).
+bot.on('hello', ()=>{
+    log.info('Slack said hi!');
 
-Usually, you will want to start a file by verifying your auth.
-
-```
-slackBot.auth.test((response)=>{
-  if(response.ok){
-    log.info('Successfully authenticated with the Slack API!');
-  }else{
-    log.error(`Unable to authenticate with Slack API: ${response.error}`);
-    process.exit();
-  }
+    bot.storage.self.get((err, res)=>{
+        if(err) log.error('could not get self storage');
+        else log.info(JSON.stringify(res));
+    });
 });
 ```
 
-Then you can do things like start RTM and respond to events:
+Features:
 
-```
-slackBot.rtm.start();
-
-//Hello is the first event fired on RTM connect.
-slackBot.on('hello', ()=>{
-  log.info(`Connected to RTM as ${log.chalk.cyan(slackBot.info.getUserName())}@${log.chalk.cyan(slackBot.info.getUserID())} to ${log.chalk.cyan(slackBot.info.getTeamName())}!`);
-});
-
-//Echoes message
-slackBot.on('message', (message)=>{
-  //Make sure you're not responding
-  if(message.subtype || message.user == slackBot.info.getUserID()) return;
-  slackUtils.chat.postMessage(message.channel, message.text);
-});
-```
+* Full slack Web API and RTM API support
+* User, channel, group storage with a callback that will look up the information if it can be obtained and does not exist.
