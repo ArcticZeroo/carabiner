@@ -21,8 +21,11 @@ bot.rtm.start();
 bot.rtm.start();
 
 bot.methods.chat.postMessage({channel: 'chat', text: `Seven cats meow meow meow`, as_user: true}, (err, res)=>{
-    log.debug(err);
-    log.debug(res);
+    if(err){
+        log.error(err);
+    }else{
+        log.info(res);
+    }
 });
 
 bot.on('hello', ()=>{
