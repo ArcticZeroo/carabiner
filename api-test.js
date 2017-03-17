@@ -1,7 +1,7 @@
 let SlackAPI = require('./lib/SlackAPI');
 
 let token    = require('./token');
-let slackBot = new SlackAPI(token);
+let slackBot = new SlackAPI(token, 'TEST');
 
 /*slackBot.methods.auth.test({}, (success, res)=>{
     console.log(success);
@@ -11,16 +11,10 @@ let slackBot = new SlackAPI(token);
 slackBot.rtm.start();
 
 slackBot.methods.chat.postMessage({channel: 'chat', text: `Seven cats meow meow meow`, as_user: true}, (err, res)=>{
-    console.log(err);
-    console.log(res);
+    console.log(err, res);
 });
 
 slackBot.on('hello', ()=>{
     console.log('Slack said hi!');
-
-    slackBot.storage.self.get((err, res)=>{
-        if(err) console.log('could not get self storage');
-        else console.log(JSON.stringify(res));
-    });
 });
 
