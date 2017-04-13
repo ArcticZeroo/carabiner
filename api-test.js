@@ -1,18 +1,20 @@
-var Logger     = require('frozor-logger');
-var log        = new Logger('API TEST');
-var token      = require('./token');
-var slackAPI   = require('./slack');
-var slackBot   = slackAPI.createBot(token);
-var apiUtils   = slackAPI.utils;
-var slackUtils = apiUtils.getUtils(slackBot);
+let SlackAPI = require('./lib/SlackAPI');
 
-slackBot.auth.test((response)=>{
-    if(response.ok){
-        log.info('Successfully authenticated with the Slack API!');
-    }else{
-        log.error(`Unable to authenticate with Slack API: ${response.error}`);
-        process.exit();
-    }
-});
+let token    = require('./token');
+let slackBot = new SlackAPI(token, 'TEST');
+
+/*slackBot.methods.auth.test({}, (success, res)=>{
+    console.log(success);
+    console.log(JSON.stringify(res));
+});*/
 
 slackBot.rtm.start();
+
+slackBot.methods.chat.postMessage({channel: 'chat', text: `Seven cats meow meow meow`, as_user: true}, (err, res)=>{
+    console.log(err, res);
+});
+
+slackBot.on('hello', ()=>{
+    console.log('Slack said hi!');
+});
+
