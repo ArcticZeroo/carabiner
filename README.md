@@ -7,7 +7,7 @@ Dependencies:
 * frozor-websocket
     * frozor-logger
     
-If you aren't a fan of frozor-logger (which is understandable, it needs a rewrite and I made it specifically for my own uses), just modify frozor-websocket to use a different module, or have frozor-logger return a different module's exports.
+If you aren't a fan of frozor-logger, just modify frozor-websocket to use a different module, or have frozor-logger return a different module's exports.
 
 Usage:
 ```$xslt
@@ -15,8 +15,6 @@ const log = new (require('frozor-logger'))('SLACK');
 const SlackAPI = require('frozor-slack');
 
 let bot = new SlackAPI(process.env.SLACK_TOKEN);
-
-bot.rtm.start();
 
 bot.rtm.start();
 
