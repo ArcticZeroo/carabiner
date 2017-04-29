@@ -1,6 +1,7 @@
 # Frozor-Slack
 A slack API for node that isn't (completely) stupid.
 
+**NOTE: This API now uses promises instead of callbacks. Will update when I have time, but in the mean time the documentation will be outdated in this way.**
 
 Dependencies:
 * request
