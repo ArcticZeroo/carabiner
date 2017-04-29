@@ -3,9 +3,9 @@
   "description": "Slack API for node that isn't stupid.",
   "version": "3.0.12",
   "dependencies": {
-    "bluebird": "^3.5.0",
     "frozor-websocket": "^1.1.x",
-    "request": "^2.78.x"
+    "request": "^2.78.x",
+    "super-promise": "^1.0.1"
   },
   "main": "index.js"
 }
