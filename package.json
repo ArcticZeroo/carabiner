@@ -4,8 +4,7 @@
   "version": "3.0.14",
   "dependencies": {
     "frozor-websocket": "^1.1.x",
-    "request": "^2.78.x",
-    "super-promise": "^1.0.x"
+    "request": "^2.78.x"
   },
   "main": "index.js"
 }
