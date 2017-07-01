@@ -15,10 +15,13 @@ Usage:
 const log = new (require('frozor-logger'))('SLACK');
 const SlackAPI = require('frozor-slack');
 
+// initialize the api, giving it the token allows it to use the token automatically in args
 let bot = new SlackAPI(process.env.SLACK_TOKEN);
 
+// Starts RTM  ¯\_(ツ)_/¯
 bot.rtm.start();
 
+// Everything that's not rtm.start() is stored in 'methods', and follows api.slack.com/methods
 bot.methods.chat.postMessage({channel: 'chat', text: `Seven cats meow meow meow`, as_user: true}, (err, res)=>{
     if(err){
         log.error(err);
