@@ -1,1 +1,1 @@
-module.exports = require('./lib/SlackAPI');
+module.exports = require('./lib/api.old/SlackAPI');

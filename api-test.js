@@ -1,4 +1,4 @@
-let SlackAPI = require('./lib/SlackAPI');
+let SlackAPI = require('./lib/api.old/SlackAPI');
 
 let token    = require('./token');
 let slackBot = new SlackAPI(token, 'TEST');
