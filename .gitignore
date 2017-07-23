@@ -85,6 +85,3 @@ $RECYCLE.BIN/
 *.lnk
 
 .idea/
-slack-old.js
-token.js
-api-test.js
