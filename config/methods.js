@@ -75,6 +75,7 @@ module.exports = [
     'reminders.delete',
     'reminders.info',
     'reminders.list',
+    'rtm.connect',
     'search.all',
     'search.files',
     'search.messages',
