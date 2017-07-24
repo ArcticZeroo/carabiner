@@ -5,7 +5,12 @@
   "dependencies": {
     "deep-equal": "^1.0.1",
     "djs-collection": "0.0.5",
-    "snekfetch": "^3.2.4"
+    "snekfetch": "^3.2.4",
+    "ws": "^3.0.0"
   },
-  "main": "index.js"
+  "main": "index.js",
+  "optionalDependencies": {
+    "bufferutil": "^3.0.2",
+    "utf-8-validate": "^3.0.3"
+  }
 }
