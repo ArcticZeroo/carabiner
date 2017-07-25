@@ -1,6 +1,6 @@
 let SlackAPI = require('./lib/api.old/SlackAPI');
 
-let token    = require('./token');
+let token    = process.env.SLACK_TOKEN;
 let slackBot = new SlackAPI(token, 'TEST');
 
 slackBot.rtm.start();
