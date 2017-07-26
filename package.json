@@ -1,7 +1,7 @@
 {
-  "name": "frozor-slack",
-  "description": "Slack API for node that isn't stupid.",
-  "version": "4.0.9",
+  "name": "carabiner",
+  "description": "Easy to use, high level slack lib!",
+  "version": "0.0.1",
   "dependencies": {
     "deep-equal": "^1.0.1",
     "djs-collection": "0.0.5",
