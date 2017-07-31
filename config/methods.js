@@ -76,6 +76,7 @@ module.exports = [
     'reminders.info',
     'reminders.list',
     'rtm.connect',
+    'rtm.start',
     'search.all',
     'search.files',
     'search.messages',
@@ -104,7 +105,17 @@ module.exports = [
     'users.setPresence',
     'users.setPhoto',
     'users.profile.get',
-    'users.profile.set'
+    'users.profile.set',
+
+    // Undocumented API methods
+    // See https://github.com/ErikKalkoken/slackApiDoc
+    // These may become inaccessible at any time.
+    'chat.command',
+    'files.delete',
+    'files.share',
+    'users.admin.invite',
+    'users.admin.setInactive',
+    'users.prefs.get'
 ];
 
 
