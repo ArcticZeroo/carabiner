@@ -10,6 +10,10 @@ Currently, this lib supports the following slack APIs:
 * Web API
 * Real Time Messaging API (websocket)
 
+Current status: **NOT READY TO USE**
+
+More unit tests are needed to determine whether it works properly in all scenarios, and events are not yet extended with cached items. This is not production-ready.
+
 At some point I plan to add support for slash commands, but having to run an express server inside this lib sounds like a mess I don't want to handle right now.
 
 I also plan to add some kind of client similar to the discordjs commando module, which just extends the `Discord.Client`. Right now, command handling can be a bit of a pain at times, even though [frozor-commands](https://github.com/ArcticZeroo/frozor-commands) actually makes it pretty simple for me. This client may have support for 'conversations' (prompts and user responses to those prompts), I don't really know yet. 
