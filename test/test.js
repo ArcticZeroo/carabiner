@@ -1,5 +1,7 @@
 const assert = require('assert');
 const Client = require('../lib/client/Client');
+const SlackAPI = require('../lib/api/SlackAPI');
+const methods = require('../config/methods');
 
 async function backwardsResolve(promise) {
     const msg = 'Promise resolved normally';
@@ -32,6 +34,12 @@ async function asyncThrows(promise, error = Error) {
 describe('Carabiner', function () {
     const client = new Client(process.env.SLACK_TOKEN);
 
+    /*describe('SlackAPI', function () {
+        it('should generate the correct amount of methods', function () {
+            // TODO: this
+        });
+    });*/
+
     describe('Requests', function () {
         it('should throw an error when slack does', async function () {
             const nullClient = new Client('invalid slack token');
@@ -51,7 +59,7 @@ describe('Carabiner', function () {
             };
 
             return client.api.methods.api.test(args).then(r => {
-                assert.deepEqual(JSON.stringify(r.args), JSON.stringify(args));
+                assert.equal(JSON.stringify(r.args), JSON.stringify(args));
             });
         });
     });
@@ -95,6 +103,7 @@ describe('Carabiner', function () {
                 throw e;
             }
 
+            // If anyone complains about this memory leak... stop yourself.
             return new Promise((resolve, reject)=>{
                 client.api.rtm.once('event', resolve);
                 client.api.rtm.once('error', reject);
