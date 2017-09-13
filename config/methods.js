@@ -20,6 +20,7 @@ module.exports = [
     'channels.unarchive',
     'chat.delete',
     'chat.postMessage',
+    'chat.postEphemeral',
     'chat.update',
     'chat.unfurl',
     'dnd.endDnd',
