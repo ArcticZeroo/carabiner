@@ -16,5 +16,8 @@
   },
   "scripts": {
     "build-docs": "jsdoc -t ./node_modules/ink-docstrap/template -R README.md -r ./lib"
+  },
+  "devDependencies": {
+    "eslint": "^4.18.1"
   }
 }

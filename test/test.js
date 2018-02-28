@@ -34,11 +34,17 @@ async function asyncThrows(promise, error = Error) {
 describe('Carabiner', function () {
     const client = new Client(process.env.SLACK_TOKEN);
 
-    /*describe('SlackAPI', function () {
-        it('should generate the correct amount of methods', function () {
-            // TODO: this
+    describe('SlackAPI', function () {
+        const split = methods.map(m => m.split('.'));
+
+        it('should generate all high-level method categories', function () {
+            // Get all high-level categories and cast it to a set so it's distinct
+            const expectedUniqueMethods = new Set(split.map(s => s[0])).size;
+            const actualUniqueMethods = Object.keys(client.api.methods).length;
+
+            return assert.strictEqual(expectedUniqueMethods, actualUniqueMethods);
         });
-    });*/
+    });
 
     describe('Requests', function () {
         it('should throw an error when slack does', async function () {
@@ -127,15 +133,23 @@ describe('Carabiner', function () {
             it('should connect to rtm automatically', async function () {
                 const client = new Client(process.env.SLACK_TOKEN, {useRtmStart: true});
 
-                client.init().catch((e)=>{
+                client.init().catch((e) => {
                     throw e;
                 });
 
-                return new Promise(resolve =>{
-                    client.api.rtm.once('open', resolve);
-                    client.api.rtm.destroy();
+                return new Promise(resolve => {
+                    client.api.rtm.once('open', () => {
+                        client.api.rtm.destroy();
+                        resolve();
+                    });
                 });
             });
+        });
+    });
+
+    describe('Structures', async function () {
+        describe('User', async function () {
+
         });
     });
 });
