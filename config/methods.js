@@ -128,12 +128,15 @@ module.exports = [
     // Undocumented API methods
     // See https://github.com/ErikKalkoken/slackApiDoc
     // These may become inaccessible at any time.
+    'bots.list',
     'chat.command',
+    'files.edit',
     'files.delete',
     'files.share',
     'users.admin.invite',
     'users.admin.setInactive',
-    'users.prefs.get'
+    'users.prefs.get',
+    'users.profile.set'
 ];
 
 
