@@ -124,7 +124,7 @@ describe('Carabiner', function () {
                 await client.init();
 
                 // If length is 0 or id is null then it did not properly cache the item
-                assert.notEqual(client.channels.length, 0);
+                assert.notEqual(client.conversations.length, 0);
                 assert.notEqual(client.users.length, 0);
                 assert.notEqual(client.team.id, null);
                 assert.notEqual(client.self.id, null);
