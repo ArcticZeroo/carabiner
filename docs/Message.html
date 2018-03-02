@@ -33,14 +33,14 @@
 			<li class="dropdown">
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="Attachment.html">Attachment</a></li><li><a href="Channel.html">Channel</a></li><li><a href="ChannelDescriptor.html">ChannelDescriptor</a></li><li><a href="Client.html">Client</a></li><li><a href="Field.html">Field</a></li><li><a href="IMChannel.html">IMChannel</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageBuilder.html">MessageBuilder</a></li><li><a href="module.exports_module.exports.html">module.exports#module.exports</a></li><li><a href="ObjectUtil.html">ObjectUtil</a></li><li><a href="SlackRTM.html">SlackRTM</a></li><li><a href="StringUtil.html">StringUtil</a></li><li><a href="Team.html">Team</a></li><li><a href="User.html">User</a></li>
+					<li><a href="Attachment.html">Attachment</a></li><li><a href="Client.html">Client</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="ConversationDescriptor.html">ConversationDescriptor</a></li><li><a href="DoNotDisturb.html">DoNotDisturb</a></li><li><a href="Field.html">Field</a></li><li><a href="IMChannel.html">IMChannel</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageBuilder.html">MessageBuilder</a></li><li><a href="ObjectUtil.html">ObjectUtil</a></li><li><a href="SlackRTM.html">SlackRTM</a></li><li><a href="SlackUtil.html">SlackUtil</a></li><li><a href="StringUtil.html">StringUtil</a></li><li><a href="Team.html">Team</a></li><li><a href="User.html">User</a></li>
 				</ul>
 			</li>
 			
 			<li class="dropdown">
 				<a href="events.list.html" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="Client.html#event:channelMemberJoin">Client#event:channelMemberJoin</a></li><li><a href="Client.html#event:channelMemberLeave">Client#event:channelMemberLeave</a></li><li><a href="Client.html#event:message">Client#event:message</a></li><li><a href="Client.html#event:teamMemberJoin">Client#event:teamMemberJoin</a></li><li><a href="Client.html#event:userNameChange">Client#event:userNameChange</a></li><li><a href="Client.html#event:userProfileUpdate">Client#event:userProfileUpdate</a></li><li><a href="Client.html#event:userTyping">Client#event:userTyping</a></li><li><a href="Client.html#event:userUpdate">Client#event:userUpdate</a></li>
+					<li><a href="Client.html#event:channelCreated">Client#event:channelCreated</a></li><li><a href="Client.html#event:channelMemberJoin">Client#event:channelMemberJoin</a></li><li><a href="Client.html#event:channelMemberLeave">Client#event:channelMemberLeave</a></li><li><a href="Client.html#event:hello">Client#event:hello</a></li><li><a href="Client.html#event:message">Client#event:message</a></li><li><a href="Client.html#event:teamMemberJoin">Client#event:teamMemberJoin</a></li><li><a href="Client.html#event:userNameChange">Client#event:userNameChange</a></li><li><a href="Client.html#event:userProfileUpdate">Client#event:userProfileUpdate</a></li><li><a href="Client.html#event:userTyping">Client#event:userTyping</a></li><li><a href="Client.html#event:userUpdate">Client#event:userUpdate</a></li>
 				</ul>
 			</li>
 			
@@ -106,7 +106,7 @@
 
     
     <div class="description">
-        This class represents a message sent in any slack channel.
+        <p>This class represents a message sent in any slack channel.</p>
     </div>
     
 
@@ -168,7 +168,7 @@
 
             
 
-            <td class="description last">The Slack Client to use when sending messages and pulling data.</td>
+            <td class="description last"><p>The Slack Client to use when sending messages and pulling data.</p></td>
         </tr>
 
     
@@ -202,7 +202,7 @@
 
             
 
-            <td class="description last">The 'raw' data provided by slack if applicable.</td>
+            <td class="description last"><p>The 'raw' data provided by slack if applicable.</p></td>
         </tr>
 
     
@@ -293,7 +293,7 @@
 <dd>
     
     <div class="description">
-        The attachments on the message, if any.
+        <p>The attachments on the message, if any.</p>
     </div>
     
 
@@ -357,14 +357,14 @@
             
 <hr>
 <dt class="name" id="channel">
-    <h4 id="channel"><span class="type-signature"></span>channel<span class="type-signature"> :<a href="Channel.html">Channel</a></span></h4>
+    <h4 id="channel"><span class="type-signature"></span>channel<span class="type-signature"> :<a href="Conversation.html">Conversation</a></span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        The {Channel} in which the message was sent.
+        <p>The {Channel} in which the message was sent.</p>
     </div>
     
 
@@ -373,7 +373,7 @@
         <ul>
             <li>
                 
-<span class="param-type"><a href="Channel.html">Channel</a></span>
+<span class="param-type"><a href="Conversation.html">Conversation</a></span>
 
 
 
@@ -435,7 +435,8 @@
 <dd>
     
     <div class="description">
-        The timestamp as a Date at which the message was deleted, if it was deleted.This may return null if it is not deleted.
+        <p>The timestamp as a Date at which the message was deleted, if it was deleted.
+This may return null if it is not deleted.</p>
     </div>
     
 
@@ -506,7 +507,7 @@
 <dd>
     
     <div class="description">
-        The timestamp at which this message was deleted, if it was delted.
+        <p>The timestamp at which this message was deleted, if it was delted.</p>
     </div>
     
 
@@ -577,7 +578,8 @@
 <dd>
     
     <div class="description">
-        The edit history for this message.This is empty by default.
+        <p>The edit history for this message.
+This is empty by default.</p>
     </div>
     
 
@@ -648,7 +650,8 @@
 <dd>
     
     <div class="description">
-        Whether the message is starred by the client.Defaults to false, of course.
+        <p>Whether the message is starred by the client.
+Defaults to false, of course.</p>
     </div>
     
 
@@ -712,14 +715,14 @@
             
 <hr>
 <dt class="name" id="pinnedTo">
-    <h4 id="pinnedTo"><span class="type-signature"></span>pinnedTo<span class="type-signature"> :Array.&lt;<a href="Channel.html">Channel</a>></span></h4>
+    <h4 id="pinnedTo"><span class="type-signature"></span>pinnedTo<span class="type-signature"> :Array.&lt;<a href="Conversation.html">Conversation</a>></span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        An array of channels the message is pinned to.
+        <p>An array of conversations the message is pinned to.</p>
     </div>
     
 
@@ -728,7 +731,7 @@
         <ul>
             <li>
                 
-<span class="param-type">Array.&lt;<a href="Channel.html">Channel</a>></span>
+<span class="param-type">Array.&lt;<a href="Conversation.html">Conversation</a>></span>
 
 
 
@@ -790,7 +793,7 @@
 <dd>
     
     <div class="description">
-        An array containing an object for each reaction added.
+        <p>An array containing an object for each reaction added.</p>
     </div>
     
 
@@ -861,7 +864,7 @@
 <dd>
     
     <div class="description">
-        Same as <a href="Message.html#ts">Message#ts</a>
+        <p>Same as <a href="Message.html#ts"><code>Message#ts</code></a></p>
     </div>
     
 
@@ -932,7 +935,9 @@
 <dd>
     
     <div class="description">
-        The slack timestamp at which the message was sent.If slack ever asks for a 'ts' property, this is what you want.Alternatively, call SlackUtil.dateToSlack(msg.ts)
+        <p>The slack timestamp at which the message was sent.
+If slack ever asks for a 'ts' property, this is what you want.
+Alternatively, call SlackUtil.dateToSlack(msg.ts)</p>
     </div>
     
 
@@ -1003,7 +1008,9 @@
 <dd>
     
     <div class="description">
-        The subtype of the message. This may be null.It's probably easiest for your sanity to use{MessageSubtype} to compare.
+        <p>The subtype of the message. This may be null.
+It's probably easiest for your sanity to use
+{MessageSubtype} to compare.</p>
     </div>
     
 
@@ -1074,7 +1081,7 @@
 <dd>
     
     <div class="description">
-        The text of the message.
+        <p>The text of the message.</p>
     </div>
     
 
@@ -1145,7 +1152,7 @@
 <dd>
     
     <div class="description">
-        The timestamp as a Date at which the message was sent.
+        <p>The timestamp as a Date at which the message was sent.</p>
     </div>
     
 
@@ -1216,7 +1223,7 @@
 <dd>
     
     <div class="description">
-        The {User} that sent the message.
+        <p>The {User} that sent the message.</p>
     </div>
     
 
@@ -1294,7 +1301,7 @@
 
     
     <div class="description">
-        Deletes the message.
+        <p>Deletes the message.</p>
     </div>
     
 
@@ -1392,7 +1399,7 @@
 
     
     <div class="description">
-        Edits the message.
+        <p>Edits the message.</p>
     </div>
     
 
@@ -1444,7 +1451,7 @@
 
             
 
-            <td class="description last">The new text in the message.</td>
+            <td class="description last"><p>The new text in the message.</p></td>
         </tr>
 
     
@@ -1468,7 +1475,7 @@
 
             
 
-            <td class="description last">Any additional args you want to pass, like an attachment.</td>
+            <td class="description last"><p>Any additional args you want to pass, like an attachment.</p></td>
         </tr>
 
     
@@ -1564,7 +1571,7 @@
 
     
     <div class="description">
-        React to this message.
+        <p>React to this message.</p>
     </div>
     
 
@@ -1698,6 +1705,270 @@
             
 <hr>
 <dt>
+    <h4 class="name" id="reactReply"><span class="type-signature"></span>reactReply(emoji, text [, mention] [, args])</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>React to a message, then reply to it.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>emoji</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Emoji to react with.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Text to reply with.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>mention</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Whether or not to mention.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>args</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Additional args to send.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <ul>
+<li>The response to the .reply call.</li>
+</ul>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;object></span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
     <h4 class="name" id="remove"><span class="type-signature"></span>remove()</h4>
     
     
@@ -1706,7 +1977,7 @@
 
     
     <div class="description">
-        Same as {Message#delete}
+        <p>Same as {Message#delete}</p>
     </div>
     
 
@@ -1804,7 +2075,7 @@
 
     
     <div class="description">
-        Replies to the message by mentioning the original user and then adding the text after a space.
+        <p>Replies to the message by mentioning the original user and then adding the text after a space.</p>
     </div>
     
 
@@ -1872,7 +2143,7 @@
                 </td>
             
 
-            <td class="description last">The text to send</td>
+            <td class="description last"><p>The text to send</p></td>
         </tr>
 
     
@@ -1912,7 +2183,7 @@
                 </td>
             
 
-            <td class="description last">Whether or not the reply should mention the original user.</td>
+            <td class="description last"><p>Whether or not the reply should mention the original user.</p></td>
         </tr>
 
     
@@ -1952,7 +2223,7 @@
                 </td>
             
 
-            <td class="description last">Additional args to send.</td>
+            <td class="description last"><p>Additional args to send.</p></td>
         </tr>
 
     
@@ -2048,7 +2319,8 @@
 
     
     <div class="description">
-        Sends the message. This will really only be used for MessageBuilder, butfeel free to use it to resend a message or something?
+        <p>Sends the message. This will really only be used for MessageBuilder, but
+feel free to use it to resend a message or something?</p>
     </div>
     
 
@@ -2120,7 +2392,7 @@
                 </td>
             
 
-            <td class="description last">Additional args.</td>
+            <td class="description last"><p>Additional args.</p></td>
         </tr>
 
     
@@ -2216,7 +2488,7 @@
 
     
     <div class="description">
-        Unfurl images
+        <p>Unfurl images</p>
     </div>
     
 
@@ -2394,9 +2666,9 @@
 
 
 <span class="jsdoc-message">
-	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a>
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
 	
-		on 2017-08-13T20:25:19-04:00
+		on 2018-03-01T20:31:52-05:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

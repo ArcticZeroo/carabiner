@@ -33,14 +33,14 @@
 			<li class="dropdown">
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="Attachment.html">Attachment</a></li><li><a href="Channel.html">Channel</a></li><li><a href="ChannelDescriptor.html">ChannelDescriptor</a></li><li><a href="Client.html">Client</a></li><li><a href="Field.html">Field</a></li><li><a href="IMChannel.html">IMChannel</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageBuilder.html">MessageBuilder</a></li><li><a href="module.exports_module.exports.html">module.exports#module.exports</a></li><li><a href="ObjectUtil.html">ObjectUtil</a></li><li><a href="SlackRTM.html">SlackRTM</a></li><li><a href="StringUtil.html">StringUtil</a></li><li><a href="Team.html">Team</a></li><li><a href="User.html">User</a></li>
+					<li><a href="Attachment.html">Attachment</a></li><li><a href="Client.html">Client</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="ConversationDescriptor.html">ConversationDescriptor</a></li><li><a href="DoNotDisturb.html">DoNotDisturb</a></li><li><a href="Field.html">Field</a></li><li><a href="IMChannel.html">IMChannel</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageBuilder.html">MessageBuilder</a></li><li><a href="ObjectUtil.html">ObjectUtil</a></li><li><a href="SlackRTM.html">SlackRTM</a></li><li><a href="SlackUtil.html">SlackUtil</a></li><li><a href="StringUtil.html">StringUtil</a></li><li><a href="Team.html">Team</a></li><li><a href="User.html">User</a></li>
 				</ul>
 			</li>
 			
 			<li class="dropdown">
 				<a href="events.list.html" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="Client.html#event:channelMemberJoin">Client#event:channelMemberJoin</a></li><li><a href="Client.html#event:channelMemberLeave">Client#event:channelMemberLeave</a></li><li><a href="Client.html#event:message">Client#event:message</a></li><li><a href="Client.html#event:teamMemberJoin">Client#event:teamMemberJoin</a></li><li><a href="Client.html#event:userNameChange">Client#event:userNameChange</a></li><li><a href="Client.html#event:userProfileUpdate">Client#event:userProfileUpdate</a></li><li><a href="Client.html#event:userTyping">Client#event:userTyping</a></li><li><a href="Client.html#event:userUpdate">Client#event:userUpdate</a></li>
+					<li><a href="Client.html#event:channelCreated">Client#event:channelCreated</a></li><li><a href="Client.html#event:channelMemberJoin">Client#event:channelMemberJoin</a></li><li><a href="Client.html#event:channelMemberLeave">Client#event:channelMemberLeave</a></li><li><a href="Client.html#event:hello">Client#event:hello</a></li><li><a href="Client.html#event:message">Client#event:message</a></li><li><a href="Client.html#event:teamMemberJoin">Client#event:teamMemberJoin</a></li><li><a href="Client.html#event:userNameChange">Client#event:userNameChange</a></li><li><a href="Client.html#event:userProfileUpdate">Client#event:userProfileUpdate</a></li><li><a href="Client.html#event:userTyping">Client#event:userTyping</a></li><li><a href="Client.html#event:userUpdate">Client#event:userUpdate</a></li>
 				</ul>
 			</li>
 			
@@ -106,7 +106,7 @@
 
     
     <div class="description">
-        This class represents a slack user.
+        <p>This class represents a slack user.</p>
     </div>
     
 
@@ -168,7 +168,7 @@
 
             
 
-            <td class="description last">The Slack Client to use when sending messages and pulling data.</td>
+            <td class="description last"><p>The Slack Client to use when sending messages and pulling data.</p></td>
         </tr>
 
     
@@ -202,7 +202,7 @@
 
             
 
-            <td class="description last">The 'raw' data provided by slack if applicable.</td>
+            <td class="description last"><p>The 'raw' data provided by slack if applicable.</p></td>
         </tr>
 
     
@@ -285,6 +285,79 @@
         <dl>
             
 <hr>
+<dt class="name" id="dnd">
+    <h4 id="dnd"><span class="type-signature"></span>dnd<span class="type-signature"> :<a href="DoNotDisturb.html">DoNotDisturb</a></span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>This user's DND status. This starts as being
+'empty', you should call <code>DoNotDisturb#update</code>
+on this.</p>
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type"><a href="DoNotDisturb.html">DoNotDisturb</a></span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
 <dt class="name" id="isDeleted">
     <h4 id="isDeleted"><span class="type-signature"></span>isDeleted<span class="type-signature"> :boolean</span></h4>
 
@@ -293,7 +366,7 @@
 <dd>
     
     <div class="description">
-        Whether the user is currently deleted/disabled.
+        <p>Whether the user is currently deleted/disabled.</p>
     </div>
     
 
@@ -364,7 +437,7 @@
 <dd>
     
     <div class="description">
-        Whether the user is a full user in this org.
+        <p>Whether the user is a full user in this org.</p>
     </div>
     
 
@@ -435,7 +508,7 @@
 <dd>
     
     <div class="description">
-        The user's mention.
+        <p>The user's mention.</p>
     </div>
     
 
@@ -513,7 +586,7 @@
 
     
     <div class="description">
-        Get a mention from any slack ID.
+        <p>Get a mention from any slack ID.</p>
     </div>
     
 
@@ -565,7 +638,7 @@
 
             
 
-            <td class="description last">The user's slack ID.</td>
+            <td class="description last"><p>The user's slack ID.</p></td>
         </tr>
 
     
@@ -653,6 +726,254 @@
             
 <hr>
 <dt>
+    <h4 class="name" id="disable"><span class="type-signature">&lt;async> </span>disable()</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Disables this user (sets them as inactive).</p>
+<p><p>
+This call will not work on free tier teams.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;void></span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="equals"><span class="type-signature"></span>equals(other)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Return whether another user equals this one</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>other</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="User.html">User</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The other user to check</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
     <h4 class="name" id="send"><span class="type-signature"></span>send(msg [, args])</h4>
     
     
@@ -661,7 +982,7 @@
 
     
     <div class="description">
-        Send a message to the user directly.
+        <p>Send a message to the user directly.</p>
     </div>
     
 
@@ -732,7 +1053,7 @@
                 </td>
             
 
-            <td class="description last">The message to send.</td>
+            <td class="description last"><p>The message to send.</p></td>
         </tr>
 
     
@@ -772,7 +1093,7 @@
                 </td>
             
 
-            <td class="description last">Additional args to send.</td>
+            <td class="description last"><p>Additional args to send.</p></td>
         </tr>
 
     
@@ -868,7 +1189,7 @@
 
     
     <div class="description">
-        Sets up the {User} with data provided from slack.
+        <p>Sets up the {User} with data provided from slack.</p>
     </div>
     
 
@@ -920,7 +1241,7 @@
 
             
 
-            <td class="description last">The data from slack to use.</td>
+            <td class="description last"><p>The data from slack to use.</p></td>
         </tr>
 
     
@@ -996,7 +1317,8 @@
 
     
     <div class="description">
-        Retrieve info about this user and update it.This is usually not going to be necessary to call.
+        <p>Retrieve info about this user and update it.
+This is usually not going to be necessary to call.</p>
     </div>
     
 
@@ -1130,9 +1452,9 @@
 
 
 <span class="jsdoc-message">
-	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a>
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
 	
-		on 2017-08-13T20:25:19-04:00
+		on 2018-03-01T20:31:53-05:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

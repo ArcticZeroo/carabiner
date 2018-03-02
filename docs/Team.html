@@ -33,14 +33,14 @@
 			<li class="dropdown">
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="Attachment.html">Attachment</a></li><li><a href="Channel.html">Channel</a></li><li><a href="ChannelDescriptor.html">ChannelDescriptor</a></li><li><a href="Client.html">Client</a></li><li><a href="Field.html">Field</a></li><li><a href="IMChannel.html">IMChannel</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageBuilder.html">MessageBuilder</a></li><li><a href="module.exports_module.exports.html">module.exports#module.exports</a></li><li><a href="ObjectUtil.html">ObjectUtil</a></li><li><a href="SlackRTM.html">SlackRTM</a></li><li><a href="StringUtil.html">StringUtil</a></li><li><a href="Team.html">Team</a></li><li><a href="User.html">User</a></li>
+					<li><a href="Attachment.html">Attachment</a></li><li><a href="Client.html">Client</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="ConversationDescriptor.html">ConversationDescriptor</a></li><li><a href="DoNotDisturb.html">DoNotDisturb</a></li><li><a href="Field.html">Field</a></li><li><a href="IMChannel.html">IMChannel</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageBuilder.html">MessageBuilder</a></li><li><a href="ObjectUtil.html">ObjectUtil</a></li><li><a href="SlackRTM.html">SlackRTM</a></li><li><a href="SlackUtil.html">SlackUtil</a></li><li><a href="StringUtil.html">StringUtil</a></li><li><a href="Team.html">Team</a></li><li><a href="User.html">User</a></li>
 				</ul>
 			</li>
 			
 			<li class="dropdown">
 				<a href="events.list.html" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="Client.html#event:channelMemberJoin">Client#event:channelMemberJoin</a></li><li><a href="Client.html#event:channelMemberLeave">Client#event:channelMemberLeave</a></li><li><a href="Client.html#event:message">Client#event:message</a></li><li><a href="Client.html#event:teamMemberJoin">Client#event:teamMemberJoin</a></li><li><a href="Client.html#event:userNameChange">Client#event:userNameChange</a></li><li><a href="Client.html#event:userProfileUpdate">Client#event:userProfileUpdate</a></li><li><a href="Client.html#event:userTyping">Client#event:userTyping</a></li><li><a href="Client.html#event:userUpdate">Client#event:userUpdate</a></li>
+					<li><a href="Client.html#event:channelCreated">Client#event:channelCreated</a></li><li><a href="Client.html#event:channelMemberJoin">Client#event:channelMemberJoin</a></li><li><a href="Client.html#event:channelMemberLeave">Client#event:channelMemberLeave</a></li><li><a href="Client.html#event:hello">Client#event:hello</a></li><li><a href="Client.html#event:message">Client#event:message</a></li><li><a href="Client.html#event:teamMemberJoin">Client#event:teamMemberJoin</a></li><li><a href="Client.html#event:userNameChange">Client#event:userNameChange</a></li><li><a href="Client.html#event:userProfileUpdate">Client#event:userProfileUpdate</a></li><li><a href="Client.html#event:userTyping">Client#event:userTyping</a></li><li><a href="Client.html#event:userUpdate">Client#event:userUpdate</a></li>
 				</ul>
 			</li>
 			
@@ -106,7 +106,7 @@
 
     
     <div class="description">
-        This class represents a slack team.
+        <p>This class represents a slack team.</p>
     </div>
     
 
@@ -168,7 +168,7 @@
 
             
 
-            <td class="description last">The client to use.</td>
+            <td class="description last"><p>The client to use.</p></td>
         </tr>
 
     
@@ -202,7 +202,7 @@
 
             
 
-            <td class="description last">Slack data, if applicable.</td>
+            <td class="description last"><p>Slack data, if applicable.</p></td>
         </tr>
 
     
@@ -285,15 +285,16 @@
         <dl>
             
 <hr>
-<dt class="name" id="channels">
-    <h4 id="channels"><span class="type-signature"></span>channels<span class="type-signature"> :Collection</span></h4>
+<dt class="name" id="conversations">
+    <h4 id="conversations"><span class="type-signature"></span>conversations<span class="type-signature"> :Collection</span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        All channels in this team.This is simply a reference to <a href="Client.html#channels">Client#channels</a>
+        <p>All conversations in this team.
+This is simply a reference to <a href="Client.html#conversations"><code>Client#conversations</code></a></p>
     </div>
     
 
@@ -356,77 +357,6 @@
         
             
 <hr>
-<dt class="name" id="client">
-    <h4 id="client"><span class="type-signature"></span>client<span class="type-signature"> :<a href="Client.html">Client</a></span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        The slack client used by this team.
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type"><a href="Client.html">Client</a></span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
 <dt class="name" id="users">
     <h4 id="users"><span class="type-signature"></span>users<span class="type-signature"> :Collection</span></h4>
 
@@ -435,7 +365,8 @@
 <dd>
     
     <div class="description">
-        All users in this team.This is simply a reference to <a href="Client.html#users">Client#users</a>
+        <p>All users in this team.
+This is simply a reference to <a href="Client.html#users"><code>Client#users</code></a></p>
     </div>
     
 
@@ -513,7 +444,7 @@
 
     
     <div class="description">
-        Set up this Team with slack data.
+        <p>Set up this Team with slack data.</p>
     </div>
     
 
@@ -671,9 +602,9 @@
 
 
 <span class="jsdoc-message">
-	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a>
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
 	
-		on 2017-08-13T20:25:19-04:00
+		on 2018-03-01T20:31:53-05:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

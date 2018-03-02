@@ -11,7 +11,11 @@
     "dictionaries": ["jsdoc","closure"]
   },
   "templates": {
-    "cleverLinks": false,
+    "cleverLinks": true,
     "monospaceLinks": false
+  },
+  "opts": {
+    "destination": "./docs/",
+    "template": "./node_modules/ink-docstrap/template"
   }
 }

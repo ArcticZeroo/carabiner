@@ -33,14 +33,14 @@
 			<li class="dropdown">
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="Attachment.html">Attachment</a></li><li><a href="Channel.html">Channel</a></li><li><a href="ChannelDescriptor.html">ChannelDescriptor</a></li><li><a href="Client.html">Client</a></li><li><a href="Field.html">Field</a></li><li><a href="IMChannel.html">IMChannel</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageBuilder.html">MessageBuilder</a></li><li><a href="module.exports_module.exports.html">module.exports#module.exports</a></li><li><a href="ObjectUtil.html">ObjectUtil</a></li><li><a href="SlackRTM.html">SlackRTM</a></li><li><a href="StringUtil.html">StringUtil</a></li><li><a href="Team.html">Team</a></li><li><a href="User.html">User</a></li>
+					<li><a href="Attachment.html">Attachment</a></li><li><a href="Client.html">Client</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="ConversationDescriptor.html">ConversationDescriptor</a></li><li><a href="DoNotDisturb.html">DoNotDisturb</a></li><li><a href="Field.html">Field</a></li><li><a href="IMChannel.html">IMChannel</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageBuilder.html">MessageBuilder</a></li><li><a href="ObjectUtil.html">ObjectUtil</a></li><li><a href="SlackRTM.html">SlackRTM</a></li><li><a href="SlackUtil.html">SlackUtil</a></li><li><a href="StringUtil.html">StringUtil</a></li><li><a href="Team.html">Team</a></li><li><a href="User.html">User</a></li>
 				</ul>
 			</li>
 			
 			<li class="dropdown">
 				<a href="events.list.html" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="Client.html#event:channelMemberJoin">Client#event:channelMemberJoin</a></li><li><a href="Client.html#event:channelMemberLeave">Client#event:channelMemberLeave</a></li><li><a href="Client.html#event:message">Client#event:message</a></li><li><a href="Client.html#event:teamMemberJoin">Client#event:teamMemberJoin</a></li><li><a href="Client.html#event:userNameChange">Client#event:userNameChange</a></li><li><a href="Client.html#event:userProfileUpdate">Client#event:userProfileUpdate</a></li><li><a href="Client.html#event:userTyping">Client#event:userTyping</a></li><li><a href="Client.html#event:userUpdate">Client#event:userUpdate</a></li>
+					<li><a href="Client.html#event:channelCreated">Client#event:channelCreated</a></li><li><a href="Client.html#event:channelMemberJoin">Client#event:channelMemberJoin</a></li><li><a href="Client.html#event:channelMemberLeave">Client#event:channelMemberLeave</a></li><li><a href="Client.html#event:hello">Client#event:hello</a></li><li><a href="Client.html#event:message">Client#event:message</a></li><li><a href="Client.html#event:teamMemberJoin">Client#event:teamMemberJoin</a></li><li><a href="Client.html#event:userNameChange">Client#event:userNameChange</a></li><li><a href="Client.html#event:userProfileUpdate">Client#event:userProfileUpdate</a></li><li><a href="Client.html#event:userTyping">Client#event:userTyping</a></li><li><a href="Client.html#event:userUpdate">Client#event:userUpdate</a></li>
 				</ul>
 			</li>
 			
@@ -106,7 +106,7 @@
 
     
     <div class="description">
-        Create a single-team Slack Client.
+        <p>Create a single-team Slack Client.</p>
     </div>
     
 
@@ -174,7 +174,7 @@
                 </td>
             
 
-            <td class="description last">The slack token to use for all operations.</td>
+            <td class="description last"><p>The slack token to use for all operations.</p></td>
         </tr>
 
     
@@ -214,7 +214,7 @@
                 </td>
             
 
-            <td class="description last">Options to use.
+            <td class="description last"><p>Options to use.</p>
                 <h6 class="method-params-label method-subparams-label">Properties</h6>
                 
 
@@ -277,7 +277,7 @@
                 </td>
             
 
-            <td class="description last">Whether the client should connect to RTM.</td>
+            <td class="description last"><p>Whether the client should connect to RTM.</p></td>
         </tr>
 
     
@@ -317,7 +317,7 @@
                 </td>
             
 
-            <td class="description last">Whether the client should retrieve ALL info about channels. This will significantly increase startup time if true, and could hit rate limit.</td>
+            <td class="description last"><p>Whether the client should retrieve ALL info about conversations. This will significantly increase startup time if true, and could hit rate limit.</p></td>
         </tr>
 
     
@@ -357,7 +357,7 @@
                 </td>
             
 
-            <td class="description last">Whether group and mpim channels should have a different type.</td>
+            <td class="description last"><p>Whether group and mpim conversations should have a different type.</p></td>
         </tr>
 
     
@@ -397,7 +397,7 @@
                 </td>
             
 
-            <td class="description last">Whether user preference should be added to cached data. This will significantly increase startup time if true.</td>
+            <td class="description last"><p>Whether user preference should be added to cached data. This will significantly increase startup time if true.</p></td>
         </tr>
 
     
@@ -437,7 +437,7 @@
                 </td>
             
 
-            <td class="description last">Whether to use rtm.start for all init info rather than rtm.connect. If this is false, each thing is separately retrieved by the web api</td>
+            <td class="description last"><p>Whether to use rtm.start for all init info rather than rtm.connect. If this is false, each thing is separately retrieved by the web api</p></td>
         </tr>
 
     
@@ -527,15 +527,16 @@
         <dl>
             
 <hr>
-<dt class="name" id="channels">
-    <h4 id="channels"><span class="type-signature"></span>channels<span class="type-signature"> :Collection.&lt;number, <a href="Channel.html">Channel</a>></span></h4>
+<dt class="name" id="api">
+    <h4 id="api"><span class="type-signature">&lt;readonly> </span>api<span class="type-signature"> :<a href="SlackAPI.html">SlackAPI</a></span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        A collection of channels the Client has access to.These are not all public channels, find by the 'type' property to get groups/ims/etc.
+        <p>The api this Client uses.
+This can and should be used for direct Slack API access.</p>
     </div>
     
 
@@ -544,7 +545,79 @@
         <ul>
             <li>
                 
-<span class="param-type">Collection.&lt;number, <a href="Channel.html">Channel</a>></span>
+<span class="param-type"><a href="SlackAPI.html">SlackAPI</a></span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id="conversations">
+    <h4 id="conversations"><span class="type-signature"></span>conversations<span class="type-signature"> :Collection.&lt;number, <a href="Conversation.html">Conversation</a>></span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>A collection of conversations the Client has access to.
+These are not all public conversations, find by the 'type' property to get groups/ims/etc.</p>
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Collection.&lt;number, <a href="Conversation.html">Conversation</a>></span>
 
 
 
@@ -606,7 +679,8 @@
 <dd>
     
     <div class="description">
-        The client's options.Default values are documented in the constructor.
+        <p>The client's options.
+Default values are documented in the constructor.</p>
     </div>
     
 
@@ -677,7 +751,7 @@
 <dd>
     
     <div class="description">
-        The user that this client is running as.
+        <p>The user that this client is running as.</p>
     </div>
     
 
@@ -748,7 +822,7 @@
 <dd>
     
     <div class="description">
-        The team this client is currently in.
+        <p>The team this client is currently in.</p>
     </div>
     
 
@@ -819,7 +893,7 @@
 <dd>
     
     <div class="description">
-        A collection of users the Client can see (which should be all of them, but may not if the client is restricted).
+        <p>A collection of users the Client can see (which should be all of them, but may not if the client is restricted).</p>
     </div>
     
 
@@ -897,7 +971,7 @@
 
     
     <div class="description">
-        Chats in the specified channel.
+        <p>Chats in the specified channel.</p>
     </div>
     
 
@@ -942,7 +1016,7 @@
             <td class="type">
             
                 
-<span class="param-type"><a href="Channel.html">Channel</a></span>
+<span class="param-type"><a href="Conversation.html">Conversation</a></span>
 |
 
 <span class="param-type"><a href="User.html">User</a></span>
@@ -971,7 +1045,7 @@
                 </td>
             
 
-            <td class="description last">A <a href="Channel.html">Channel</a>, <a href="User.html">User</a> or string representing the channel to chat in.</td>
+            <td class="description last"><p>A <a href="Conversation.html"><code>Conversation</code></a>, <a href="User.html"><code>User</code></a> or string representing the channel to chat in.</p></td>
         </tr>
 
     
@@ -1007,7 +1081,7 @@
                 </td>
             
 
-            <td class="description last">The text to send in the channel.</td>
+            <td class="description last"><p>The text to send in the channel.</p></td>
         </tr>
 
     
@@ -1047,7 +1121,137 @@
                 </td>
             
 
-            <td class="description last">Additional args to send.</td>
+            <td class="description last"><p>Additional args to send.</p>
+                <h6 class="method-params-label method-subparams-label">Properties</h6>
+                
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>postEphemeral</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>If this is truthy, the message will be sent ephemerally</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ephemeral</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>If this is truthy, the message will be sent ephemerally</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>invisible</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>If this is truthy, the message will be sent ephemerally</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -1143,6 +1347,84 @@
             
 <hr>
 <dt>
+    <h4 class="name" id="event:channelCreated">channelCreated</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Emitted when a channel is created.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
     <h4 class="name" id="event:channelMemberJoin">channelMemberJoin</h4>
     
     
@@ -1151,7 +1433,7 @@
 
     
     <div class="description">
-        Emitted when a user joins a slack channel.
+        <p>Emitted when a user joins a slack channel.</p>
     </div>
     
 
@@ -1203,7 +1485,7 @@
 
             
 
-            <td class="description last">Event data.
+            <td class="description last"><p>Event data.</p>
                 <h6 class="method-params-label method-subparams-label">Properties</h6>
                 
 
@@ -1235,7 +1517,7 @@
             <td class="type">
             
                 
-<span class="param-type"><a href="Channel.html">Channel</a></span>
+<span class="param-type">Channel</span>
 
 
 
@@ -1246,7 +1528,7 @@
 
             
 
-            <td class="description last">The channel the member joined.</td>
+            <td class="description last"><p>The channel the member joined.</p></td>
         </tr>
 
     
@@ -1270,7 +1552,7 @@
 
             
 
-            <td class="description last">The user that joined the channel.</td>
+            <td class="description last"><p>The user that joined the channel.</p></td>
         </tr>
 
     
@@ -1297,7 +1579,7 @@
 
             
 
-            <td class="description last">The user that invited the joining member, if applicable.</td>
+            <td class="description last"><p>The user that invited the joining member, if applicable.</p></td>
         </tr>
 
     
@@ -1380,7 +1662,7 @@
 
     
     <div class="description">
-        Emitted when a user leaves a slack channel.
+        <p>Emitted when a user leaves a slack channel.</p>
     </div>
     
 
@@ -1432,7 +1714,7 @@
 
             
 
-            <td class="description last">Event data.
+            <td class="description last"><p>Event data.</p>
                 <h6 class="method-params-label method-subparams-label">Properties</h6>
                 
 
@@ -1464,7 +1746,7 @@
             <td class="type">
             
                 
-<span class="param-type"><a href="Channel.html">Channel</a></span>
+<span class="param-type">Channel</span>
 
 
 
@@ -1475,7 +1757,7 @@
 
             
 
-            <td class="description last">The channel the member joined.</td>
+            <td class="description last"><p>The channel the member joined.</p></td>
         </tr>
 
     
@@ -1499,7 +1781,7 @@
 
             
 
-            <td class="description last">The user that joined the channel.</td>
+            <td class="description last"><p>The user that joined the channel.</p></td>
         </tr>
 
     
@@ -1574,6 +1856,84 @@
             
 <hr>
 <dt>
+    <h4 class="name" id="event:hello">hello</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Emitted when the client connects successfully to slack's RTM</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
     <h4 class="name" id="event:message">message</h4>
     
     
@@ -1582,7 +1942,7 @@
 
     
     <div class="description">
-        Emitted when a message is sent in a slack channel.
+        <p>Emitted when a message is sent in a slack channel.</p>
     </div>
     
 
@@ -1634,7 +1994,7 @@
 
             
 
-            <td class="description last">The message that was sent.</td>
+            <td class="description last"><p>The message that was sent.</p></td>
         </tr>
 
     
@@ -1710,7 +2070,7 @@
 
     
     <div class="description">
-        Emitted when a member joins a slack team
+        <p>Emitted when a member joins a slack team</p>
     </div>
     
 
@@ -1762,7 +2122,7 @@
 
             
 
-            <td class="description last">The user that joined the team.</td>
+            <td class="description last"><p>The user that joined the team.</p></td>
         </tr>
 
     
@@ -1838,7 +2198,7 @@
 
     
     <div class="description">
-        Emitted when a user's name is changed.
+        <p>Emitted when a user's name is changed.</p>
     </div>
     
 
@@ -1890,7 +2250,7 @@
 
             
 
-            <td class="description last">Event data.
+            <td class="description last"><p>Event data.</p>
                 <h6 class="method-params-label method-subparams-label">Properties</h6>
                 
 
@@ -1933,7 +2293,7 @@
 
             
 
-            <td class="description last">The old username.</td>
+            <td class="description last"><p>The old username.</p></td>
         </tr>
 
     
@@ -1957,7 +2317,7 @@
 
             
 
-            <td class="description last">The new username.</td>
+            <td class="description last"><p>The new username.</p></td>
         </tr>
 
     
@@ -2040,7 +2400,7 @@
 
     
     <div class="description">
-        Emitted when a user's profile is changed.
+        <p>Emitted when a user's profile is changed.</p>
     </div>
     
 
@@ -2092,7 +2452,7 @@
 
             
 
-            <td class="description last">Event data.
+            <td class="description last"><p>Event data.</p>
                 <h6 class="method-params-label method-subparams-label">Properties</h6>
                 
 
@@ -2135,7 +2495,7 @@
 
             
 
-            <td class="description last">The old profile.</td>
+            <td class="description last"><p>The old profile.</p></td>
         </tr>
 
     
@@ -2159,7 +2519,7 @@
 
             
 
-            <td class="description last">The new profile.</td>
+            <td class="description last"><p>The new profile.</p></td>
         </tr>
 
     
@@ -2242,7 +2602,7 @@
 
     
     <div class="description">
-        Emitted when a user starts typing.
+        <p>Emitted when a user starts typing.</p>
     </div>
     
 
@@ -2294,7 +2654,7 @@
 
             
 
-            <td class="description last">Event data.
+            <td class="description last"><p>Event data.</p>
                 <h6 class="method-params-label method-subparams-label">Properties</h6>
                 
 
@@ -2337,7 +2697,7 @@
 
             
 
-            <td class="description last">The channel in which the user is typing.</td>
+            <td class="description last"><p>The channel in which the user is typing.</p></td>
         </tr>
 
     
@@ -2361,7 +2721,7 @@
 
             
 
-            <td class="description last">The user that is typing.</td>
+            <td class="description last"><p>The user that is typing.</p></td>
         </tr>
 
     
@@ -2444,7 +2804,7 @@
 
     
     <div class="description">
-        Emitted when a user is changed.
+        <p>Emitted when a user is changed.</p>
     </div>
     
 
@@ -2496,7 +2856,7 @@
 
             
 
-            <td class="description last">Event data.
+            <td class="description last"><p>Event data.</p>
                 <h6 class="method-params-label method-subparams-label">Properties</h6>
                 
 
@@ -2539,7 +2899,7 @@
 
             
 
-            <td class="description last">The old user.</td>
+            <td class="description last"><p>The old user.</p></td>
         </tr>
 
     
@@ -2563,7 +2923,7 @@
 
             
 
-            <td class="description last">The new user.</td>
+            <td class="description last"><p>The new user.</p></td>
         </tr>
 
     
@@ -2678,9 +3038,9 @@
 
 
 <span class="jsdoc-message">
-	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a>
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
 	
-		on 2017-08-13T20:25:19-04:00
+		on 2018-03-01T20:31:52-05:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

@@ -33,14 +33,14 @@
 			<li class="dropdown">
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="Attachment.html">Attachment</a></li><li><a href="Channel.html">Channel</a></li><li><a href="ChannelDescriptor.html">ChannelDescriptor</a></li><li><a href="Client.html">Client</a></li><li><a href="Field.html">Field</a></li><li><a href="IMChannel.html">IMChannel</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageBuilder.html">MessageBuilder</a></li><li><a href="module.exports_module.exports.html">module.exports#module.exports</a></li><li><a href="ObjectUtil.html">ObjectUtil</a></li><li><a href="SlackRTM.html">SlackRTM</a></li><li><a href="StringUtil.html">StringUtil</a></li><li><a href="Team.html">Team</a></li><li><a href="User.html">User</a></li>
+					<li><a href="Attachment.html">Attachment</a></li><li><a href="Client.html">Client</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="ConversationDescriptor.html">ConversationDescriptor</a></li><li><a href="DoNotDisturb.html">DoNotDisturb</a></li><li><a href="Field.html">Field</a></li><li><a href="IMChannel.html">IMChannel</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageBuilder.html">MessageBuilder</a></li><li><a href="ObjectUtil.html">ObjectUtil</a></li><li><a href="SlackRTM.html">SlackRTM</a></li><li><a href="SlackUtil.html">SlackUtil</a></li><li><a href="StringUtil.html">StringUtil</a></li><li><a href="Team.html">Team</a></li><li><a href="User.html">User</a></li>
 				</ul>
 			</li>
 			
 			<li class="dropdown">
 				<a href="events.list.html" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="Client.html#event:channelMemberJoin">Client#event:channelMemberJoin</a></li><li><a href="Client.html#event:channelMemberLeave">Client#event:channelMemberLeave</a></li><li><a href="Client.html#event:message">Client#event:message</a></li><li><a href="Client.html#event:teamMemberJoin">Client#event:teamMemberJoin</a></li><li><a href="Client.html#event:userNameChange">Client#event:userNameChange</a></li><li><a href="Client.html#event:userProfileUpdate">Client#event:userProfileUpdate</a></li><li><a href="Client.html#event:userTyping">Client#event:userTyping</a></li><li><a href="Client.html#event:userUpdate">Client#event:userUpdate</a></li>
+					<li><a href="Client.html#event:channelCreated">Client#event:channelCreated</a></li><li><a href="Client.html#event:channelMemberJoin">Client#event:channelMemberJoin</a></li><li><a href="Client.html#event:channelMemberLeave">Client#event:channelMemberLeave</a></li><li><a href="Client.html#event:hello">Client#event:hello</a></li><li><a href="Client.html#event:message">Client#event:message</a></li><li><a href="Client.html#event:teamMemberJoin">Client#event:teamMemberJoin</a></li><li><a href="Client.html#event:userNameChange">Client#event:userNameChange</a></li><li><a href="Client.html#event:userProfileUpdate">Client#event:userProfileUpdate</a></li><li><a href="Client.html#event:userTyping">Client#event:userTyping</a></li><li><a href="Client.html#event:userUpdate">Client#event:userUpdate</a></li>
 				</ul>
 			</li>
 			
@@ -98,7 +98,7 @@
         
 <hr>
 <dt>
-    <h4 class="name" id="MessageBuilder"><span class="type-signature"></span>new MessageBuilder()</h4>
+    <h4 class="name" id="MessageBuilder"><span class="type-signature"></span>new MessageBuilder(client)</h4>
     
     
 </dt>
@@ -106,7 +106,7 @@
 
     
     <div class="description">
-        This class allows you to build a <a href="Message.html">Message</a> easily.
+        <p>This class allows you to build a <a href="Message.html"><code>Message</code></a> easily.</p>
     </div>
     
 
@@ -116,100 +116,55 @@
 
     
     
+        <h5>Parameters:</h5>
+        
 
-    
-<dl class="details">
-    
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
 
-	
+        <th>Type</th>
 
-	
+        
 
-	
+        
 
-    
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-
-	
-
-	
-
-	
-</dl>
-
-
+    <tbody>
     
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        <dl>
+        <tr>
             
-<hr>
-<dt class="name" id="text">
-    <h4 id="text"><span class="type-signature"></span>text<span class="type-signature"> :null</span></h4>
+                <td class="name"><code>client</code></td>
+            
 
-    
-</dt>
-<dd>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
+            <td class="type">
+            
                 
-<span class="param-type">null</span>
+<span class="param-type"><a href="Client.html">Client</a></span>
 
 
 
-            </li>
-        </ul>
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The client to build the <a href="Message.html"><code>Message</code></a> with.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
     
 
     
@@ -253,9 +208,33 @@
 
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dd>
 
-        </dl>
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
 
     
@@ -273,7 +252,7 @@
 
     
     <div class="description">
-        Adds an attachment to the message
+        <p>Adds an attachment to the message</p>
     </div>
     
 
@@ -407,7 +386,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="build"><span class="type-signature"></span>build(client)</h4>
+    <h4 class="name" id="build"><span class="type-signature"></span>build()</h4>
     
     
 </dt>
@@ -415,7 +394,7 @@
 
     
     <div class="description">
-        Builds and returns the <a href="Message.html">Message</a> being created.
+        <p>Builds and returns the <a href="Message.html"><code>Message</code></a> being created.</p>
     </div>
     
 
@@ -424,56 +403,6 @@
     
 
     
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>client</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Client.html">Client</a></span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The client to build the <a href="Message.html">Message</a> with.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
     
 
     
@@ -563,7 +492,7 @@
 
     
     <div class="description">
-        Sets the destination channel for the message
+        <p>Sets the destination channel for the message</p>
     </div>
     
 
@@ -604,7 +533,7 @@
             <td class="type">
             
                 
-<span class="param-type"><a href="Channel.html">Channel</a></span>
+<span class="param-type"><a href="Conversation.html">Conversation</a></span>
 
 
 
@@ -615,7 +544,7 @@
 
             
 
-            <td class="description last">The <a href="Channel.html">Channel</a> to set</td>
+            <td class="description last"><p>The <a href="Conversation.html"><code>Conversation</code></a> to set</p></td>
         </tr>
 
     
@@ -711,7 +640,7 @@
 
     
     <div class="description">
-        Sets the text for the message
+        <p>Sets the text for the message</p>
     </div>
     
 
@@ -763,7 +692,7 @@
 
             
 
-            <td class="description last">The text to set</td>
+            <td class="description last"><p>The text to set</p></td>
         </tr>
 
     
@@ -895,9 +824,9 @@
 
 
 <span class="jsdoc-message">
-	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a>
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
 	
-		on 2017-08-13T20:25:19-04:00
+		on 2018-03-01T20:31:52-05:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
