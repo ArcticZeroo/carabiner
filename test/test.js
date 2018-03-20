@@ -53,13 +53,18 @@ describe('Carabiner', function () {
             function countExistingMethods(pointer = client.api.methods) {
                 let count = 0;
 
+                console.log('counting methods...');
+
                 for (const method of Object.keys(pointer)) {
+                    console.log(`checking method ${method}`);
                     if (typeof pointer[method] === 'function') {
+                        console.log('it\'s a function, incrementing count');
                         count++;
                         continue;
                     }
 
-                    count += countExistingMethods(pointer[method])
+                    console.log('going deeper');
+                    count += countExistingMethods(pointer[method]);
                 }
 
                 return count;
@@ -67,7 +72,7 @@ describe('Carabiner', function () {
 
             const existingMethods = countExistingMethods();
 
-            assert.strictEqual(existingMethods, split.length);
+            assert.strictEqual(existingMethods, methods.length);
         });
     });
 
