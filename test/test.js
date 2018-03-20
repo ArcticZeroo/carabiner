@@ -52,7 +52,7 @@ describe('Carabiner', function () {
                 let count = 0;
 
                 for (const method of Object.keys(pointer)) {
-                    if (typeof client.api.methods[method] === 'function') {
+                    if (typeof pointer[method] === 'function') {
                         count++;
                         continue;
                     }
