@@ -32,6 +32,8 @@ async function asyncThrows(promise, error = Error) {
 }
 
 describe('Carabiner', function () {
+    assert.notEqual(process.env.SLACK_TOKEN, null, 'Slack token should be set in environment variables');
+
     const client = new Client(process.env.SLACK_TOKEN);
 
     describe('SlackAPI', function () {
@@ -43,6 +45,27 @@ describe('Carabiner', function () {
             const actualUniqueMethods = Object.keys(client.api.methods).length;
 
             return assert.strictEqual(expectedUniqueMethods, actualUniqueMethods);
+        });
+
+        it('should generate all actual methods', function () {
+            function countExistingMethods(pointer = client.api.methods) {
+                let count = 0;
+
+                for (const method of Object.keys(pointer)) {
+                    if (typeof client.api.methods[method] === 'function') {
+                        count++;
+                        continue;
+                    }
+
+                    count += countExistingMethods(pointer[method])
+                }
+
+                return count;
+            }
+
+            const existingMethods = countExistingMethods();
+
+            assert.strictEqual(existingMethods, split.length);
         });
     });
 
