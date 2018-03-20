@@ -31,6 +31,8 @@ async function asyncThrows(promise, error = Error) {
     return false;
 }
 
+process.on('unhandledRejection', console.error);
+
 describe('Carabiner', function () {
     assert.notEqual(process.env.SLACK_TOKEN, null, 'Slack token should be set in environment variables');
 
