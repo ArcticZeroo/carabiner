@@ -1,7 +1,13 @@
 const assert = require('assert');
+
+const methods = require('../config/methods');
+const mockData = require('./mockData');
+
 const Client = require('../lib/client/Client');
 const SlackAPI = require('../lib/api/SlackAPI');
-const methods = require('../config/methods');
+
+const ConversationType = require('../lib/enum/ConversationType');
+const User = require('../lib/structures/user/User');
 
 async function backwardsResolve(promise) {
     const msg = 'Promise resolved normally';
@@ -36,43 +42,27 @@ process.on('unhandledRejection', console.error);
 describe('Carabiner', function () {
     assert.notEqual(process.env.SLACK_TOKEN, null, 'Slack token should be set in environment variables');
 
-    const client = new Client(process.env.SLACK_TOKEN);
+    const mainClient = new Client(process.env.SLACK_TOKEN);
 
-    describe('SlackAPI', function () {
+    describe('SlackAPI Generation', function () {
         const split = methods.map(m => m.split('.'));
 
         it('should generate all high-level method categories', function () {
             // Get all high-level categories and cast it to a set so it's distinct
             const expectedUniqueMethods = new Set(split.map(s => s[0])).size;
-            const actualUniqueMethods = Object.keys(client.api.methods).length;
+            const actualUniqueMethods = Object.keys(mainClient.api.methods).length;
 
             return assert.strictEqual(expectedUniqueMethods, actualUniqueMethods);
         });
 
         it('should generate all actual methods', function () {
-            function countExistingMethods(pointer = client.api.methods) {
-                let count = 0;
-
-                console.log('counting methods...');
-
-                for (const method of Object.keys(pointer)) {
-                    console.log(`checking method ${method}`);
-                    if (typeof pointer[method] === 'function') {
-                        console.log('it\'s a function, incrementing count');
-                        count++;
-                        continue;
-                    }
-
-                    console.log('going deeper');
-                    count += countExistingMethods(pointer[method]);
+            for (const method of methods) {
+                let pointer = mainClient.api.methods;
+                for (const piece of method.split('.')) {
+                    assert.ok(pointer.hasOwnProperty(piece), 'Method ' + method + ' is missing');
+                    pointer = pointer[piece];
                 }
-
-                return count;
             }
-
-            const existingMethods = countExistingMethods();
-
-            assert.strictEqual(existingMethods, methods.length);
         });
     });
 
@@ -84,29 +74,29 @@ describe('Carabiner', function () {
         });
 
         it('should return an object when making slack requests', async function () {
-            return assert(typeof (await client.api.methods.api.test()) === 'object');
+            return assert(typeof (await mainClient.api.methods.api.test()) === 'object');
         });
 
         it('should correctly pass all args', async function () {
             const args = {
                 hello: 'world',
                 count: '4',
-                token: client.api.token
+                token: mainClient.api.token
             };
 
-            return client.api.methods.api.test(args).then(r => {
+            return mainClient.api.methods.api.test(args).then(r => {
                 assert.equal(JSON.stringify(r.args), JSON.stringify(args));
             });
         });
     });
 
     describe('Web API', function () {
-        it('should be able to start rtm', async function () {
-            return client.api.methods.rtm.start();
+        it('should resolve when calling the basic api test', function () {
+            return mainClient.api.methods.api.test();
         });
 
         it('should be able to parse arrays from requests', async function () {
-            return client.api.methods.users.list({
+            return mainClient.api.methods.users.list({
                 limit: 5,
                 presence: false
             }).then(res => {
@@ -125,7 +115,7 @@ describe('Carabiner', function () {
                 throw e;
             }
 
-            return new Promise(resolve =>{
+            return new Promise(resolve => {
                 client.api.rtm.once('open', resolve);
             });
         });
@@ -140,7 +130,7 @@ describe('Carabiner', function () {
             }
 
             // If anyone complains about this memory leak... stop yourself.
-            return new Promise((resolve, reject)=>{
+            return new Promise((resolve, reject) => {
                 client.api.rtm.once('event', resolve);
                 client.api.rtm.once('error', reject);
             });
@@ -181,7 +171,39 @@ describe('Carabiner', function () {
 
     describe('Structures', async function () {
         describe('User', async function () {
+            const testUser = new User(mainClient, mockData.user);
 
+            assert.equal(testUser.client, mainClient);
+            assert.equal(testUser.id, mockData.user['id']);
+            assert.equal(testUser.isAdmin, mockData.user['is_admin']);
+        });
+    });
+
+    describe('Test slack organization', async function () {
+        const testClient = new Client(process.env.SLACK_TOKEN);
+
+        try {
+            await testClient.init();
+        } catch (e) {
+            throw e;
+        }
+
+        it('should recognize the self as a bot', function () {
+            assert.ok(testClient.self.isBot, 'User is not recognized as a bot');
+        });
+
+        it('should contain the correct distributions of channels', function () {
+           assert.equal(testClient.conversations.length, 4);
+           assert.equal(testClient.conversations.findAll('type', ConversationType.CHANNEL).length, 2);
+           assert.equal(testClient.conversations.findAll('type', ConversationType.GROUP).length, 2);
+        });
+
+        it('should contain the correct #general', function () {
+            const generalConversation = testClient.conversations.find('name', 'general');
+
+            assert.ok(generalConversation != null, '#general does not exist');
+            assert.equal(generalConversation.topic.value, 'Company-wide announcements and work-based matters', 'incorrect topic');
+            assert.ok(generalConversation.members.find('id', testClient.self.id) != null, '#general does not contain the bot');
         });
     });
 });
