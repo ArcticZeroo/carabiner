@@ -17,7 +17,7 @@
   },
   "scripts": {
     "build-docs": "jsdoc -c ./jsdoc.json -R README.md -r ./lib",
-    "test": "mocha -u tdd --reporter spec"
+    "test": "mocha -u tdd --reporter spec --exit"
   },
   "devDependencies": {
     "eslint": "^4.18.1",

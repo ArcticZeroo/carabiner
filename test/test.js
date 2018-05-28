@@ -186,7 +186,7 @@ describe('Carabiner', function () {
     });
 
     describe('Test slack organization', async function () {
-        const testClient = new Client(process.env.SLACK_TOKEN);
+        const testClient = new Client(process.env.SLACK_TOKEN, { rtm: false });
 
         try {
             await testClient.init();
