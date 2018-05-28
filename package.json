@@ -4,6 +4,7 @@
   "repository": "https://github.com/ArcticZeroo/carabiner",
   "version": "0.0.1",
   "dependencies": {
+    "bluebird": "^3.5.1",
     "deep-equal": "^1.0.1",
     "djs-collection": "0.0.5",
     "snekfetch": "^3.2.4",
@@ -16,7 +17,7 @@
   },
   "scripts": {
     "build-docs": "jsdoc -c ./jsdoc.json -R README.md -r ./lib",
-    "test": "mocha"
+    "test": "mocha -u tdd --reporter spec"
   },
   "devDependencies": {
     "eslint": "^4.18.1",

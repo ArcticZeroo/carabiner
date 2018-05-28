@@ -1,4 +1,5 @@
 const assert = require('assert');
+const Promise = require('bluebird');
 
 const methods = require('../config/methods');
 const mockData = require('./mockData');
@@ -117,7 +118,9 @@ describe('Carabiner', function () {
 
             return new Promise(resolve => {
                 client.api.rtm.once('open', resolve);
-            });
+            })
+                .timeout(2000)
+                .finally(() => client.api.rtm.destroy());
         });
 
         it('should be able to receive rtm events', async function () {
@@ -133,7 +136,9 @@ describe('Carabiner', function () {
             return new Promise((resolve, reject) => {
                 client.api.rtm.once('event', resolve);
                 client.api.rtm.once('error', reject);
-            });
+            })
+                .timeout(2000)
+                .finally(() => client.api.rtm.destroy());
         });
     });
 
@@ -155,16 +160,17 @@ describe('Carabiner', function () {
 
                 const client = new Client(process.env.SLACK_TOKEN, {useRtmStart: true});
 
-                client.init().catch((e) => {
+                try {
+                    await client.init();
+                } catch (e) {
                     throw e;
-                });
+                }
 
                 return new Promise(resolve => {
-                    client.api.rtm.once('open', () => {
-                        client.api.rtm.destroy();
-                        resolve();
-                    });
-                });
+                    client.api.rtm.once('open', resolve);
+                })
+                    .timeout(10000)
+                    .finally(() => client.api.rtm.destroy());
             });
         });
     });
