@@ -38,6 +38,10 @@ async function asyncThrows(promise, error = Error) {
     return false;
 }
 
+function pause(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 process.on('unhandledRejection', console.error);
 
 describe('Carabiner', function () {
@@ -124,6 +128,11 @@ describe('Carabiner', function () {
         });
 
         it('should be able to receive rtm events', async function () {
+            this.timeout(10000);
+
+            // Wait for 8s to prevent 429 too many requests
+            await pause(8000);
+
             const client = new Client(process.env.SLACK_TOKEN);
 
             try {
@@ -175,41 +184,88 @@ describe('Carabiner', function () {
         });
     });
 
-    describe('Structures', async function () {
+    describe('Structures', function () {
         describe('User', async function () {
-            const testUser = new User(mainClient, mockData.user);
+            it('should assign all necessary properties from mock data', function () {
+                const testUser = new User(mainClient, mockData.user);
 
-            assert.equal(testUser.client, mainClient);
-            assert.equal(testUser.id, mockData.user['id']);
-            assert.equal(testUser.isAdmin, mockData.user['is_admin']);
+                assert.equal(testUser.client, mainClient);
+                assert.equal(testUser.id, mockData.user['id']);
+                assert.equal(testUser.isAdmin, mockData.user['is_admin']);
+            });
         });
     });
 
-    describe('Test slack organization', async function () {
+    describe('Test slack organization', function () {
         const testClient = new Client(process.env.SLACK_TOKEN, { rtm: false });
 
-        try {
-            await testClient.init();
-        } catch (e) {
-            throw e;
-        }
+        before(function initClient() {
+            this.timeout(5000);
+
+            return testClient.init();
+        });
 
         it('should recognize the self as a bot', function () {
             assert.ok(testClient.self.isBot, 'User is not recognized as a bot');
         });
 
+        it('should contain slackbot in users', function () {
+            assert.ok(testClient.users.find('isSlackbot', true) != null, 'Slackbot was not found');
+        });
+
         it('should contain the correct distributions of channels', function () {
-           assert.equal(testClient.conversations.length, 4);
-           assert.equal(testClient.conversations.findAll('type', ConversationType.CHANNEL).length, 2);
-           assert.equal(testClient.conversations.findAll('type', ConversationType.GROUP).length, 2);
+            assert.equal(testClient.conversations.findAll('type', ConversationType.CHANNEL).length, 2);
+            assert.equal(testClient.conversations.findAll('type', ConversationType.GROUP).length, 2);
         });
 
         it('should contain the correct #general', function () {
-            const generalConversation = testClient.conversations.find('name', 'general');
+            const conversation = testClient.conversations.find('name', 'general');
 
-            assert.ok(generalConversation != null, '#general does not exist');
-            assert.equal(generalConversation.topic.value, 'Company-wide announcements and work-based matters', 'incorrect topic');
-            assert.ok(generalConversation.members.find('id', testClient.self.id) != null, '#general does not contain the bot');
+            assert.ok(conversation != null, '#general does not exist');
+            assert.ok(conversation.type === ConversationType.CHANNEL, '#general is not a public channel');
+            assert.equal(conversation.topic.value, 'Company-wide announcements and work-based matters', 'incorrect topic');
+            assert.ok(conversation.contains(testClient.self), '#general does not contain the bot');
+        });
+
+        it('should contain the correct #random', function () {
+            const conversation = testClient.conversations.find('name', 'random');
+
+            assert.ok(conversation != null, '#random does not exist');
+            assert.ok(conversation.type === ConversationType.CHANNEL, '#random is not a public channel');
+            assert.equal(conversation.topic.value, 'Non-work banter and water cooler conversation', 'incorrect topic');
+            assert.ok(!conversation.contains(testClient.self), '#random does contain the bot');
+        });
+
+        it('should contain the correct #carabiner-private', function () {
+            const conversation = testClient.conversations.find('name', 'carabiner-private');
+
+            assert.ok(conversation != null, '#carabiner-private does not exist');
+            assert.ok(conversation.type === ConversationType.GROUP, '#carabiner-private is not a private channel');
+            assert.ok(conversation.contains(testClient.self), '#carabiner-private does not contain the bot');
+        });
+
+        it('should contain the correct #carabiner-solitary', function () {
+            const conversation = testClient.conversations.find('name', 'carabiner-solitary');
+
+            assert.ok(conversation != null, '#carabiner-solitary does not exist');
+            assert.ok(conversation.type === ConversationType.GROUP, '#carabiner-solitary is not a private channel');
+            assert.ok(!conversation.topic.exists, '#carabiner-solitary has a conversation topic');
+            assert.ok(conversation.contains(testClient.self), '#carabiner-solitary does not contain the bot');
+
+            if (conversation.members.size !== 1) {
+                assert.strictEqual(conversation.members.size, 2, 'conversation has too many users');
+
+                // Get the only other user in this conversation, i.e. the only other one whose ID is not mine
+                // since members is a map of <ID, User>
+                const other = conversation.members.get(
+                    conversation.members
+                        .keyArray()
+                        .filter(id => !(id === testClient.self.id))[0]
+                );
+
+                assert.ok(other != null, 'the other user could not be found');
+                assert.ok(other === conversation.creator, 'the other user is not the creator of the conversation');
+            }
         });
     });
 });
