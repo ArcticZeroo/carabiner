@@ -151,7 +151,7 @@ describe('Carabiner', function () {
             });
 
             it('should connect to rtm automatically', async function () {
-                this.timeout = 20000;
+                this.timeout(10000);
 
                 const client = new Client(process.env.SLACK_TOKEN, {useRtmStart: true});
 
