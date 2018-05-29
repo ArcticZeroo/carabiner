@@ -111,6 +111,11 @@ describe('Carabiner', function () {
     });
 
     describe('RTM API', function () {
+        afterEach(function () {
+            this.timeout(9000);
+            return pause(8000);
+        });
+
         it('should be able to connect to rtm', async function () {
             const client = new Client(process.env.SLACK_TOKEN);
 
@@ -128,11 +133,6 @@ describe('Carabiner', function () {
         });
 
         it('should be able to receive rtm events', async function () {
-            this.timeout(10000);
-
-            // Wait for 8s to prevent 429 too many requests
-            await pause(8000);
-
             const client = new Client(process.env.SLACK_TOKEN);
 
             try {
@@ -153,7 +153,7 @@ describe('Carabiner', function () {
 
     describe('Client', async function () {
         describe('init', async function () {
-            it('should successfully cache objects', async function () {
+            it('should successfully cache objects without RTM', async function () {
                 const client = new Client(process.env.SLACK_TOKEN, {rtm: false});
                 await client.init();
 
