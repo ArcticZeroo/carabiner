@@ -6,6 +6,7 @@
 ## Tests
 - Set your slack token in the env variable SLACK_TOKEN. Easy, right?
 - Make the slack token contain a workspace with the following (I made one just for testing):
+    - The name "CarabinerJS"
     - The token's user, who should be given the username "carabiner-test-bot"
         - Add a bot here: https://my.slack.com/services/new/bot
     - A channel called "general" whose topic is "Company-wide announcements and work-based matters" (default) and contains the bot

@@ -7,6 +7,7 @@
     "bluebird": "^3.5.1",
     "deep-equal": "^1.0.1",
     "djs-collection": "0.0.5",
+    "enmap": "^2.5.2",
     "nyc": "^11.8.0",
     "snekfetch": "^3.2.4",
     "ws": "^3.0.0"
