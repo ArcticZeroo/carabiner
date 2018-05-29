@@ -1,5 +1,7 @@
 # Carabiner
 
+[![Build Status](https://travis-ci.org/ArcticZeroo/carabiner.svg?branch=master)](https://travis-ci.org/ArcticZeroo/carabiner)
+
 Easy to use, high level slack lib for Node.JS!
 
 Documentation coming soon, this is not a complete version. Feel free to clone the repo and run jsdoc, many classes are already pretty documented.
