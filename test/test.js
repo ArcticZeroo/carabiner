@@ -5,7 +5,7 @@ const methods = require('../config/methods');
 const mockData = require('./mockData');
 
 const Client = require('../lib/client/Client');
-const SlackAPI = require('../lib/api/SlackAPI');
+//const SlackAPI = require('../lib/api/SlackAPI');
 
 const ConversationType = require('../lib/enum/ConversationType');
 const User = require('../lib/structures/user/User');
@@ -189,6 +189,8 @@ describe('Carabiner', function () {
             it('should assign all necessary properties from mock data', function () {
                 const testUser = new User(mainClient, mockData.user);
 
+                // Yeah... this isn't ALL properties.
+                // But I'm a bit lazy at the time of writing this.
                 assert.equal(testUser.client, mainClient);
                 assert.equal(testUser.id, mockData.user['id']);
                 assert.equal(testUser.isAdmin, mockData.user['is_admin']);
