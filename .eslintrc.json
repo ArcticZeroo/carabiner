@@ -35,7 +35,14 @@
     "accessor-pairs": "error",
     "array-callback-return": "error",
     "no-else-return": "error",
-    "no-empty-function": "warn",
+    "no-empty-function": [
+      "warn",
+      {
+        "allow": [
+          "constructors"
+        ]
+      }
+    ],
     "no-implicit-coercion": [
       "error",
       {
@@ -61,7 +68,10 @@
       "error"
     ],
     "camelcase": [
-      "error"
+      // Warning so that we can make
+      // slack api calls without it
+      // getting mad at us
+      "warn"
     ],
     "one-var": [
       "error",
@@ -73,8 +83,10 @@
     "require-jsdoc": [
       "warn",
       {
-        "FunctionDeclaration": true,
-        "MethodDefinition": true
+        "require": {
+          "FunctionDeclaration": true,
+          "MethodDefinition": true
+        }
       }
     ],
     "generator-star-spacing": [
@@ -92,7 +104,6 @@
       "always",
       {
         "avoidQuotes": true
-
       }
     ],
     "prefer-rest-params": [
@@ -100,7 +111,14 @@
     ],
     "prefer-template": [
       "error"
-    ]
+    ],
+    "prefer-const": [
+      "error",
+      {
+        "destructuring": "any"
+      }
+    ],
+    "no-undef": "warn"
   },
   "parserOptions": {
     "ecmaVersion": 2017
