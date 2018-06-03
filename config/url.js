@@ -1,1 +1,0 @@
-module.exports = 'https://slack.com/api/';
