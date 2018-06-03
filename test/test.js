@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars,no-console */
 const assert = require('assert');
 const Promise = require('bluebird');
 
@@ -9,6 +10,7 @@ const Client = require('../lib/client/Client');
 
 const ConversationType = require('../lib/enum/ConversationType');
 const User = require('../lib/structures/user/User');
+const SlackUtil = require('../lib/util/SlackUtil');
 
 async function backwardsResolve(promise) {
     const msg = 'Promise resolved normally';
@@ -44,10 +46,50 @@ function pause(ms) {
 
 process.on('unhandledRejection', console.error);
 
-describe('Carabiner', function () {
-    assert.notEqual(process.env.SLACK_TOKEN, null, 'Slack token should be set in environment variables');
+describe('SlackUtil', function () {
+    describe('#convertProperties', function () {
+        it('works with no underscores', function () {
+            const obj = {
+                hello: 'world'
+            };
 
-    const mainClient = new Client(process.env.SLACK_TOKEN);
+            const converted = SlackUtil.convertProperties(obj);
+
+            assert.strictEqual(converted.hello, obj.hello, 'Did not convert property hello');
+        });
+
+        it('works with one underscore', function () {
+            const obj = {
+                hello_world: 'yup'
+            };
+
+            const converted = SlackUtil.convertProperties(obj);
+
+            assert.strictEqual(converted.helloWorld, obj.hello_world, 'Did not convert property hello_world');
+            assert.ok(converted.hello_world == null, 'hello_world property persisted to new object');
+        });
+
+        it('works with more than one underscore', function () {
+            const obj = {
+                to_be_or_not_to_be: 'that is the question'
+            };
+
+            const converted = SlackUtil.convertProperties(obj);
+
+            assert.strictEqual(converted.toBeOrNotToBe, obj.to_be_or_not_to_be, 'Did not convert property to_be_or_not_to_be');
+            assert.ok(converted.to_be_or_not_to_be == null, 'to_be_or_not_to_be property persisted to new object');
+        });
+    });
+});
+
+describe('Carabiner', function () {
+    let mainClient;
+
+    before(function () {
+        assert.ok(process.env.SLACK_TOKEN != null, 'Slack token should be set in environment variables');
+
+        mainClient = new Client(process.env.SLACK_TOKEN);
+    });
 
     describe('SlackAPI Generation', function () {
         const split = methods.map(m => m.split('.'));
@@ -101,37 +143,25 @@ describe('Carabiner', function () {
         });
 
         it('should be able to parse arrays from requests', async function () {
+            // Limit the amount of users we get back,
+            // disable presence. We don't need much
+            // data, just need it to validate
             return mainClient.api.methods.users.list({
-                limit: 5,
+                limit: 2,
                 presence: false
             }).then(res => {
-                assert(Array.isArray(res.members));
+                assert.ok(Array.isArray(res.members), 'res.members is not an array');
             });
         });
     });
 
     describe('RTM API', function () {
-        afterEach(function () {
-            this.timeout(9000);
-            return pause(8000);
-        });
-
-        it('should be able to connect to rtm', async function () {
-            const client = new Client(process.env.SLACK_TOKEN);
-
-            try {
-                await client.api.rtm.connect();
-            } catch (e) {
-                throw e;
-            }
-
-            return new Promise(resolve => {
-                client.api.rtm.once('open', resolve);
-            })
-                .timeout(2000)
-                .finally(() => client.api.rtm.destroy());
-        });
-
+        // This also tests the removed test to check
+        // whether it can even connect to RTM to begin
+        // with, because otherwise the two are redundant.
+        // It either connects and receives events (which
+        // is how we determine if it's opened) or it
+        // doesn't at all.
         it('should be able to receive rtm events', async function () {
             const client = new Client(process.env.SLACK_TOKEN);
 
@@ -154,7 +184,8 @@ describe('Carabiner', function () {
     describe('Client', async function () {
         describe('init', async function () {
             it('should successfully cache objects without RTM', async function () {
-                const client = new Client(process.env.SLACK_TOKEN, {rtm: false});
+                const client = new Client(process.env.SLACK_TOKEN, { rtm: false });
+
                 await client.init();
 
                 // If length is 0 or id is null then it did not properly cache the item
@@ -165,9 +196,10 @@ describe('Carabiner', function () {
             });
 
             it('should connect to rtm automatically', async function () {
+                // This can take a while sometimes
                 this.timeout(10000);
 
-                const client = new Client(process.env.SLACK_TOKEN, {useRtmStart: true});
+                const client = new Client(process.env.SLACK_TOKEN, { useRtmStart: true });
 
                 try {
                     await client.init();
@@ -199,10 +231,12 @@ describe('Carabiner', function () {
     });
 
     describe('Test slack organization', function () {
-        const testClient = new Client(process.env.SLACK_TOKEN, { rtm: false });
+        let testClient;
 
         before(function initClient() {
             this.timeout(5000);
+
+            testClient = new Client(process.env.SLACK_TOKEN, { rtm: false });
 
             return testClient.init();
         });
