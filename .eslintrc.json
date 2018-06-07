@@ -118,7 +118,11 @@
         "destructuring": "any"
       }
     ],
-    "no-undef": "warn"
+    "no-undef": "warn",
+    "template-curly-spacing": [
+      "error",
+      "never"
+    ]
   },
   "parserOptions": {
     "ecmaVersion": 2017
