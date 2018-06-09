@@ -122,6 +122,10 @@
     "template-curly-spacing": [
       "error",
       "never"
+    ],
+    "arrow-parens": [
+      "error",
+      "as-needed"
     ]
   },
   "parserOptions": {
