@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "eslint": "^4.19.1",
-    "ink-docstrap": "^1.3.2"
+    "ink-docstrap": "^1.3.2",
+    "@arcticzeroo/eslint-config": "latest"
   }
 }
