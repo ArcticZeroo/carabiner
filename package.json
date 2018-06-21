@@ -22,7 +22,7 @@
     "test": "mocha -u tdd --reporter spec"
   },
   "devDependencies": {
-    "@arcticzeroo/eslint-config": "latest",
+    "@arcticzeroo/eslint-config": "^1.0.4",
     "eslint": "^4.19.1",
     "ink-docstrap": "^1.3.2",
     "jsdoc": "^3.5.5"
