@@ -46,42 +46,6 @@ function pause(ms) {
 
 process.on('unhandledRejection', console.error);
 
-describe('SlackUtil', function () {
-    describe('#convertProperties', function () {
-        it('works with no underscores', function () {
-            const obj = {
-                hello: 'world'
-            };
-
-            const converted = SlackUtil.convertProperties(obj);
-
-            assert.strictEqual(converted.hello, obj.hello, 'Did not convert property hello');
-        });
-
-        it('works with one underscore', function () {
-            const obj = {
-                hello_world: 'yup'
-            };
-
-            const converted = SlackUtil.convertProperties(obj);
-
-            assert.strictEqual(converted.helloWorld, obj.hello_world, 'Did not convert property hello_world');
-            assert.ok(converted.hello_world == null, 'hello_world property persisted to new object');
-        });
-
-        it('works with more than one underscore', function () {
-            const obj = {
-                to_be_or_not_to_be: 'that is the question'
-            };
-
-            const converted = SlackUtil.convertProperties(obj);
-
-            assert.strictEqual(converted.toBeOrNotToBe, obj.to_be_or_not_to_be, 'Did not convert property to_be_or_not_to_be');
-            assert.ok(converted.to_be_or_not_to_be == null, 'to_be_or_not_to_be property persisted to new object');
-        });
-    });
-});
-
 describe('Carabiner', function () {
     let mainClient;
 

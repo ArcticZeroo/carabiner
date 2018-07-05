@@ -38,5 +38,20 @@ module.exports = {
         'is_bot': false,
         'updated': 1480527098,
         'has_2fa': false
+    },
+    slackResponse: {
+        validCursor: {
+            response_metadata: {
+                next_cursor: 'I am a cursor!'
+            }
+        },
+        invalidCursor: {
+            response_metadata: {
+                next_cursor: ''
+            }
+        }
+    },
+    pages: {
+        getDataReturn: 'transformed data!'
     }
 };
