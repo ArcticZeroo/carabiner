@@ -5,11 +5,12 @@
   "version": "0.0.4",
   "dependencies": {
     "bluebird": "^3.5.1",
+    "chai": "^4.1.2",
     "deep-equal": "^1.0.1",
     "djs-collection": "0.0.5",
     "enmap": "^2.5.2",
     "nyc": "^11.8.0",
-    "snekfetch": "^3.2.4",
+    "superagent": "^3.8.3",
     "ws": "^3.0.0"
   },
   "main": "index.js",
@@ -19,7 +20,7 @@
   },
   "scripts": {
     "build-docs": "./node_modules/.bin/jsdoc -c ./jsdoc.json -R README.md -r ./lib",
-    "test": "mocha -u tdd --reporter spec"
+    "test": "mocha mocha test/**/*.test.js"
   },
   "devDependencies": {
     "@arcticzeroo/eslint-config": "^1.0.4",
