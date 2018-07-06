@@ -66,8 +66,8 @@ describe('SlackUtil', function () {
     });
 
     describe('#getNextPage', function () {
-        it('returns null when the last response had no valid cursor (i.e. no args provided/null res/end of pages)', function () {
-            expect(SlackUtil.getNextPage({})).to.be.null;
+        it('returns null when the last response had no valid cursor (i.e. no args provided/null res/end of pages)', async function () {
+            expect(await SlackUtil.getNextPage({ res: null })).to.be.null;
         });
 
         const limit = 50;
@@ -79,22 +79,104 @@ describe('SlackUtil', function () {
             return new Promise(resolve => SlackUtil.getNextPage({
                 res, limit, getData,
                 // This has to be async since getNextPage assumes it returns a promise
-                async method () { resolve(); }
+                async method ({ limit: methodLimit, cursor: methodCursor }) {
+                    expect(methodLimit).to.equal(limit);
+                    expect(methodCursor).to.equal(res.response_metadata.next_cursor);
+                    resolve();
+                }
             }));
         });
 
-        it('calls getData and returns the transformed value', async function () {
-            const getData = () => mockData.pages.getDataReturn;
+        it('returns the value provided by method() call', async function () {
+            // This has to be async since getNextPage assumes it returns a promise
+            const method = () => 'hello';
 
-            const promise = new Promise(resolve => SlackUtil.getNextPage({
-                res, limit, getData,
-                // This has to be async since getNextPage assumes it returns a promise
-                async method () { resolve(); }
-            }));
+            const promise = SlackUtil.getNextPage({ res, limit, method });
 
             const returnValue = await promise;
 
-            expect(returnValue).to.equal(mockData.pages.getDataReturn);
+            expect(returnValue).to.equal('hello');
+        });
+    });
+
+    describe('#getPages', function () {
+        it('properly calls the method at least once', function () {
+            return new Promise(resolve => SlackUtil.getPages({
+                method() { resolve(); },
+                getData() { return { res: mockData.slackResponse.invalidCursor }; },
+                combine: false
+            }));
+        });
+
+        it('calls the method until cursor is null', async function () {
+            let hitCount = 0;
+
+            await SlackUtil.getPages({
+                method() {
+                    if (hitCount === 2) {
+                        return mockData.slackResponse.invalidCursor;
+                    }
+
+                    hitCount++;
+
+                    return mockData.slackResponse.validCursor;
+                },
+                getData() {
+                    return { count: hitCount };
+                },
+                combine: false
+            });
+
+            expect(hitCount).to.equal(2);
+        });
+
+        it('stops calling the method when the page limit is hit', async function () {
+            const pageLimit = 5;
+            let hitCount = 0;
+
+            await SlackUtil.getPages({
+                method() {
+                    if (hitCount === 10) {
+                        return mockData.slackResponse.invalidCursor;
+                    }
+
+                    hitCount++;
+
+                    return mockData.slackResponse.validCursor;
+                },
+                getData() {
+                    return { count: hitCount };
+                },
+                combine: false,
+                pageLimit
+            });
+
+            expect(hitCount).to.equal(pageLimit);
+        });
+
+        it('combines all pages when each page is an array, by flattening them one layer', async function () {
+            const pageLimit = 5;
+            let hitCount = 0;
+
+            const pages = await SlackUtil.getPages({
+                method() {
+                    if (hitCount === 10) {
+                        return mockData.slackResponse.invalidCursor;
+                    }
+
+                    hitCount++;
+
+                    return mockData.slackResponse.validCursor;
+                },
+                getData() {
+                    return [ hitCount ];
+                },
+                combine: true,
+                pageLimit
+            });
+
+            expect(pages).to.have.length(pageLimit);
+            expect(pages).to.have.members([1, 2, 3, 4, 5]);
         });
     });
 });
