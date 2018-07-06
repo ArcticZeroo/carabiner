@@ -20,7 +20,7 @@
   },
   "scripts": {
     "build-docs": "./node_modules/.bin/jsdoc -c ./jsdoc.json -R README.md -r ./lib",
-    "test": "mocha mocha test/**/*.test.js"
+    "test": "mocha test/**/*.test.js"
   },
   "devDependencies": {
     "@arcticzeroo/eslint-config": "^1.0.4",
