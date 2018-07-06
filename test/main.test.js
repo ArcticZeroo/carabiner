@@ -6,11 +6,9 @@ const methods = require('../config/methods');
 const mockData = require('./mockData');
 
 const Client = require('../lib/client/Client');
-//const SlackAPI = require('../lib/api/SlackAPI');
 
 const ConversationType = require('../lib/enum/ConversationType');
 const User = require('../lib/structures/user/User');
-const SlackUtil = require('../lib/util/SlackUtil');
 
 async function backwardsResolve(promise) {
     const msg = 'Promise resolved normally';
@@ -20,7 +18,7 @@ async function backwardsResolve(promise) {
 
         //noinspection ExceptionCaughtLocallyJS
         throw new Error(msg);
-    } catch(e) {
+    } catch (e) {
         if (e.message === msg) {
             throw e;
         }
@@ -69,10 +67,13 @@ describe('Carabiner', function () {
         it('should generate all actual methods', function () {
             for (const method of methods) {
                 let pointer = mainClient.api.methods;
+
                 for (const piece of method.split('.')) {
-                    assert.ok(pointer.hasOwnProperty(piece), 'Method ' + method + ' is missing');
+                    assert.ok(pointer.hasOwnProperty(piece), `Method ${method} is missing`);
                     pointer = pointer[piece];
                 }
+
+                assert.equal(typeof pointer, 'function', `Method ${method} does not end in a function`);
             }
         });
     });
@@ -148,6 +149,8 @@ describe('Carabiner', function () {
     describe('Client', async function () {
         describe('init', async function () {
             it('should successfully cache objects without RTM', async function () {
+                this.timeout(10000);
+
                 const client = new Client(process.env.SLACK_TOKEN, { rtm: false });
 
                 await client.init();
@@ -198,7 +201,7 @@ describe('Carabiner', function () {
         let testClient;
 
         before(function initClient() {
-            this.timeout(5000);
+            this.timeout(10000);
 
             testClient = new Client(process.env.SLACK_TOKEN, { rtm: false });
 

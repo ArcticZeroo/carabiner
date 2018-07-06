@@ -28,4 +28,18 @@ describe('ObjectUtil', function () {
             expect(baseObj.my_prop).to.equal('duck');
         });
     });
+
+    describe('#hasNullValue', function () {
+        it('works on an object with null value', function () {
+            expect(ObjectUtil.hasNullValue({ yellow: null, peach: true })).to.be.true;
+        });
+
+        it('works on an object without null value', function () {
+            expect(ObjectUtil.hasNullValue({ yellow: false, peach: true })).to.be.false;
+        });
+
+        it('treats undefined as null', function () {
+            expect(ObjectUtil.hasNullValue({ yellow: undefined, peach: true })).to.be.true;
+        });
+    });
 });
