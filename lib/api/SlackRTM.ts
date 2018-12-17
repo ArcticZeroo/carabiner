@@ -13,7 +13,7 @@ interface ISlackRtmParams {
 }
 
 export default class SlackRTM extends EventEmitter {
-    public readonly socket: WebSocket;
+    public socket: WebSocket;
     public readonly events: EventEmitter;
     private readonly api: SlackAPI;
     private readonly retryIfMigrating: boolean;
@@ -92,8 +92,8 @@ export default class SlackRTM extends EventEmitter {
         this.socket = new WebSocket(url);
 
         // Arrow functions to bind to this
-        const forward = event => {
-            this.socket.on(event, (...data) => {
+        const forward = (event: any) => {
+            this.socket.on(event, (...data: any[]) => {
                 this.events.emit(event, ...data);
                 this.emit(event, ...data);
             });
@@ -104,8 +104,9 @@ export default class SlackRTM extends EventEmitter {
         forward('error');
 
 
-        this.socket.on('message', event => {
+        this.socket.on('message', (event: { type: string }) => {
             // Not entirely sure if ws parses messages by default.
+            // noinspection SuspiciousTypeOfGuard
             if (typeof event === 'string') {
                 try {
                     event = JSON.parse(event);
@@ -141,7 +142,7 @@ export default class SlackRTM extends EventEmitter {
                 this.emit('migrating');
 
                 if (this.retryIfMigrating && (this.migrationRetryAttempts > retryCount)) {
-                    await PromiseUtil.pause(config.migrationRetryBase + (config.migrationRetryIncrement * retryCount));
+                    await PromiseUtil.pause(apiConfig.rtm.migrationRetryBase + (apiConfig.rtm.migrationRetryIncrement * retryCount));
 
                     // Do not use a URL this time because the old
                     // URL is invalid as migration was in progress...
@@ -172,7 +173,7 @@ export default class SlackRTM extends EventEmitter {
      * @param {object} obj - The JSON object to send. This will be directly JSON stringified, so no circular refs!
      * @return {Promise<any>}
      */
-    async sendJson(obj) {
+    async sendJson(obj: {}) {
         if (!this.socket) {
             throw new Error('RTM is inactive');
         }
