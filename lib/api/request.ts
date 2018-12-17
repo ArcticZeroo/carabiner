@@ -1,10 +1,7 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const superagent_1 = __importDefault(require("superagent"));
-const api_1 = __importDefault(require("../../config/api"));
+import superagent from 'superagent';
+
+import apiConfig from '../../config/api';
+
 /**
  * Create a slack request URL based on a query object and a method path.
  *
@@ -20,18 +17,23 @@ const api_1 = __importDefault(require("../../config/api"));
  * @param {object} [query={}] - The query object to stringify.
  * @return {string}
  */
-function createSlackRequestUrl(method, query = {}) {
-    const url = api_1.default.url + method;
+function createSlackRequestUrl(method: string, query: { [key: string]: any } = {}) {
+    const url = apiConfig.url + method;
     const args = [];
+
     for (const key of Object.keys(query)) {
         let value = query[key];
+
         if (typeof value !== 'string') {
             value = JSON.stringify(value);
         }
+
         args.push(`${key}=${encodeURIComponent(value)}`);
     }
+
     return `${url}?${args.join('&')}`;
 }
+
 /**
  * Makes a request to a slack API method.
  *
@@ -39,30 +41,33 @@ function createSlackRequestUrl(method, query = {}) {
  * @param {object} [args={}] - All args to be sent to slack.
  * @return {Promise.<*>}
  */
-async function makeSlackRequest(path, args = {}) {
+export default async function makeSlackRequest(path: string, args: {}  = {}) {
     let res;
     try {
-        res = await superagent_1.default.get(createSlackRequestUrl(path, args));
-    }
-    catch (e) {
+        res = await superagent.get(createSlackRequestUrl(path, args));
+    } catch (e) {
         if (e instanceof Error) {
             throw e;
         }
+
         if (!e.hasOwnProperty('body')) {
             throw new Error(`${e.status} - ${e.statusText}`);
         }
-        const errorBody = e.body;
+
+        const errorBody: { error?: any } = e.body;
+
         if (errorBody.error) {
             throw new Error(errorBody.error);
         }
+
         throw e;
     }
+
     const body = res.body;
+
     if (body.ok === false || body.error != null) {
         throw new Error(body.error || 'An unknown error has occurred.');
     }
+
     return body;
-}
-exports.default = makeSlackRequest;
-;
-//# sourceMappingURL=request.js.map
+};

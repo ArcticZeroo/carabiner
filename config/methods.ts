@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const methodNames = [
+const methodNames: string[] = [
     'api.test',
     'auth.test',
     'auth.revoke',
@@ -126,6 +124,7 @@ const methodNames = [
     'users.setPhoto',
     'users.profile.get',
     'users.profile.set',
+
     // Undocumented API methods
     // See https://github.com/ErikKalkoken/slackApiDoc
     // These may become inaccessible at any time.
@@ -139,5 +138,5 @@ const methodNames = [
     'users.prefs.get',
     'users.profile.set'
 ];
-exports.default = methodNames;
-//# sourceMappingURL=methods.js.map
+
+export default methodNames;
