@@ -5,10 +5,7 @@ import methods from '../config/methods';
 
 const argsInterfaceName = 'ISlackWebApiArgs';
 const generatedInterfaceName = 'ISlackWebApiMethods';
-
-function getSignature(): string {
-    return `(args?: ${argsInterfaceName}) => Promise<any>`;
-}
+const methodTypeName = `SlackWebApiMethod`;
 
 // Should group them all together...
 methods.sort();
@@ -32,7 +29,7 @@ for (const method of methods) {
 
     ptr[path[path.length - 1]] = {
         toJSON() {
-            return getSignature();
+            return methodTypeName;
         }
     };
 }
@@ -42,8 +39,8 @@ function escapeRegExp(str: string): string {
 }
 
 const json = JSON.stringify(groupedMethods, null, '\t');
-const signatureWithQuotesRegex = new RegExp(`"${escapeRegExp(getSignature())}"[,]?`, 'g');
+const signatureWithQuotesRegex = new RegExp(`"${escapeRegExp(methodTypeName)}"[,]?`, 'g');
 
-const cleanedJson = json.replace(/[,]/g, '').replace(/"(.+)":/g, '$1:').replace(signatureWithQuotesRegex, `${getSignature()};`);
+const cleanedJson = json.replace(/[,]/g, '').replace(/"(.+)":/g, '$1:').replace(signatureWithQuotesRegex, `${methodTypeName};`);
 
-fs.writeFileSync(path.resolve(`../lib/models/${generatedInterfaceName}.ts`), `import ${argsInterfaceName} from './${argsInterfaceName}';\n\nexport default interface ${generatedInterfaceName} ${cleanedJson}`);
+fs.writeFileSync(path.resolve(`../lib/models/${generatedInterfaceName}.ts`), `import ${methodTypeName} from './${methodTypeName}';\n\nexport default interface ${generatedInterfaceName} ${cleanedJson}`);

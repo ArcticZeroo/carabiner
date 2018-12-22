@@ -1,191 +1,191 @@
-import ISlackWebApiArgs from './ISlackWebApiArgs';
+import SlackWebApiMethod from './SlackWebApiMethod';
 
 export default interface ISlackWebApiMethods {
 	api: {
-		test: (args?: ISlackWebApiArgs) => Promise<any>;
+		test: SlackWebApiMethod;
 	}
 	auth: {
-		revoke: (args?: ISlackWebApiArgs) => Promise<any>;
-		test: (args?: ISlackWebApiArgs) => Promise<any>;
+		revoke: SlackWebApiMethod;
+		test: SlackWebApiMethod;
 	}
 	bots: {
-		info: (args?: ISlackWebApiArgs) => Promise<any>;
-		list: (args?: ISlackWebApiArgs) => Promise<any>;
+		info: SlackWebApiMethod;
+		list: SlackWebApiMethod;
 	}
 	channels: {
-		archive: (args?: ISlackWebApiArgs) => Promise<any>;
-		create: (args?: ISlackWebApiArgs) => Promise<any>;
-		history: (args?: ISlackWebApiArgs) => Promise<any>;
-		info: (args?: ISlackWebApiArgs) => Promise<any>;
-		invite: (args?: ISlackWebApiArgs) => Promise<any>;
-		join: (args?: ISlackWebApiArgs) => Promise<any>;
-		kick: (args?: ISlackWebApiArgs) => Promise<any>;
-		leave: (args?: ISlackWebApiArgs) => Promise<any>;
-		list: (args?: ISlackWebApiArgs) => Promise<any>;
-		mark: (args?: ISlackWebApiArgs) => Promise<any>;
-		rename: (args?: ISlackWebApiArgs) => Promise<any>;
-		setPurpose: (args?: ISlackWebApiArgs) => Promise<any>;
-		setTopic: (args?: ISlackWebApiArgs) => Promise<any>;
-		unarchive: (args?: ISlackWebApiArgs) => Promise<any>;
+		archive: SlackWebApiMethod;
+		create: SlackWebApiMethod;
+		history: SlackWebApiMethod;
+		info: SlackWebApiMethod;
+		invite: SlackWebApiMethod;
+		join: SlackWebApiMethod;
+		kick: SlackWebApiMethod;
+		leave: SlackWebApiMethod;
+		list: SlackWebApiMethod;
+		mark: SlackWebApiMethod;
+		rename: SlackWebApiMethod;
+		setPurpose: SlackWebApiMethod;
+		setTopic: SlackWebApiMethod;
+		unarchive: SlackWebApiMethod;
 	}
 	chat: {
-		command: (args?: ISlackWebApiArgs) => Promise<any>;
-		delete: (args?: ISlackWebApiArgs) => Promise<any>;
-		postEphemeral: (args?: ISlackWebApiArgs) => Promise<any>;
-		postMessage: (args?: ISlackWebApiArgs) => Promise<any>;
-		unfurl: (args?: ISlackWebApiArgs) => Promise<any>;
-		update: (args?: ISlackWebApiArgs) => Promise<any>;
+		command: SlackWebApiMethod;
+		delete: SlackWebApiMethod;
+		postEphemeral: SlackWebApiMethod;
+		postMessage: SlackWebApiMethod;
+		unfurl: SlackWebApiMethod;
+		update: SlackWebApiMethod;
 	}
 	conversations: {
-		archive: (args?: ISlackWebApiArgs) => Promise<any>;
-		close: (args?: ISlackWebApiArgs) => Promise<any>;
-		create: (args?: ISlackWebApiArgs) => Promise<any>;
-		history: (args?: ISlackWebApiArgs) => Promise<any>;
-		info: (args?: ISlackWebApiArgs) => Promise<any>;
-		invite: (args?: ISlackWebApiArgs) => Promise<any>;
-		join: (args?: ISlackWebApiArgs) => Promise<any>;
-		kick: (args?: ISlackWebApiArgs) => Promise<any>;
-		leave: (args?: ISlackWebApiArgs) => Promise<any>;
-		list: (args?: ISlackWebApiArgs) => Promise<any>;
-		members: (args?: ISlackWebApiArgs) => Promise<any>;
-		open: (args?: ISlackWebApiArgs) => Promise<any>;
-		rename: (args?: ISlackWebApiArgs) => Promise<any>;
-		replies: (args?: ISlackWebApiArgs) => Promise<any>;
-		setPurpose: (args?: ISlackWebApiArgs) => Promise<any>;
-		setTopic: (args?: ISlackWebApiArgs) => Promise<any>;
-		unarchive: (args?: ISlackWebApiArgs) => Promise<any>;
+		archive: SlackWebApiMethod;
+		close: SlackWebApiMethod;
+		create: SlackWebApiMethod;
+		history: SlackWebApiMethod;
+		info: SlackWebApiMethod;
+		invite: SlackWebApiMethod;
+		join: SlackWebApiMethod;
+		kick: SlackWebApiMethod;
+		leave: SlackWebApiMethod;
+		list: SlackWebApiMethod;
+		members: SlackWebApiMethod;
+		open: SlackWebApiMethod;
+		rename: SlackWebApiMethod;
+		replies: SlackWebApiMethod;
+		setPurpose: SlackWebApiMethod;
+		setTopic: SlackWebApiMethod;
+		unarchive: SlackWebApiMethod;
 	}
 	dnd: {
-		endDnd: (args?: ISlackWebApiArgs) => Promise<any>;
-		endSnooze: (args?: ISlackWebApiArgs) => Promise<any>;
-		info: (args?: ISlackWebApiArgs) => Promise<any>;
-		setSnooze: (args?: ISlackWebApiArgs) => Promise<any>;
-		teamInfo: (args?: ISlackWebApiArgs) => Promise<any>;
+		endDnd: SlackWebApiMethod;
+		endSnooze: SlackWebApiMethod;
+		info: SlackWebApiMethod;
+		setSnooze: SlackWebApiMethod;
+		teamInfo: SlackWebApiMethod;
 	}
 	emoji: {
-		list: (args?: ISlackWebApiArgs) => Promise<any>;
+		list: SlackWebApiMethod;
 	}
 	files: {
-		delete: (args?: ISlackWebApiArgs) => Promise<any>;
-		edit: (args?: ISlackWebApiArgs) => Promise<any>;
-		info: (args?: ISlackWebApiArgs) => Promise<any>;
-		list: (args?: ISlackWebApiArgs) => Promise<any>;
-		revokePublicURL: (args?: ISlackWebApiArgs) => Promise<any>;
-		share: (args?: ISlackWebApiArgs) => Promise<any>;
-		sharedPublicURL: (args?: ISlackWebApiArgs) => Promise<any>;
-		upload: (args?: ISlackWebApiArgs) => Promise<any>;
+		delete: SlackWebApiMethod;
+		edit: SlackWebApiMethod;
+		info: SlackWebApiMethod;
+		list: SlackWebApiMethod;
+		revokePublicURL: SlackWebApiMethod;
+		share: SlackWebApiMethod;
+		sharedPublicURL: SlackWebApiMethod;
+		upload: SlackWebApiMethod;
 	}
 	groups: {
-		archive: (args?: ISlackWebApiArgs) => Promise<any>;
-		close: (args?: ISlackWebApiArgs) => Promise<any>;
-		create: (args?: ISlackWebApiArgs) => Promise<any>;
-		createChild: (args?: ISlackWebApiArgs) => Promise<any>;
-		history: (args?: ISlackWebApiArgs) => Promise<any>;
-		info: (args?: ISlackWebApiArgs) => Promise<any>;
-		invite: (args?: ISlackWebApiArgs) => Promise<any>;
-		kick: (args?: ISlackWebApiArgs) => Promise<any>;
-		leave: (args?: ISlackWebApiArgs) => Promise<any>;
-		list: (args?: ISlackWebApiArgs) => Promise<any>;
-		mark: (args?: ISlackWebApiArgs) => Promise<any>;
-		open: (args?: ISlackWebApiArgs) => Promise<any>;
-		rename: (args?: ISlackWebApiArgs) => Promise<any>;
-		replies: (args?: ISlackWebApiArgs) => Promise<any>;
-		setPurpose: (args?: ISlackWebApiArgs) => Promise<any>;
-		setTopic: (args?: ISlackWebApiArgs) => Promise<any>;
-		unarchive: (args?: ISlackWebApiArgs) => Promise<any>;
+		archive: SlackWebApiMethod;
+		close: SlackWebApiMethod;
+		create: SlackWebApiMethod;
+		createChild: SlackWebApiMethod;
+		history: SlackWebApiMethod;
+		info: SlackWebApiMethod;
+		invite: SlackWebApiMethod;
+		kick: SlackWebApiMethod;
+		leave: SlackWebApiMethod;
+		list: SlackWebApiMethod;
+		mark: SlackWebApiMethod;
+		open: SlackWebApiMethod;
+		rename: SlackWebApiMethod;
+		replies: SlackWebApiMethod;
+		setPurpose: SlackWebApiMethod;
+		setTopic: SlackWebApiMethod;
+		unarchive: SlackWebApiMethod;
 	}
 	im: {
-		close: (args?: ISlackWebApiArgs) => Promise<any>;
-		history: (args?: ISlackWebApiArgs) => Promise<any>;
-		list: (args?: ISlackWebApiArgs) => Promise<any>;
-		mark: (args?: ISlackWebApiArgs) => Promise<any>;
-		open: (args?: ISlackWebApiArgs) => Promise<any>;
-		replies: (args?: ISlackWebApiArgs) => Promise<any>;
+		close: SlackWebApiMethod;
+		history: SlackWebApiMethod;
+		list: SlackWebApiMethod;
+		mark: SlackWebApiMethod;
+		open: SlackWebApiMethod;
+		replies: SlackWebApiMethod;
 	}
 	mpim: {
-		close: (args?: ISlackWebApiArgs) => Promise<any>;
-		history: (args?: ISlackWebApiArgs) => Promise<any>;
-		list: (args?: ISlackWebApiArgs) => Promise<any>;
-		mark: (args?: ISlackWebApiArgs) => Promise<any>;
-		open: (args?: ISlackWebApiArgs) => Promise<any>;
-		replies: (args?: ISlackWebApiArgs) => Promise<any>;
+		close: SlackWebApiMethod;
+		history: SlackWebApiMethod;
+		list: SlackWebApiMethod;
+		mark: SlackWebApiMethod;
+		open: SlackWebApiMethod;
+		replies: SlackWebApiMethod;
 	}
 	oauth: {
-		access: (args?: ISlackWebApiArgs) => Promise<any>;
+		access: SlackWebApiMethod;
 	}
 	pins: {
-		add: (args?: ISlackWebApiArgs) => Promise<any>;
-		list: (args?: ISlackWebApiArgs) => Promise<any>;
-		remove: (args?: ISlackWebApiArgs) => Promise<any>;
+		add: SlackWebApiMethod;
+		list: SlackWebApiMethod;
+		remove: SlackWebApiMethod;
 	}
 	reactions: {
-		add: (args?: ISlackWebApiArgs) => Promise<any>;
-		get: (args?: ISlackWebApiArgs) => Promise<any>;
-		list: (args?: ISlackWebApiArgs) => Promise<any>;
-		remove: (args?: ISlackWebApiArgs) => Promise<any>;
+		add: SlackWebApiMethod;
+		get: SlackWebApiMethod;
+		list: SlackWebApiMethod;
+		remove: SlackWebApiMethod;
 	}
 	reminders: {
-		add: (args?: ISlackWebApiArgs) => Promise<any>;
-		complete: (args?: ISlackWebApiArgs) => Promise<any>;
-		delete: (args?: ISlackWebApiArgs) => Promise<any>;
-		info: (args?: ISlackWebApiArgs) => Promise<any>;
-		list: (args?: ISlackWebApiArgs) => Promise<any>;
+		add: SlackWebApiMethod;
+		complete: SlackWebApiMethod;
+		delete: SlackWebApiMethod;
+		info: SlackWebApiMethod;
+		list: SlackWebApiMethod;
 	}
 	rtm: {
-		connect: (args?: ISlackWebApiArgs) => Promise<any>;
-		start: (args?: ISlackWebApiArgs) => Promise<any>;
+		connect: SlackWebApiMethod;
+		start: SlackWebApiMethod;
 	}
 	search: {
-		all: (args?: ISlackWebApiArgs) => Promise<any>;
-		files: (args?: ISlackWebApiArgs) => Promise<any>;
-		messages: (args?: ISlackWebApiArgs) => Promise<any>;
+		all: SlackWebApiMethod;
+		files: SlackWebApiMethod;
+		messages: SlackWebApiMethod;
 	}
 	stars: {
-		add: (args?: ISlackWebApiArgs) => Promise<any>;
-		list: (args?: ISlackWebApiArgs) => Promise<any>;
-		remove: (args?: ISlackWebApiArgs) => Promise<any>;
+		add: SlackWebApiMethod;
+		list: SlackWebApiMethod;
+		remove: SlackWebApiMethod;
 	}
 	team: {
-		accessLogs: (args?: ISlackWebApiArgs) => Promise<any>;
-		billableInfo: (args?: ISlackWebApiArgs) => Promise<any>;
-		info: (args?: ISlackWebApiArgs) => Promise<any>;
+		accessLogs: SlackWebApiMethod;
+		billableInfo: SlackWebApiMethod;
+		info: SlackWebApiMethod;
 		profile: {
-			get: (args?: ISlackWebApiArgs) => Promise<any>;
+			get: SlackWebApiMethod;
 		}
 	}
 	teams: {
-		integrationLogs: (args?: ISlackWebApiArgs) => Promise<any>;
+		integrationLogs: SlackWebApiMethod;
 	}
 	usergroups: {
-		create: (args?: ISlackWebApiArgs) => Promise<any>;
-		disable: (args?: ISlackWebApiArgs) => Promise<any>;
-		enable: (args?: ISlackWebApiArgs) => Promise<any>;
-		list: (args?: ISlackWebApiArgs) => Promise<any>;
-		update: (args?: ISlackWebApiArgs) => Promise<any>;
+		create: SlackWebApiMethod;
+		disable: SlackWebApiMethod;
+		enable: SlackWebApiMethod;
+		list: SlackWebApiMethod;
+		update: SlackWebApiMethod;
 		users: {
-			list: (args?: ISlackWebApiArgs) => Promise<any>;
-			update: (args?: ISlackWebApiArgs) => Promise<any>;
+			list: SlackWebApiMethod;
+			update: SlackWebApiMethod;
 		}
 	}
 	users: {
 		admin: {
-			invite: (args?: ISlackWebApiArgs) => Promise<any>;
-			setInactive: (args?: ISlackWebApiArgs) => Promise<any>;
+			invite: SlackWebApiMethod;
+			setInactive: SlackWebApiMethod;
 		}
-		deletePhoto: (args?: ISlackWebApiArgs) => Promise<any>;
-		getPresence: (args?: ISlackWebApiArgs) => Promise<any>;
-		identity: (args?: ISlackWebApiArgs) => Promise<any>;
-		info: (args?: ISlackWebApiArgs) => Promise<any>;
-		list: (args?: ISlackWebApiArgs) => Promise<any>;
+		deletePhoto: SlackWebApiMethod;
+		getPresence: SlackWebApiMethod;
+		identity: SlackWebApiMethod;
+		info: SlackWebApiMethod;
+		list: SlackWebApiMethod;
 		prefs: {
-			get: (args?: ISlackWebApiArgs) => Promise<any>;
+			get: SlackWebApiMethod;
 		}
 		profile: {
-			get: (args?: ISlackWebApiArgs) => Promise<any>;
-			set: (args?: ISlackWebApiArgs) => Promise<any>;
+			get: SlackWebApiMethod;
+			set: SlackWebApiMethod;
 		}
-		setActive: (args?: ISlackWebApiArgs) => Promise<any>;
-		setPhoto: (args?: ISlackWebApiArgs) => Promise<any>;
-		setPresence: (args?: ISlackWebApiArgs) => Promise<any>;
+		setActive: SlackWebApiMethod;
+		setPhoto: SlackWebApiMethod;
+		setPresence: SlackWebApiMethod;
 	}
 }
