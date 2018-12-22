@@ -1,21 +1,50 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+import Collection from '@arcticzeroo/collection';
+import Client from '../client/Client';
+import Conversation from './conversation/Conversation';
+import User from './user/User';
 const SlackUtil = require('../util/SlackUtil');
 const Structure = require('./Structure');
-class Team extends Structure {
+
+export interface ITeamData {
+
+}
+
+export default class Team extends Structure<ITeamData> {
+    readonly conversations: Collection<string, Conversation>;
+    readonly users: Collection<string, User>;
+    readonly members: Collection<string, User>;
+
+    id: string;
+    name: string;
+    domain: string;
+    emailDomain: string;
+    icon: {
+        image34: string;
+        image44: string;
+        image68: string;
+        image88: string;
+        image102: string;
+        image132: string;
+        imageDefault: boolean;
+    };
+    enterpriseId: string;
+    enterpriseName: string;
+
     /**
      * This class represents a slack team.
      * @param client {Client} - The client to use.
      * @param {object} [data] - Slack data, if applicable.
      */
-    constructor(client, data) {
+    constructor(client: Client, data?: ITeamData) {
         super(client, data);
+
         /**
          * All conversations in this team.
          * This is simply a reference to {@link Client#conversations}
          * @type {Collection}
          */
         this.conversations = this.client.conversations;
+
         /**
          * @namespace Team
          * All users in this team.
@@ -27,11 +56,12 @@ class Team extends Structure {
         this.users = this.client.users;
         this.members = this.users;
     }
+
     /**
      * Set up this Team with slack data.
      * @param data
      */
-    setup(data) {
+    setup(data: ITeamData) {
         /**
          * @namespace Team
          * @property {string} Team.id - This team's identifier (id)
@@ -51,6 +81,7 @@ class Team extends Structure {
          */
         Object.assign(this, SlackUtil.convertProperties(data));
     }
+
     /**
      * Whether this team is enterprise or not
      * @return {boolean}
@@ -60,6 +91,7 @@ class Team extends Structure {
     get isEnterprise() {
         return !!this.enterpriseId;
     }
+
     /**
      * This team's full slack URL
      * @return {string}
@@ -70,5 +102,3 @@ class Team extends Structure {
         return `${this.domain}.slack.com`;
     }
 }
-exports.default = Team;
-//# sourceMappingURL=Team.js.map

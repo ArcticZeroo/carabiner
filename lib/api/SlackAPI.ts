@@ -1,5 +1,5 @@
-import ISlackWebApiArgs from '../models/ISlackWebApiArgs';
-import ISlackWebApiMethods from '../models/ISlackWebApiMethods';
+import ISlackWebApiArgs from '../models/web-api/ISlackWebApiArgs';
+import ISlackWebApiMethods from '../models/web-api/ISlackWebApiMethods';
 import SlackRTM from './SlackRTM';
 import methods from '../../config/methods';
 import request from './request';

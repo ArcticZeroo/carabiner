@@ -1,18 +1,15 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-class StringUtil {
+export default class StringUtil {
     /**
      * String utilities.
      */
-    constructor() { }
+    private constructor() {}
+
     /**
      * It... capitalizes a string. Anything that's not the first character becomes lowercase.
      * @param str {string} - The string to capitalize.
      * @return {string}
      */
-    static capitalize(str) {
+    static capitalize(str: string): string {
         return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
     }
 }
-exports.default = StringUtil;
-//# sourceMappingURL=StringUtil.js.map

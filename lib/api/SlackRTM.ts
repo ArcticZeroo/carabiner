@@ -171,9 +171,9 @@ export default class SlackRTM extends EventEmitter {
      * If RTM is not currently running this will throw
      * an error.
      * @param {object} obj - The JSON object to send. This will be directly JSON stringified, so no circular refs!
-     * @return {Promise<any>}
+     * @return {Promise<void>}
      */
-    async sendJson(obj: {}) {
+    async sendJson(obj: {}): Promise<any> {
         if (!this.socket) {
             throw new Error('RTM is inactive');
         }
@@ -193,7 +193,7 @@ export default class SlackRTM extends EventEmitter {
      * Terminate this websocket if
      * it has been started.
      */
-    destroy() {
+    destroy(): void {
         if (!this.socket) {
             return;
         }

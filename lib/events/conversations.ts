@@ -1,13 +1,9 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const ConversationType_1 = __importDefault(require("../enum/ConversationType"));
-const Conversation_1 = __importDefault(require("../structures/conversation/Conversation"));
-const StringUtil_1 = __importDefault(require("../util/StringUtil"));
-const handler_1 = __importDefault(require("./handler"));
-class ConversationEventHandler extends handler_1.default {
+import ConversationType from '../enum/ConversationType';
+import Conversation from '../structures/conversation/Conversation';
+import StringUtil from '../util/StringUtil';
+import EventHandler from './handler';
+
+export default class ConversationEventHandler extends EventHandler {
     listen() {
         /**
          * Emitted when a conversation of any type
@@ -18,6 +14,7 @@ class ConversationEventHandler extends handler_1.default {
          * @event Client#conversationCreated
          */
         this.setListeners(this.onCreate, 'channel_created', 'im_created');
+
         /**
          * Emitted when a conversation of any type
          * is "opened", which apparently to slack
@@ -29,6 +26,7 @@ class ConversationEventHandler extends handler_1.default {
          * @event Client#conversationOpen
          */
         this.setListeners(this.onCreate, 'group_open', 'im_open');
+
         /**
          * Emitted when a conversation of any type
          * is deleted.
@@ -38,6 +36,7 @@ class ConversationEventHandler extends handler_1.default {
          * @event Client#conversationDeleted
          */
         this.setListeners(this.onDelete, 'channel_deleted');
+
         /**
          * Emitted when a conversation of any
          * type is renamed.
@@ -50,6 +49,7 @@ class ConversationEventHandler extends handler_1.default {
          * @param {Conversation} data.conversation - The conversation whose name was just changed
          */
         this.setListeners(this.onRename, 'channel_rename', 'group_rename');
+
         /**
          * Emitted when a user joins a slack conversation.
          * Use conversationMemberJoin.[type] to get events for just
@@ -61,6 +61,7 @@ class ConversationEventHandler extends handler_1.default {
          * @param {User|null} data.inviter - The user that invited the joining member, if applicable.
          */
         this.setListeners(this.onMemberJoin, 'member_joined_channel');
+
         /**
          * Emitted when a user leaves a slack conversation.
          * Use conversationMemberLeave.[type] to get events for just
@@ -71,6 +72,7 @@ class ConversationEventHandler extends handler_1.default {
          * @param {User} data.user - The user that joined the channel.
          */
         this.setListeners(this.onMemberLeave, 'member_left_channel');
+
         /**
          * Emitted when a conversation is archived (distinct from deletion
          * because it still exists in message history and can be remade later)
@@ -80,6 +82,7 @@ class ConversationEventHandler extends handler_1.default {
          * @param {Conversation} conversation - The conversation that was just archived.
          */
         this.setListeners(this.onArchive, 'channel_archive', 'group_archive');
+
         /**
          * Emitted when a conversation is unarchived
          * Use conversationUnarchive.[type] to get events for just
@@ -88,6 +91,7 @@ class ConversationEventHandler extends handler_1.default {
          * @param {Conversation} conversation - The conversation that was just unarchived.
          */
         this.setListeners(this.onUnArchive, 'channel_unarchive', 'group_unarchive');
+
         /**
          * Emitted when the current user joins a conversation
          * Use conversationSelfJoin.[type] to get events for just
@@ -96,6 +100,7 @@ class ConversationEventHandler extends handler_1.default {
          * @param {Conversation} conversation - The conversation the client joined
          */
         this.setListeners(this.onSelfJoin, 'channel_joined', 'group_joined');
+
         /**
          * Emitted when the current user leaves a conversation
          * Use conversationSelfLeave.[type] to get events for just
@@ -104,8 +109,10 @@ class ConversationEventHandler extends handler_1.default {
          * @param {Conversation} conversation - The conversation the client left
          */
         this.setListeners(this.onSelfLeave, 'channel_left', 'group_left');
+
         this.setListeners(this.onClose, 'im_close', 'group_close');
     }
+
     /**
      * Emit two conversation events. One will be
      * conversation$name, the other conversation$name.$type
@@ -113,69 +120,86 @@ class ConversationEventHandler extends handler_1.default {
      * @param {string} name - The event suffix name.
      * @param {object|Conversation} data - Data to emit and get the conversation from. If this is an object, it must have a conversation property.
      */
-    emitWithSubtype(name, data) {
-        name = StringUtil_1.default.capitalize(name);
+    emitWithSubtype(name: string, data: Conversation | ({ conversation: Conversation } & any)) {
+        name = StringUtil.capitalize(name);
+
         let conversation;
-        if (data instanceof Conversation_1.default) {
+        if (data instanceof Conversation) {
             conversation = data;
-        }
-        else if (data.conversation instanceof Conversation_1.default) {
+        } else if (data.conversation instanceof Conversation) {
             conversation = data.conversation;
-        }
-        else {
+        } else {
             this.client.emit('error', new Error(`Could not emit a conversation event with the subtype ${name}; invalid data provided`));
         }
+
         this.client.emit(`conversation${name}`, data);
         this.client.emit(`conversation${name}.${conversation.type}`, data);
     }
-    static getConversationId({ channel }) {
+
+    static getConversationId({ channel } : { channel: string | Conversation }) {
         return (typeof channel === 'string') ? channel : channel.id;
     }
-    onClose(data) {
+
+    onClose(data: { channel: string | Conversation }) {
         const id = ConversationEventHandler.getConversationId(data);
+
         const conversation = this.client.conversations.get(id);
+
         this.emitWithSubtype('close', conversation);
     }
-    onRename(data) {
+
+    onRename(data: { channel: { id: string, name: string; } }) {
         const conversation = this.client.conversations.get(data.channel.id);
+
         const oldName = conversation.name;
         const newName = data.channel.name;
+
         conversation.name = newName;
+
         this.emitWithSubtype('rename', { conversation, oldName, newName });
     }
-    onSelfJoin(data) {
+
+    onSelfJoin(data: { channel: string | Conversation }) {
         const id = ConversationEventHandler.getConversationId(data);
+
         if (!this.client.conversations.has(id)) {
             this.client.retrieveConversation(id)
                 .then(conversation => {
-                this.client.conversations.set(conversation.id, conversation);
-                this.emitWithSubtype('selfJoin', conversation);
-            })
+                    this.client.conversations.set(conversation.id, conversation);
+                    this.emitWithSubtype('selfJoin', conversation);
+                })
                 .catch(e => this.client.emit('error', e));
-        }
-        else {
+        } else {
             const conversation = this.client.conversations.get(id);
+
             conversation.users.set(this.client.self.id, this.client.self);
+
             this.emitWithSubtype('selfJoin', conversation);
         }
     }
-    onSelfLeave({ channel: id }) {
+
+    onSelfLeave({ channel: id } : { channel: string }) {
         const conversation = this.client.conversations.get(id);
+
         conversation.users.delete(this.client.self.id);
+
         this.emitWithSubtype('selfLeave', conversation);
     }
-    onOpen(data) {
+
+    onOpen(data: { channel: string | Conversation }) {
         const id = ConversationEventHandler.getConversationId(data);
+
         this.client.retrieveConversation(id)
             .then(conversation => {
-            this.client.conversations.set(conversation.id, conversation);
-            this.emitWithSubtype('open', conversation);
-        })
+                this.client.conversations.set(conversation.id, conversation);
+                this.emitWithSubtype('open', conversation);
+            })
             .catch(e => {
-            this.client.emit('error', e);
-        });
+                this.client.emit('error', e);
+            });
     }
-    async onMemberJoin(data) {
+
+    async onMemberJoin(data : { channel: string, user: string, inviter: string }) {
         /**
          * @type {Conversation}
          */
@@ -184,60 +208,79 @@ class ConversationEventHandler extends handler_1.default {
             try {
                 conversation = await this.client.retrieveConversation(data.channel);
                 this.client.conversations.set(conversation.id, conversation);
-            }
-            catch (e) {
+            } catch (e) {
                 console.error(e);
                 return;
             }
-        }
-        else {
+        } else {
             conversation = this.client.conversations.get(data.channel);
         }
+
         const user = this.client.users.get(data.user);
+
         conversation.users.set(user.id, user);
+
         const inviter = (data.inviter) ? this.client.users.get(data.inviter) : null;
+
         this.emitWithSubtype('memberJoin', { conversation, user, inviter });
     }
-    onMemberLeave(data) {
+
+    onMemberLeave(data: { channel: string, user: string }) {
         const conversation = this.client.conversations.get(data.channel);
         const user = this.client.users.get(data.user);
+
         conversation.users.delete(user.id);
+
         this.emitWithSubtype('memberLeave', { conversation, user });
     }
-    onCreate(data) {
+
+    onCreate(data: { channel: string | Conversation }) {
         const id = ConversationEventHandler.getConversationId(data);
+
         this.client.retrieveConversation(id)
             .then(conversation => {
-            this.client.conversations.set(conversation.id, conversation);
-            this.emitWithSubtype('created', conversation);
-        })
+                this.client.conversations.set(conversation.id, conversation);
+
+                this.emitWithSubtype('created', conversation);
+            })
             .catch(e => {
-            this.client.emit('error', e);
-        });
+                this.client.emit('error', e);
+            });
     }
-    onArchive({ channel: id }) {
+
+    onArchive({ channel: id } : { channel: string }) {
         const conversation = this.client.conversations.get(id);
+
         conversation.isArchived = true;
-        if (conversation.type !== ConversationType_1.default.CHANNEL) {
+
+        if (conversation.type !== ConversationType.CHANNEL) {
             conversation.isDeleted = true;
         }
+
         this.emitWithSubtype('archive', conversation);
     }
-    onUnArchive({ channel: id }) {
+
+    onUnArchive({ channel: id } : { channel: string }) {
         const conversation = this.client.conversations.get(id);
+
         conversation.isArchived = false;
         conversation.isDeleted = false;
+
         this.emitWithSubtype('unarchive', conversation);
     }
-    onDelete(data) {
+
+    onDelete(data: { channel: string }) {
         const conversation = this.client.conversations.get(data.channel);
+
         conversation.isDeleted = true;
+
         // It has to be archived if it's deleted...
         conversation.isArchived = true;
+
         this.client.conversations.delete(data.channel);
+
         this.emitWithSubtype('deleted', conversation);
     }
 }
-exports.default = ConversationEventHandler;
+
 module.exports = ConversationEventHandler;
-//# sourceMappingURL=conversations.js.map

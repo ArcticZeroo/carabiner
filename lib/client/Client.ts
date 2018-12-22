@@ -1,24 +1,46 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const events_1 = __importDefault(require("events"));
-const collection_1 = __importDefault(require("@arcticzeroo/collection"));
-const SlackAPI_1 = __importDefault(require("../api/SlackAPI"));
+import EventEmitter from 'events';
+import Collection from '@arcticzeroo/collection';
+
+import SlackAPI from '../api/SlackAPI';
+import IClientWebApiChatArgs from '../models/client/IClientWebApiChatArgs';
+import { IConversationData } from '../structures/conversation/Conversation';
+import { ITeamData } from '../structures/Team';
+import { IUserData } from '../structures/user/User';
+
 //const ObjectUtil = require('../util/ObjectUtil');
-const SlackUtil_1 = __importDefault(require("../util/SlackUtil"));
-const index_1 = require("../structures/index");
+import SlackUtil from '../util/SlackUtil';
+import { Conversation, Team, User } from '../structures/index';
+
 //const MessageSubtype = require('../enum/MessageSubtype');
-const DoNotDisturb_1 = __importDefault(require("../structures/user/DoNotDisturb"));
+import DoNotDisturb from '../structures/user/DoNotDisturb';
 // Well that's a long name.
-const ApiConversationType_1 = __importDefault(require("../enum/ApiConversationType"));
-const WebSocketReadyState_1 = __importDefault(require("../enum/WebSocketReadyState"));
-const conversations_1 = __importDefault(require("../events/conversations"));
-const users_1 = __importDefault(require("../events/users"));
-const team_1 = __importDefault(require("../events/team"));
-const messages_1 = __importDefault(require("../events/messages"));
-class Client extends events_1.default {
+import ApiConversationType from '../enum/ApiConversationType';
+import ReadyState from '../enum/WebSocketReadyState';
+import ConversationEventHandler from '../events/conversations';
+import UserEventHandler from '../events/users';
+import TeamEventHandler from '../events/team';
+import MessageEventHandler from '../events/messages';
+
+interface IClientOptions {
+    rtm?: boolean;
+    separateGroupAndMpim?: boolean;
+    useRtmStart?: boolean;
+    getUserPresence?: boolean;
+    getDndStatus?: boolean;
+    handleMigration?: boolean;
+    handleGoodbye?: boolean;
+    subscribeToUserPresence?: boolean;
+}
+
+export default class Client extends EventEmitter {
+    private readonly options: IClientOptions;
+    public readonly api: SlackAPI;
+    public readonly conversations: Collection<string, Conversation>;
+    public readonly users: Collection<string, User>;
+    public readonly members: Collection<string, User>;
+    public readonly team: Team;
+    public self: User;
+
     /**
      * Create a single-team Slack Client.
      * @param token {string} - The slack token to use for all operations.
@@ -32,9 +54,20 @@ class Client extends events_1.default {
      * @param {boolean} [options.handleGoodbye=true] - Whether the client should automatically restart RTM when 'goodbye' is emitted (events may be missed between reconnects)
      * @param {boolean} [options.subscribeToUserPresence=true] - Whether the client should subscribe to user presence of all users.
      */
-    constructor(token, options = {}) {
+    constructor(token: string, options: IClientOptions = {}) {
         super();
-        const { rtm = true, separateGroupAndMpim = false, useRtmStart = false, getUserPresence = false, getDndStatus = false, handleMigration = true, handleGoodbye = true, subscribeToUserPresence = true } = options;
+
+        const {
+            rtm = true,
+            separateGroupAndMpim = false,
+            useRtmStart = false,
+            getUserPresence = false,
+            getDndStatus = false,
+            handleMigration = true,
+            handleGoodbye = true,
+            subscribeToUserPresence = true
+        } = options;
+
         // noinspection JSValidateTypes
         /**
          * The client's options.
@@ -45,6 +78,7 @@ class Client extends events_1.default {
             rtm, separateGroupAndMpim, useRtmStart, getUserPresence,
             getDndStatus, handleMigration, handleGoodbye, subscribeToUserPresence
         };
+
         /**
          * The api this Client uses.
          * This can and should be used for direct Slack API access.
@@ -52,14 +86,16 @@ class Client extends events_1.default {
          * @type {SlackAPI}
          * @readonly
          */
-        this.api = new SlackAPI_1.default(token, this.options);
+        this.api = new SlackAPI(token, this.options);
+
         /**
          * A collection of conversations the Client has access to.
          * These are not all public conversations, find by the 'type' property to get groups/ims/etc.
          * @extends {Map}
          * @type {Collection<string, Conversation>}
          */
-        this.conversations = new collection_1.default();
+        this.conversations = new Collection();
+
         /**
          * @namespace
          * A collection of users the Client can see (which should be all of them, but may not if the client is restricted).
@@ -68,81 +104,92 @@ class Client extends events_1.default {
          * @property Client.users
          * @property Client.members
          */
-        this.users = new collection_1.default();
+        this.users = new Collection();
         this.members = this.users;
+
         /**
          * The team this client is currently in.
          * @type {Team}
          */
-        this.team = new index_1.Team(this);
+        this.team = new Team(this);
+
         /**
          * The user that this client is running as.
          * @type {User}
          */
-        this.self = new index_1.User(this);
+        this.self = new User(this);
     }
+
     /**
      * This does not return a value, because once it
      * gets channel info, it also sets it in this.conversations.
      * @returns {Promise.<void>}
      * @private
      */
-    async _populateChannelInfo(conversations = []) {
+    async _populateChannelInfo(conversations: IConversationData[] = []) {
         if (!conversations || !conversations.length) {
             try {
-                conversations = await SlackUtil_1.default.getPages({
+                conversations = await SlackUtil.getPages({
                     method: this.api.methods.conversations.list,
                     transformData: r => r.channels,
                     args: {
                         // Get all channel types. It's stupid you have to do this,
                         // what's the point of a unified API if you have to arbitrarily
                         // specify each one and it's not all by default?
-                        types: Object.keys(ApiConversationType_1.default)
-                            .map((k) => ApiConversationType_1.default[k])
+                        types: Object.keys(ApiConversationType)
+                            .map((k: keyof typeof ApiConversationType) => ApiConversationType[k])
                             .join(',')
                     }
                 });
-            }
-            catch (e) {
+            } catch (e) {
                 throw e;
             }
         }
+
         for (const data of conversations) {
-            const conversation = new index_1.Conversation(this, data);
+            const conversation = new Conversation(this, data);
+
             await conversation.retrieveMembers();
+
             this.conversations.set(conversation.id, conversation);
         }
     }
+
     /**
      * Gets user information and saves it to {Client#users}
      * If this.options.getUserPresence is true, this will take longer to complete.
      * @return {Promise.<void>}
      * @private
      */
-    async _populateUserInfo(users) {
+    async _populateUserInfo(users: IUserData[]) {
         if (!users) {
             try {
                 users = (await this.api.methods.users.list({ presence: this.options.getUserPresence })).members;
-            }
-            catch (e) {
+            } catch (e) {
                 throw e;
             }
         }
+
         for (const data of users) {
-            const user = new index_1.User(this, data);
+            const user = new User(this, data);
+
             this.users.set(user.id, user);
         }
+
         // this.self.id must be set, done automatically in Client#init.
         this.self = this.users.get(this.self.id);
+
         if (this.options.getDndStatus) {
             // Congrats DND, this method is finally being used for once!
-            return DoNotDisturb_1.default.updateMany(this, ...Array.from(this.users.values()));
+            return DoNotDisturb.updateMany(this, ...Array.from(this.users.values()));
         }
+
         // Update self's DND status regardless. We always want the self's
         // DND status to be up-to-date, but if the developer doesn't set
         // getDndStatus to be true, we don't care about other users' DND
         return this.self.dnd.update();
     }
+
     /***
      * Retrieve team info from slack, and then
      * set up this client's team with the returned
@@ -151,18 +198,19 @@ class Client extends events_1.default {
      * @return {Promise<void>}
      * @private
      */
-    async _populateTeamInfo(team) {
+    async _populateTeamInfo(team: ITeamData[]) {
         if (!team) {
             try {
                 team = (await this.api.methods.team.info()).team;
-            }
-            catch (e) {
+            } catch (e) {
                 throw e;
             }
         }
+
         // We already made an instance, so just set it up now.
         this.team.setup(team);
     }
+
     /**
      * Once RTM has started, listen to all
      * of slack's emitted events and extend them
@@ -171,27 +219,32 @@ class Client extends events_1.default {
      */
     _extendRtmEvents() {
         const emitter = this.api.rtm.events;
-        const forward = (event) => {
+
+        const forward = (event: any) => {
             emitter.on(event, (...data) => {
                 this.emit(event, ...data);
             });
         };
+
         /**
          * Emitted when the client connects successfully to slack's RTM
          * @event Client#hello
          */
         forward('hello');
+
         /**
          * Emitted when the client is about to lose its RTM connection.
          * @event Client#goodbye
          */
         forward('goodbye');
-        const eventHandlers = [
-            conversations_1.default,
-            users_1.default,
-            team_1.default,
-            messages_1.default
+
+        const eventHandlers: Array<new (client: Client) => any> = [
+            ConversationEventHandler,
+            UserEventHandler,
+            TeamEventHandler,
+            MessageEventHandler
         ];
+
         for (const EventHandler of eventHandlers) {
             // Instantiation causes it to
             // begin listening because we're
@@ -199,6 +252,7 @@ class Client extends events_1.default {
             new EventHandler(this);
         }
     }
+
     /**
      * Initialize this client.
      * This method must be called in order to receive
@@ -224,20 +278,24 @@ class Client extends events_1.default {
     async init() {
         try {
             this.self.id = (await this.api.methods.auth.test()).user_id;
-        }
-        catch (e) {
+        } catch (e) {
             throw new Error(`Slack authentication error: ${e}`);
         }
+
         let url;
+
         try {
             let self, team, users, channels, groups, mpims, ims;
+
             if (this.options.useRtmStart) {
                 // eslint-disable-next-line camelcase
                 ({ url, self, team, users, channels, groups, mpims, ims } = await this.api.methods.rtm.start({ no_latest: 1 }));
             }
+
             // Populate users AND self if id is set (which it is above)
             // do this first so channels are initialized properly
             await this._populateUserInfo(users);
+
             //noinspection JSUnusedAssignment
             await Promise.all([
                 // Populate conversations, potentially with extra data...
@@ -245,20 +303,24 @@ class Client extends events_1.default {
                 // Populate the team itself.
                 this._populateTeamInfo(team)
             ]);
+
             // If they used rtm.start, self is available, and we can set prefs.
             if (self) {
                 this.self.setup(self);
             }
-        }
-        catch (e) {
+        } catch (e) {
             throw e;
         }
+
         if (!this.options.rtm) {
             return;
         }
+
         this._extendRtmEvents();
+
         return this.api.rtm.connect(url);
     }
+
     /**
      * Retrieve a conversation with the given
      * ID from the slack API, and return it
@@ -270,23 +332,25 @@ class Client extends events_1.default {
      * @param id
      * @return {Promise<Conversation|*>}
      */
-    async retrieveConversation(id) {
+    async retrieveConversation(id: string): Promise<Conversation> {
         let data;
         try {
             data = await this.api.methods.conversations.info({ channel: id });
-        }
-        catch (e) {
+        } catch (e) {
             throw e;
         }
-        const conversation = new index_1.Conversation(this, data);
+
+        const conversation = new Conversation(this, data);
+
         try {
             await conversation.retrieveMembers();
-        }
-        catch (e) {
+        } catch (e) {
             throw e;
         }
+
         return conversation;
     }
+
     /**
      * Subscribe to user presence
      * for all cached users.
@@ -294,26 +358,34 @@ class Client extends events_1.default {
      */
     async sendUserPresenceSub() {
         const readyState = this.api.rtm.socket.readyState;
-        if (readyState < WebSocketReadyState_1.default.OPEN) {
+
+        if (readyState < ReadyState.OPEN) {
             return new Promise((resolve, reject) => {
                 this.api.rtm.once('open', () => this.sendUserPresenceSub().then(resolve).catch(reject));
             });
         }
-        if (readyState > WebSocketReadyState_1.default.OPEN) {
+
+        if (readyState > ReadyState.OPEN) {
             return;
         }
+
         return new Promise((resolve, reject) => {
-            this.api.rtm.socket.send(JSON.stringify({
-                type: 'presence_sub',
-                ids: Array.from(this.users.keys())
-            }), function (err) {
-                if (err) {
-                    return reject(err);
+            this.api.rtm.socket.send(
+                JSON.stringify({
+                    type: 'presence_sub',
+                    ids: Array.from(this.users.keys())
+                }),
+                function (err) {
+                    if (err) {
+                        return reject(err);
+                    }
+
+                    resolve();
                 }
-                resolve();
-            });
+            );
         });
     }
+
     /**
      * Chats in the specified channel.
      * @param conversation {Conversation|User|string} - A {@link Conversation}, {@link User} or string representing the channel to chat in.
@@ -324,14 +396,17 @@ class Client extends events_1.default {
      * @param {*} [args.invisible] - If this is truthy, the message will be sent ephemerally
      * @return {Promise}
      */
-    chat(conversation, text, args = {}) {
+    chat(conversation: Conversation | User | string, text: string, args: IClientWebApiChatArgs = {}) {
         let method = 'Message';
+
         if (args.postEphemeral || args.ephemeral || args.invisible) {
             method = 'Ephemeral';
+
             if (!args.user) {
                 return Promise.reject(new Error('Ephemeral recipient must be specified in args.user'));
             }
         }
+
         // @ts-ignore - This does exactly what I want it to do.
         return this.api.methods.chat[`post${method}`](Object.assign({
             text,
@@ -339,6 +414,7 @@ class Client extends events_1.default {
             as_user: true
         }, args));
     }
+
     /**
      * Destroy this client.
      * This performs the following actions:
@@ -355,5 +431,3 @@ class Client extends events_1.default {
         this.users.clear();
     }
 }
-exports.default = Client;
-//# sourceMappingURL=Client.js.map

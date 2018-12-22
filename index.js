@@ -1,6 +1,6 @@
 module.exports = {
     Client: require('./lib/client/Client'),
-    ...require('./lib/structures'),
+    ...require('./lib/structures/index'),
     ...require('./lib/enum/index'),
-    ...require('./lib/util')
+    ...require('./lib/util/index')
 };

@@ -1,14 +1,11 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const StringUtil_1 = __importDefault(require("./StringUtil"));
-class ObjectUtil {
+import StringUtil from './StringUtil';
+
+export default class ObjectUtil {
     /**
      * Object utilities.
      */
-    constructor() { }
+    private constructor() {}
+
     /**
      * Generates setters on an object when given an underscore'd property, and returns the new object.
      * This does not clone the original object, so you can probably ignore the return value.
@@ -22,20 +19,25 @@ class ObjectUtil {
      * @param iterator
      * @return {object}
      */
-    static generateSetters(obj, iterator) {
+    static generateSetters<T>(obj: any, iterator: IterableIterator<any>) {
         for (const item of iterator) {
             obj.prototype[item] = null;
-            const methodName = item.split('_').map(StringUtil_1.default.capitalize).join('');
-            obj.prototype[`set${methodName}`] = function (val) {
+
+            const methodName = item.split('_').map(StringUtil.capitalize).join('');
+
+            obj.prototype[`set${methodName}`] = function(val: T) {
                 this[item] = val;
                 return this;
             };
-            obj.prototype[`get${methodName}`] = function () {
+
+            obj.prototype[`get${methodName}`] = function(): T {
                 return this[item];
             };
         }
+
         return obj;
     }
+
     /**
      * Returns whether or not the given
      * object has any null values as its
@@ -43,15 +45,14 @@ class ObjectUtil {
      * @param {object} obj
      * @return {boolean}
      */
-    static hasNullValue(obj) {
+    static hasNullValue(obj: any) {
         for (const key of Object.keys(obj)) {
             // noinspection EqualityComparisonWithCoercionJS
             if (obj[key] == null) {
                 return true;
             }
         }
+
         return false;
     }
 }
-exports.default = ObjectUtil;
-//# sourceMappingURL=ObjectUtil.js.map

@@ -5,6 +5,7 @@
     "sourceMap": true,
     "lib": ["es2018"],
     "esModuleInterop": true,
+    "allowJs": true,
     "noImplicitAny": true
   },
   "exclude": [
