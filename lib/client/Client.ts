@@ -3,13 +3,12 @@ import Collection from '@arcticzeroo/collection';
 
 import SlackAPI from '../api/SlackAPI';
 import IClientWebApiChatArgs from '../models/client/IClientWebApiChatArgs';
-import { IConversationData } from '../structures/conversation/Conversation';
-import { ITeamData } from '../structures/Team';
-import { IUserData } from '../structures/user/User';
+import Conversation, { IConversationData } from '../structures/conversation/Conversation';
+import Team, { ITeamData } from '../structures/Team';
+import User, { IUserData } from '../structures/user/User';
 
 //const ObjectUtil = require('../util/ObjectUtil');
 import SlackUtil from '../util/SlackUtil';
-import { Conversation, Team, User } from '../structures/index';
 
 //const MessageSubtype = require('../enum/MessageSubtype');
 import DoNotDisturb from '../structures/user/DoNotDisturb';

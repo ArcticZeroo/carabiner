@@ -1,4 +1,3 @@
-import config from '../../../../config/attachments';
 import Attachment from '../../../../lib/structures/message/attachment/Attachment';
 import mockData from '../../../mockData/attachment';
 import { expect } from 'chai';
@@ -20,8 +19,8 @@ describe('Attachment & Field', () => {
         it('should not have a markdown field property until the method is first called', () => {
             const attachment = new Attachment();
 
-            expect(attachment.mrkdwn_in)
-                .to.be.null;
+            // noinspection BadExpressionStatementJS - expect is not supposed to be an assignment or call. OK is alright
+            expect(attachment.mrkdwn_in).to.not.be.ok;
 
             attachment.addMarkdownField('some markdown field');
 
