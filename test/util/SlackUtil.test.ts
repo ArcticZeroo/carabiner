@@ -2,7 +2,7 @@ import { expect } from 'chai';
 
 import assert from 'assert';
 import SlackUtil from '../../lib/util/SlackUtil';
-import mockData from '../mockData';
+import mockData from '../mockData/primary';
 
 describe('SlackUtil', function () {
     describe('#convertProperties', function () {

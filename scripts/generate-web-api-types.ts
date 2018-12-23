@@ -3,7 +3,6 @@ import * as path from 'path';
 
 import methods from '../config/methods';
 
-const argsInterfaceName = 'ISlackWebApiArgs';
 const generatedInterfaceName = 'ISlackWebApiMethods';
 const methodTypeName = `SlackWebApiMethod`;
 

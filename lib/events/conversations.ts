@@ -282,5 +282,3 @@ export default class ConversationEventHandler extends EventHandler {
         this.emitWithSubtype('deleted', conversation);
     }
 }
-
-module.exports = ConversationEventHandler;

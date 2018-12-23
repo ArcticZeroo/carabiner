@@ -76,5 +76,3 @@ export default abstract class EventHandler {
         }
     }
 }
-
-module.exports = EventHandler;

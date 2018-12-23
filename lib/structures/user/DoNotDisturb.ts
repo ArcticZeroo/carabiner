@@ -232,5 +232,3 @@ export default class DoNotDisturb extends Structure<IDoNotDisturbData> {
         }
     }
 }
-
-module.exports = DoNotDisturb;
