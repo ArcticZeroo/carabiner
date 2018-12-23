@@ -2,8 +2,8 @@ import Collection from '@arcticzeroo/collection';
 import Client from '../client/Client';
 import Conversation from './conversation/Conversation';
 import User from './user/User';
-const SlackUtil = require('../util/SlackUtil');
-const Structure = require('./Structure');
+import SlackUtil from '../util/SlackUtil';
+import Structure from './Structure';
 
 export interface ITeamData {
 

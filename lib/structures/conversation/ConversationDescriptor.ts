@@ -1,6 +1,6 @@
 import Client from '../../client/Client';
-const SlackUtil = require('../../util/SlackUtil');
-const Structure = require('../Structure');
+import SlackUtil from '../../util/SlackUtil';
+import Structure from '../Structure';
 
 export interface IConversationDescriptorData {
     value: string;

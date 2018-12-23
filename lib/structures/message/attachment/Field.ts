@@ -1,6 +1,7 @@
-const ObjectUtil = require('../../../util/ObjectUtil');
-const config = require('../../../../config/attachments');
+import ObjectUtil from '../../../util/ObjectUtil';
+import config from '../../../../config/attachments';
 
+// TODO: Look into getting type hinting for this
 // That's right, nothing is here.
 class Field {
     /**
