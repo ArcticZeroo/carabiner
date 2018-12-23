@@ -407,6 +407,10 @@ export default class Client extends EventEmitter {
             }
         }
 
+        if (args.user && args.user instanceof User) {
+            args.user = args.user.id;
+        }
+
         // @ts-ignore - This does exactly what I want it to do.
         return this.api.methods.chat[`post${method}`](Object.assign({
             text,

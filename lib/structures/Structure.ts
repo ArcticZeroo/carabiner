@@ -33,5 +33,5 @@ export default abstract class Structure<T = any> {
      * Update this structure. This method, when overridden by base classes, should call {@link Structure#setup}
      * @returns {Promise}
      */
-    abstract update(): Promise<any>;
+    async update(): Promise<any> {}
 }

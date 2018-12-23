@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@arcticzeroo/eslint-config": "^1.0.4",
+    "@types/deep-equal": "^1.0.1",
     "@types/node": "^10.12.15",
     "@types/superagent": "^3.8.5",
     "@types/ws": "^6.0.1",

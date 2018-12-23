@@ -1,16 +1,14 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const handler_1 = __importDefault(require("./handler"));
-const User_1 = __importDefault(require("../structures/user/User"));
-const deep_equal_1 = __importDefault(require("deep-equal"));
-class UserEventHandler extends handler_1.default {
-    constructor(client, options = {}) {
+import EventHandler from './handler';
+import User from '../structures/user/User';
+import deepEqual from 'deep-equal';
+import Client from '../client/Client';
+
+export default class UserEventHandler extends EventHandler {
+    constructor(client: Client, options = {}) {
         super(client, { ...options, name: 'user' });
     }
-    listen() {
+
+    listen(): void {
         // Listen to user<> events,
         // then related events which
         // are closely tied to users
@@ -18,7 +16,8 @@ class UserEventHandler extends handler_1.default {
         this._listenMain();
         this._listenRelated();
     }
-    _listenMain() {
+
+    _listenMain(): void {
         /**
          * Emitted when a user's name is changed.
          * @event Client#userNameChange
@@ -43,24 +42,29 @@ class UserEventHandler extends handler_1.default {
         this.emitter.on('user_change', data => {
             // TODO: 2fa, admin, owner change detection
             const oldUser = this.client.users.get(data.user.id);
-            const newUser = new User_1.default(this.client, data.user);
+            const newUser = new User(this.client, data.user);
+
             this.client.users.set(data.user.id, newUser);
+
             if (oldUser.name !== newUser.name) {
                 this.emit('nameChange', {
                     old: oldUser.name,
                     new: newUser.name
                 });
             }
-            if (!deep_equal_1.default(oldUser.profile, newUser.profile)) {
+
+            if (!deepEqual(oldUser.profile, newUser.profile)) {
                 this.emit('profileUpdate', {
                     old: oldUser.profile,
                     new: newUser.profile
                 });
             }
+
             this.emit('update', {
                 old: oldUser,
                 new: newUser
             });
+
             // User was just deactivated
             if (!oldUser.isDeleted && newUser.isDeleted) {
                 /**
@@ -70,8 +74,7 @@ class UserEventHandler extends handler_1.default {
                  */
                 this.emit('deactivated', newUser);
                 // Was just activated from being deactivated
-            }
-            else if (oldUser.isDeleted && !newUser.isDeleted) {
+            } else if (oldUser.isDeleted && !newUser.isDeleted) {
                 /**
                  * Emitted when a user is activated, after
                  * being deactivated prior
@@ -81,6 +84,7 @@ class UserEventHandler extends handler_1.default {
                 this.emit('activated', newUser);
             }
         });
+
         /**
          * Emitted when a user starts typing.
          * @event Client#userTyping
@@ -91,10 +95,12 @@ class UserEventHandler extends handler_1.default {
         this.emitter.on('user_typing', data => {
             const channel = this.client.conversations.get(data.channel);
             const user = this.client.users.get(data.user);
+
             this.emit('typing', { channel, user });
         });
     }
-    _listenRelated() {
+
+    _listenRelated(): void {
         /**
          * Emitted when a user's DND status is updated.
          * @event Client#dndUpdated
@@ -110,12 +116,12 @@ class UserEventHandler extends handler_1.default {
             this.client.emit('dndUpdatedSelf', this.client.self.dnd);
             this.client.emit('dndUpdated', this.client.self.dnd);
         });
+
         this.emitter.on('dnd_updated_user', ({ user: id, dnd_status: dndStatus }) => {
             const user = this.client.users.get(id);
+
             user.dnd.setup(dndStatus);
             this.client.emit('dndUpdated', user.dnd);
         });
     }
 }
-exports.default = UserEventHandler;
-//# sourceMappingURL=users.js.map

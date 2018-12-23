@@ -1,18 +1,17 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const handler_1 = __importDefault(require("./handler"));
-const Message_1 = __importDefault(require("../structures/message/Message"));
-class TeamEventHandler extends handler_1.default {
-    constructor(client, options = {}) {
+import Client from '../client/Client';
+import EventHandler from './handler';
+import Message from '../structures/message/Message';
+
+export default class TeamEventHandler extends EventHandler {
+    constructor(client: Client, options = {}) {
         super(client, { ...options, name: 'message' });
     }
+
     listen() {
         this._listenMain();
         this._listenRelated();
     }
+
     _listenMain() {
         /**
          * Emitted when a message is sent in a slack channel.
@@ -26,14 +25,16 @@ class TeamEventHandler extends handler_1.default {
          * @param {Message} message - The message that was sent.
          */
         this.emitter.on('message', data => {
-            const message = new Message_1.default(this.client, data);
+            const message = new Message(this.client, data);
+
             this.client.emit('message', message);
             this.client.emit(`message.type.${message.channel.type}`, message);
+
             if (message.subtype) {
                 this.client.emit(`message.subtype.${message.subtype}`, message);
+
                 //TODO: switch on subtype for special handling
-            }
-            else {
+            } else {
                 /**
                  * Emitted when a user sends a chat message.
                  * These are messages without subtypes.
@@ -44,6 +45,7 @@ class TeamEventHandler extends handler_1.default {
             }
         });
     }
+
     _listenRelated() {
         /**
          * Emitted when a user adds a reaction to a message
@@ -56,8 +58,10 @@ class TeamEventHandler extends handler_1.default {
         this.emitter.on('reaction_added', ({ user: reactingUser, item_user: reactingTo, reaction }) => {
             reactingUser = this.client.users.get(reactingUser);
             reactingTo = this.client.users.get(reactingTo);
+
             this.client.emit('reactionAdded', { reactingUser, reactingTo, reaction });
         });
+
         /**
          * Emitted when a user adds a reaction to a message
          * @event Client#reactionRemoved
@@ -69,9 +73,8 @@ class TeamEventHandler extends handler_1.default {
         this.emitter.on('reaction_removed', ({ user: reactingUser, item_user: reactingTo, reaction }) => {
             reactingUser = this.client.users.get(reactingUser);
             reactingTo = this.client.users.get(reactingTo);
+
             this.client.emit('reactionRemoved', { reactingUser, reactingTo, reaction });
         });
     }
 }
-exports.default = TeamEventHandler;
-//# sourceMappingURL=messages.js.map

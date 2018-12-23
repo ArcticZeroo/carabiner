@@ -1,14 +1,12 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const handler_1 = __importDefault(require("./handler"));
-const User_1 = __importDefault(require("../structures/user/User"));
-class TeamEventHandler extends handler_1.default {
-    constructor(client, options = {}) {
+import Client from '../client/Client';
+import EventHandler from './handler';
+import User from '../structures/user/User';
+
+export default class TeamEventHandler extends EventHandler {
+    constructor(client: Client, options = {}) {
         super(client, { ...options, name: 'team' });
     }
+
     listen() {
         /**
          * Emitted when a member joins a slack team
@@ -16,10 +14,13 @@ class TeamEventHandler extends handler_1.default {
          * @param {User} user - The user that joined the team.
          */
         this.emitter.on('team_join', data => {
-            const user = new User_1.default(this.client, data.user);
+            const user = new User(this.client, data.user) ;
+
             this.client.users.set(user.id, user);
+
             this.emit('memberJoin', user);
         });
+
         /**
          * Emitted when this.client team's domain is changed.
          * @event Client#teamDomainChange
@@ -32,6 +33,7 @@ class TeamEventHandler extends handler_1.default {
             this.client.team.domain = data.domain;
             this.emit('domainChange', { oldDomain, newDomain: data.domain });
         });
+
         /**
          * Emitted when this.client team's name is renamed.
          * @event Client#teamRename
@@ -46,5 +48,3 @@ class TeamEventHandler extends handler_1.default {
         });
     }
 }
-exports.default = TeamEventHandler;
-//# sourceMappingURL=team.js.map

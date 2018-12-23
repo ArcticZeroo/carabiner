@@ -19,7 +19,7 @@ export default class ObjectUtil {
      * @param iterator
      * @return {object}
      */
-    static generateSetters<T>(obj: any, iterator: IterableIterator<any>) {
+    static generateSetters<T>(obj: any, iterator: string[]) {
         for (const item of iterator) {
             obj.prototype[item] = null;
 

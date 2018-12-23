@@ -3,8 +3,8 @@ import SlackUtil from '../../util/SlackUtil';
 import Structure from '../Structure';
 import ConversationType from '../../enum/ConversationType';
 import User from '../user/User';
-import ConversationDescriptor from './ConversationDescriptor';
-import Message from '../message/Message';
+import ConversationDescriptor, { IConversationDescriptorData } from './ConversationDescriptor';
+import Message, { IMessageData } from '../message/Message';
 import Collection from '@arcticzeroo/collection';
 import MessageBuilder from '../message/MessageBuilder';
 import Attachment from '../message/attachment/Attachment';
@@ -17,7 +17,7 @@ export interface IConversationData {
     is_member: boolean;
     members?: string[];
     last_read: number;
-    latest?: number;
+    latest?: IMessageData;
     unread_count?: number;
     is_archived?: boolean;
     is_general: boolean;
@@ -27,8 +27,8 @@ export interface IConversationData {
     is_group: boolean;
     is_private: boolean;
     created: number;
-    purpose: {};
-    topic: {};
+    purpose: IConversationDescriptorData;
+    topic: IConversationDescriptorData;
     unread_count_display: any;
 }
 
@@ -209,7 +209,7 @@ export default class Conversation extends Structure<IConversationData> {
      * @type {string}
      * @readonly
      */
-    get type() {
+    get type(): string {
         if (this.isChannel) {
             return ConversationType.CHANNEL;
         }

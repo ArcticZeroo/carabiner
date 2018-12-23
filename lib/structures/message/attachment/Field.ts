@@ -1,7 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const ObjectUtil = require('../../../util/ObjectUtil');
 const config = require('../../../../config/attachments');
+
 // That's right, nothing is here.
 class Field {
     /**
@@ -16,8 +15,9 @@ class Field {
      *  .setTitle('hi')
      *  .setValue(':)')
      */
-    constructor() { }
+    constructor() {}
 }
+
 /**
  * @name Field#setTitle
  * @function
@@ -42,6 +42,7 @@ class Field {
  * @param {boolean} val - Whether this field should be considered 'short'
  * @return {Field}
  */
+
 /**
  * @name Field#getTitle
  * @function
@@ -63,6 +64,7 @@ class Field {
  * @description Get whether this field is short
  * @return {boolean}
  */
+
 ObjectUtil.generateSetters(Field, config.fieldProperties);
-exports.default = Field;
-//# sourceMappingURL=Field.js.map
+
+export default Field;

@@ -1,12 +1,69 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const ObjectUtil_1 = __importDefault(require("../../../util/ObjectUtil"));
-const attachments_1 = __importDefault(require("../../../../config/attachments"));
-const Field_1 = __importDefault(require("./Field"));
-class Attachment {
+import ObjectUtil from '../../../util/ObjectUtil';
+import config from '../../../../config/attachments';
+import Field from './Field';
+
+interface IAttachment {
+    setFallback(value: string): this;
+    getFallback(): string;
+
+    setColor(value: string): this;
+    getColor(): string;
+
+    setPretext(value: string): this;
+    getPretext(): string;
+
+    setAuthorName(value: string): this;
+    getAuthorName(): string;
+
+    setAuthorLink(value: string): this;
+    getAuthorLink(): string;
+
+    setAuthorIcon(value: string): this;
+    getAuthorIcon(): string;
+
+    setTitle(value: string): this;
+    getTitle(): string;
+
+    setTitleLink(value: string): this;
+    getTitleLink(): string;
+
+    setText(value: string): this;
+    getText(): string;
+
+    setImageUrl(value: string): this;
+    getImageUrl(): string;
+
+    setThumbUrl(value: string): this;
+    getThumbUrl(): string;
+
+    setFooter(value: string): this;
+    getFooter(): string;
+
+    setFooterIcon(value: string): this;
+    getFooterIcon(): string;
+
+    setTs(value: string): this;
+    getTs(): string;
+}
+
+export default class Attachment implements IAttachment {
+    private fields: Field[];
+    private mrkdwn_in: string[];
+    private fallback: string;
+    private color: string;
+    private pretext: string;
+    private author_name: string;
+    private author_link: string;
+    private author_icon: string;
+    private title: string;
+    private title_link: string;
+    private text: string;
+    private image_url: string;
+    private thumb_url: string;
+    private footer: string;
+    private footer_icon: string;
+    private ts: string;
+
     /**
      * Create a slack attachment object.
      * No build, json-ifying or any hocus-pocus necessary.
@@ -21,7 +78,8 @@ class Attachment {
      *  .setColor('#2196F3')
      *  .addField(new Field()...)
      */
-    constructor() { }
+    constructor() {}
+
     /**
      *
      * @param {Field|string} field - The field to add, or the field's title.
@@ -29,30 +87,35 @@ class Attachment {
      * @param {boolean} [short] - Whether the field should be short, if the field param is a string
      * @return {Attachment}
      */
-    addField(field, value, short) {
+    addField(field: Field | string, value: string, short: boolean) {
         if (!this.fields) {
             this.fields = [];
         }
-        if (field instanceof Field_1.default) {
+
+        if (field instanceof Field) {
             this.fields.push(field);
+        } else {
+            this.fields.push(
+                new Field()
+                    .setTitle(field)
+                    .setValue(value)
+                    .setShort(short)
+            );
         }
-        else {
-            this.fields.push(new Field_1.default()
-                .setTitle(field)
-                .setValue(value)
-                .setShort(short));
-        }
+
         return this;
     }
+
     /**
      * Set fields on this attachment.
      * @param {Array.<Field>} fields - Fields to set.
      * @return {Attachment}
      */
-    setFields(fields) {
+    setFields(fields: Field[]) {
         this.fields = fields;
         return this;
     }
+
     /**
      * Get fields for this attachment.
      * @return {Array|Array.<Field>}
@@ -60,127 +123,158 @@ class Attachment {
     getFields() {
         return this.fields;
     }
+
     /**
      * Add a markdown field to this attachment.
      * @param {string} field - The slack field to add a markdown field to. Consult slack docs.
      * @return {Attachment}
      */
-    addMarkdownField(field) {
+    addMarkdownField(field: string) {
         if (!this.mrkdwn_in) {
             this.mrkdwn_in = [];
         }
+
         this.mrkdwn_in.push(field);
         return this;
     }
+
     /**
      * Set markdown fields for this attachment.
      * @param {Array.<string>} fields - Fields to set.
      * @return {Attachment}
      */
-    setMarkdownFields(fields) {
+    setMarkdownFields(fields: string[]) {
         this.mrkdwn_in = fields;
         return this;
     }
-    setFallback(value) {
+
+    setFallback(value: string): this {
         this.fallback = value;
         return this;
     }
-    getFallback() {
+
+    getFallback(): string {
         return this.fallback;
     }
-    setColor(value) {
+
+    setColor(value: string): this {
         this.color = value;
         return this;
     }
-    getColor() {
+
+    getColor(): string {
         return this.color;
     }
-    setPretext(value) {
+
+    setPretext(value: string): this {
         this.pretext = value;
         return this;
     }
-    getPretext() {
+
+    getPretext(): string {
         return this.pretext;
     }
-    setAuthorName(value) {
+
+    setAuthorName(value: string): this {
         this.author_name = value;
         return this;
     }
-    getAuthorName() {
+
+    getAuthorName(): string {
         return this.author_name;
     }
-    setAuthorLink(value) {
+
+    setAuthorLink(value: string): this {
         this.author_link = value;
         return this;
     }
-    getAuthorLink() {
+
+    getAuthorLink(): string {
         return this.author_link;
     }
-    setAuthorIcon(value) {
+
+    setAuthorIcon(value: string): this {
         this.author_icon = value;
         return this;
     }
-    getAuthorIcon() {
+
+    getAuthorIcon(): string {
         return this.author_icon;
     }
-    setTitle(value) {
+
+    setTitle(value: string): this {
         this.title = value;
         return this;
     }
-    getTitle() {
+
+    getTitle(): string {
         return this.title;
     }
-    setTitleLink(value) {
+
+    setTitleLink(value: string): this {
         this.title_link = value;
         return this;
     }
-    getTitleLink() {
+
+    getTitleLink(): string {
         return this.title_link;
     }
-    setText(value) {
+
+    setText(value: string): this {
         this.text = value;
         return this;
     }
-    getText() {
+
+    getText(): string {
         return this.text;
     }
-    setImageUrl(value) {
+
+    setImageUrl(value: string): this {
         this.image_url = value;
         return this;
     }
-    getImageUrl() {
+
+    getImageUrl(): string {
         return this.image_url;
     }
-    setThumbUrl(value) {
+
+    setThumbUrl(value: string): this {
         this.thumb_url = value;
         return this;
     }
-    getThumbUrl() {
+
+    getThumbUrl(): string {
         return this.thumb_url;
     }
-    setFooter(value) {
+
+    setFooter(value: string): this {
         this.footer = value;
         return this;
     }
-    getFooter() {
+
+    getFooter(): string {
         return this.footer;
     }
-    setFooterIcon(value) {
+
+    setFooterIcon(value: string): this {
         this.footer_icon = value;
         return this;
     }
-    getFooterIcon() {
+
+    getFooterIcon(): string {
         return this.footer_icon;
     }
-    setTs(value) {
+
+    setTs(value: string): this {
         this.ts = value;
         return this;
     }
-    getTs() {
+
+    getTs(): string {
         return this.ts;
     }
 }
-exports.default = Attachment;
+
 /**
  * @name Attachment#setFallback
  * @function
@@ -301,6 +395,7 @@ exports.default = Attachment;
  * @param {string} val - text to set
  * @return {Attachment}
  */
+
 /**
  * @name Attachment#getFallback
  * @function
@@ -406,7 +501,7 @@ exports.default = Attachment;
  * @description Get timestamp
  * @return {number}
  */
-ObjectUtil_1.default.generateSetters(Attachment, attachments_1.default.attachmentProperties);
+ObjectUtil.generateSetters(Attachment, config.attachmentProperties);
 Attachment.prototype.setTimestamp = Attachment.prototype.setTs;
+
 module.exports = Attachment;
-//# sourceMappingURL=Attachment.js.map
