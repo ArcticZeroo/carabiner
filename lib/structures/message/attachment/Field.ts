@@ -1,9 +1,14 @@
-import ObjectUtil from '../../../util/ObjectUtil';
-import config from '../../../../config/attachments';
+export interface IFieldProperties {
+    title: string;
+    value: string;
+    short: boolean;
+}
 
-// TODO: Look into getting type hinting for this
-// That's right, nothing is here.
-class Field {
+export default class Field implements IFieldProperties {
+    title: string;
+    value: string;
+    short: boolean;
+
     /**
      * Create a slack field object.
      * No build, json-ifying or any hocus-pocus necessary.
@@ -17,55 +22,31 @@ class Field {
      *  .setValue(':)')
      */
     constructor() {}
+
+    getTitle(): string {
+        return this.title;
+    }
+
+    setTitle(value: string): this {
+        this.title = value;
+        return this;
+    }
+
+    getValue(): string {
+        return this.value;
+    }
+
+    setValue(value: string): this {
+        this.value = value;
+        return this;
+    }
+
+    getShort(): boolean {
+        return this.short;
+    }
+
+    setShort(value: boolean): this {
+        this.short = value;
+        return this;
+    }
 }
-
-/**
- * @name Field#setTitle
- * @function
- * @memberOf Field
- * @description Set title text
- * @param {string} val - text to set
- * @return {Field}
- */
-/**
- * @name Field#setValue
- * @function
- * @memberOf Field
- * @description Set the value of this field
- * @param {string} val - text to set
- * @return {Field}
- */
-/**
- * @name Field#setShort
- * @function
- * @memberOf Field
- * @description Set whether this field should be short
- * @param {boolean} val - Whether this field should be considered 'short'
- * @return {Field}
- */
-
-/**
- * @name Field#getTitle
- * @function
- * @memberOf Field
- * @description Get title text
- * @return {string}
- */
-/**
- * @name Field#getValue
- * @function
- * @memberOf Field
- * @description Get value text
- * @return {string}
- */
-/**
- * @name Field#getShort
- * @function
- * @memberOf Field
- * @description Get whether this field is short
- * @return {boolean}
- */
-
-ObjectUtil.generateSetters(Field, config.fieldProperties);
-
-export default Field;

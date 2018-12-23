@@ -1,68 +1,41 @@
-import ObjectUtil from '../../../util/ObjectUtil';
-import config from '../../../../config/attachments';
 import Field from './Field';
 
-interface IAttachment {
-    setFallback(value: string): this;
-    getFallback(): string;
-
-    setColor(value: string): this;
-    getColor(): string;
-
-    setPretext(value: string): this;
-    getPretext(): string;
-
-    setAuthorName(value: string): this;
-    getAuthorName(): string;
-
-    setAuthorLink(value: string): this;
-    getAuthorLink(): string;
-
-    setAuthorIcon(value: string): this;
-    getAuthorIcon(): string;
-
-    setTitle(value: string): this;
-    getTitle(): string;
-
-    setTitleLink(value: string): this;
-    getTitleLink(): string;
-
-    setText(value: string): this;
-    getText(): string;
-
-    setImageUrl(value: string): this;
-    getImageUrl(): string;
-
-    setThumbUrl(value: string): this;
-    getThumbUrl(): string;
-
-    setFooter(value: string): this;
-    getFooter(): string;
-
-    setFooterIcon(value: string): this;
-    getFooterIcon(): string;
-
-    setTs(value: string): this;
-    getTs(): string;
+export interface IAttachmentProperties {
+    fields?: Field[];
+    mrkdwn_in?: string[];
+    fallback?: string;
+    color?: string;
+    pretext?: string;
+    author_name?: string;
+    author_link?: string;
+    author_icon?: string;
+    title?: string;
+    title_link?: string;
+    text?: string;
+    image_url?: string;
+    thumb_url?: string;
+    footer?: string;
+    footer_icon?: string;
+    ts?: number;
 }
 
-export default class Attachment implements IAttachment {
-    private fields: Field[];
-    private mrkdwn_in: string[];
-    private fallback: string;
-    private color: string;
-    private pretext: string;
-    private author_name: string;
-    private author_link: string;
-    private author_icon: string;
-    private title: string;
-    private title_link: string;
-    private text: string;
-    private image_url: string;
-    private thumb_url: string;
-    private footer: string;
-    private footer_icon: string;
-    private ts: string;
+export default class Attachment implements IAttachmentProperties {
+    fields: Field[];
+    mrkdwn_in: string[];
+    fallback: string;
+    color: string;
+    pretext: string;
+    author_name: string;
+    author_link: string;
+    author_icon: string;
+    title: string;
+    title_link: string;
+    text: string;
+    image_url: string;
+    thumb_url: string;
+    footer: string;
+    footer_icon: string;
+    ts: number;
 
     /**
      * Create a slack attachment object.
@@ -148,17 +121,12 @@ export default class Attachment implements IAttachment {
         return this;
     }
 
-    setFallback(value: string): this {
-        this.fallback = value;
-        return this;
-    }
-
     getFallback(): string {
         return this.fallback;
     }
 
-    setColor(value: string): this {
-        this.color = value;
+    setFallback(value: string): this {
+        this.fallback = value;
         return this;
     }
 
@@ -166,8 +134,8 @@ export default class Attachment implements IAttachment {
         return this.color;
     }
 
-    setPretext(value: string): this {
-        this.pretext = value;
+    setColor(value: string): this {
+        this.color = value;
         return this;
     }
 
@@ -175,8 +143,8 @@ export default class Attachment implements IAttachment {
         return this.pretext;
     }
 
-    setAuthorName(value: string): this {
-        this.author_name = value;
+    setPretext(value: string): this {
+        this.pretext = value;
         return this;
     }
 
@@ -184,8 +152,8 @@ export default class Attachment implements IAttachment {
         return this.author_name;
     }
 
-    setAuthorLink(value: string): this {
-        this.author_link = value;
+    setAuthorName(value: string): this {
+        this.author_name = value;
         return this;
     }
 
@@ -193,8 +161,8 @@ export default class Attachment implements IAttachment {
         return this.author_link;
     }
 
-    setAuthorIcon(value: string): this {
-        this.author_icon = value;
+    setAuthorLink(value: string): this {
+        this.author_link = value;
         return this;
     }
 
@@ -202,8 +170,8 @@ export default class Attachment implements IAttachment {
         return this.author_icon;
     }
 
-    setTitle(value: string): this {
-        this.title = value;
+    setAuthorIcon(value: string): this {
+        this.author_icon = value;
         return this;
     }
 
@@ -211,8 +179,8 @@ export default class Attachment implements IAttachment {
         return this.title;
     }
 
-    setTitleLink(value: string): this {
-        this.title_link = value;
+    setTitle(value: string): this {
+        this.title = value;
         return this;
     }
 
@@ -220,8 +188,8 @@ export default class Attachment implements IAttachment {
         return this.title_link;
     }
 
-    setText(value: string): this {
-        this.text = value;
+    setTitleLink(value: string): this {
+        this.title_link = value;
         return this;
     }
 
@@ -229,8 +197,8 @@ export default class Attachment implements IAttachment {
         return this.text;
     }
 
-    setImageUrl(value: string): this {
-        this.image_url = value;
+    setText(value: string): this {
+        this.text = value;
         return this;
     }
 
@@ -238,8 +206,8 @@ export default class Attachment implements IAttachment {
         return this.image_url;
     }
 
-    setThumbUrl(value: string): this {
-        this.thumb_url = value;
+    setImageUrl(value: string): this {
+        this.image_url = value;
         return this;
     }
 
@@ -247,8 +215,8 @@ export default class Attachment implements IAttachment {
         return this.thumb_url;
     }
 
-    setFooter(value: string): this {
-        this.footer = value;
+    setThumbUrl(value: string): this {
+        this.thumb_url = value;
         return this;
     }
 
@@ -256,8 +224,8 @@ export default class Attachment implements IAttachment {
         return this.footer;
     }
 
-    setFooterIcon(value: string): this {
-        this.footer_icon = value;
+    setFooter(value: string): this {
+        this.footer = value;
         return this;
     }
 
@@ -265,243 +233,25 @@ export default class Attachment implements IAttachment {
         return this.footer_icon;
     }
 
-    setTs(value: string): this {
+    setFooterIcon(value: string): this {
+        this.footer_icon = value;
+        return this;
+    }
+
+    getTs(): number {
+        return this.ts;
+    }
+
+    setTs(value: number): this {
         this.ts = value;
         return this;
     }
 
-    getTs(): string {
-        return this.ts;
+    setTimestamp(value: number): this {
+        return this.setTs(value);
+    }
+
+    getTimestamp(): number {
+        return this.getTs();
     }
 }
-
-/**
- * @name Attachment#setFallback
- * @function
- * @memberOf Attachment
- * @description Set fallback text
- * @param {string} val - text to set
- * @return {Attachment}
- */
-/**
- * @name Attachment#setColor
- * @function
- * @memberOf Attachment
- * @description Set color
- * @param {string} val - color to set
- * @return {Attachment}
- */
-/**
- * @name Attachment#setPretext
- * @function
- * @memberOf Attachment
- * @description Set pretext
- * @param {string} val - text to set
- * @return {Attachment}
- */
-/**
- * @name Attachment#setAuthorName
- * @function
- * @memberOf Attachment
- * @description Set author name
- * @param {string} val - name to set
- * @return {Attachment}
- */
-/**
- * @name Attachment#setAuthorLink
- * @function
- * @memberOf Attachment
- * @description Set author link
- * @param {string} val - link to set
- * @return {Attachment}
- */
-/**
- * @name Attachment#setAuthorIcon
- * @function
- * @memberOf Attachment
- * @description Set author icon
- * @param {string} val - Icon to set
- * @return {Attachment}
- */
-/**
- * @name Attachment#setTitle
- * @function
- * @memberOf Attachment
- * @description Set title
- * @param {string} val - text to set
- * @return {Attachment}
- */
-/**
- * @name Attachment#setTitleLink
- * @function
- * @memberOf Attachment
- * @description Set title link
- * @param {string} val - link to set
- * @return {Attachment}
- */
-/**
- * @name Attachment#setText
- * @function
- * @memberOf Attachment
- * @description Set text
- * @param {string} val - text to set
- * @return {Attachment}
- */
-/**
- * @name Attachment#setImageUrl
- * @function
- * @memberOf Attachment
- * @description Set image url
- * @param {string} val - url to set
- * @return {Attachment}
- */
-/**
- * @name Attachment#setThumbUrl
- * @function
- * @memberOf Attachment
- * @description Set thumb url
- * @param {string} val - url to set
- * @return {Attachment}
- */
-/**
- * @name Attachment#setFooter
- * @function
- * @memberOf Attachment
- * @description Set footer text
- * @param {string} val - text to set
- * @return {Attachment}
- */
-/**
- * @name Attachment#setFooterIcon
- * @function
- * @memberOf Attachment
- * @description Set footer icon
- * @param {string} val - icon to set
- * @return {Attachment}
- */
-/**
- * @name Attachment#setTs
- * @function
- * @memberOf Attachment
- * @description Set timestamp
- * @param {string} val - text to set
- * @return {Attachment}
- */
-/**
- * @name Attachment#setTimestamp
- * @function
- * @memberOf Attachment
- * @description Set timestamp
- * @param {string} val - text to set
- * @return {Attachment}
- */
-
-/**
- * @name Attachment#getFallback
- * @function
- * @memberOf Attachment
- * @description Get fallback text
- * @return {string}
- */
-/**
- * @name Attachment#getColor
- * @function
- * @memberOf Attachment
- * @description Get color
- * @return {string}
- */
-/**
- * @name Attachment#getPretext
- * @function
- * @memberOf Attachment
- * @description Get pretext
- * @return {string}
- */
-/**
- * @name Attachment#getAuthorName
- * @function
- * @memberOf Attachment
- * @description Get author name
- * @return {string}
- */
-/**
- * @name Attachment#getAuthorLink
- * @function
- * @memberOf Attachment
- * @description Get author link
- * @return {string}
- */
-/**
- * @name Attachment#getAuthorIcon
- * @function
- * @memberOf Attachment
- * @description Get author icon
- * @return {string}
- */
-/**
- * @name Attachment#getTitle
- * @function
- * @memberOf Attachment
- * @description Get title
- * @return {string}
- */
-/**
- * @name Attachment#getTitleLink
- * @function
- * @memberOf Attachment
- * @description Get title link
- * @return {string}
- */
-/**
- * @name Attachment#getText
- * @function
- * @memberOf Attachment
- * @description Get text
- * @return {string}
- */
-/**
- * @name Attachment#getImageUrl
- * @function
- * @memberOf Attachment
- * @description Get image url
- * @return {string}
- */
-/**
- * @name Attachment#getThumbUrl
- * @function
- * @memberOf Attachment
- * @description Get thumb url
- * @return {string}
- */
-/**
- * @name Attachment#getFooter
- * @function
- * @memberOf Attachment
- * @description Get footer text
- * @return {string}
- */
-/**
- * @name Attachment#getFooterIcon
- * @function
- * @memberOf Attachment
- * @description Get footer icon
- * @return {string}
- */
-/**
- * @name Attachment#getTs
- * @function
- * @memberOf Attachment
- * @description Get timestamp
- * @return {number}
- */
-/**
- * @name Attachment#getTimestamp
- * @function
- * @memberOf Attachment
- * @description Get timestamp
- * @return {number}
- */
-ObjectUtil.generateSetters(Attachment, config.attachmentProperties);
-Attachment.prototype.setTimestamp = Attachment.prototype.setTs;
-
-module.exports = Attachment;
