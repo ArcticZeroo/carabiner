@@ -7,7 +7,7 @@ interface IMChannelData extends IConversationData {
     is_user_deleted: boolean;
 }
 
-class IMChannel extends Conversation {
+export default class IMChannel extends Conversation {
     user: User;
     isUserDeleted: boolean;
 
@@ -42,5 +42,3 @@ class IMChannel extends Conversation {
         this.isUserDeleted = data.is_user_deleted;
     }
 }
-
-module.exports = IMChannel;
