@@ -26,7 +26,7 @@ export default class DoNotDisturb extends Structure<IDoNotDisturbData> {
      * @param {User} user - The user this dnd status is for
      * @param [data] {object} - Optional data to use to set up this class instance
      */
-    constructor(user: User, data: IDoNotDisturbData) {
+    constructor(user: User, data?: IDoNotDisturbData) {
         super(user.client, data);
 
         this.user = user;

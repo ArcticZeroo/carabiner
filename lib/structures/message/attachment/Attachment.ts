@@ -60,7 +60,7 @@ export default class Attachment implements IAttachmentProperties {
      * @param {boolean} [short] - Whether the field should be short, if the field param is a string
      * @return {Attachment}
      */
-    addField(field: Field | string, value: string, short: boolean) {
+    addField(field: Field | string, value: string, short: boolean): this {
         if (!this.fields) {
             this.fields = [];
         }
@@ -84,7 +84,7 @@ export default class Attachment implements IAttachmentProperties {
      * @param {Array.<Field>} fields - Fields to set.
      * @return {Attachment}
      */
-    setFields(fields: Field[]) {
+    setFields(fields: Field[]): this {
         this.fields = fields;
         return this;
     }
@@ -93,7 +93,7 @@ export default class Attachment implements IAttachmentProperties {
      * Get fields for this attachment.
      * @return {Array|Array.<Field>}
      */
-    getFields() {
+    getFields(): Field[] {
         return this.fields;
     }
 
@@ -102,12 +102,12 @@ export default class Attachment implements IAttachmentProperties {
      * @param {string} field - The slack field to add a markdown field to. Consult slack docs.
      * @return {Attachment}
      */
-    addMarkdownField(field: string) {
+    addMarkdownField(...field: string[]): this {
         if (!this.mrkdwn_in) {
             this.mrkdwn_in = [];
         }
 
-        this.mrkdwn_in.push(field);
+        this.mrkdwn_in.push(...field);
         return this;
     }
 
@@ -116,7 +116,7 @@ export default class Attachment implements IAttachmentProperties {
      * @param {Array.<string>} fields - Fields to set.
      * @return {Attachment}
      */
-    setMarkdownFields(fields: string[]) {
+    setMarkdownFields(fields: string[]): this {
         this.mrkdwn_in = fields;
         return this;
     }

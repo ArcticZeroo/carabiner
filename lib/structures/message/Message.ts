@@ -4,6 +4,7 @@ import SlackUtil from '../../util/SlackUtil';
 import Structure from '../Structure';
 import User from '../user/User';
 import Conversation from '../conversation/Conversation';
+import Attachment from './attachment/Attachment';
 import MessageBuilder from './MessageBuilder';
 import Collection from '@arcticzeroo/collection';
 
@@ -447,7 +448,7 @@ export default class Message extends Structure<IMessageData> {
             // message, or create a new thread with the current
             // timestamp;
             thread_ts: threadIdentifier
-        }, args)).then(d => {
+        }, args)).then((d: any) => {
             // Set the timestamp of this thread, in
             // case we just made a thread out of it
             // where there was not one before.
