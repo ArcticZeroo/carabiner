@@ -2,7 +2,7 @@ import Attachment from '../../../../lib/structures/message/attachment/Attachment
 import mockData from '../../../mockData/attachment';
 import { expect } from 'chai';
 
-describe('Attachment & Field', () => {
+describe('Structures', () => {
     describe('Attachment', () => {
         it('should have working getters and setters', () => {
             const attachment = new Attachment();

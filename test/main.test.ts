@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars,no-console */
-import assert from 'assert';
 import methods from '../config/methods';
 import mockData from './mockData/primary';
 import Client from '../lib/client/Client';
 import ConversationType from '../lib/enum/ConversationType';
 import User from '../lib/structures/user/User';
+import { expect } from 'chai';
 
 async function backwardsResolve(promise: Promise<any>): Promise<void> {
     const msg = 'Promise resolved normally';
@@ -48,7 +48,7 @@ describe('Carabiner', function () {
     let mainClient: Client;
 
     before(function () {
-        assert.ok(process.env.SLACK_TOKEN != null, 'Slack token should be set in environment variables');
+        expect(process.env.SLACK_TOKEN).to.be.ok('Slack token should be set in environment variables');
 
         mainClient = new Client(process.env.SLACK_TOKEN);
     });
@@ -61,7 +61,7 @@ describe('Carabiner', function () {
             const expectedUniqueMethods = new Set(split.map(s => s[0])).size;
             const actualUniqueMethods = Object.keys(mainClient.api.methods).length;
 
-            return assert.strictEqual(expectedUniqueMethods, actualUniqueMethods);
+            expect(expectedUniqueMethods).to.equal(actualUniqueMethods);
         });
 
         it('should generate all actual methods', function () {
@@ -69,11 +69,11 @@ describe('Carabiner', function () {
                 let pointer: any = mainClient.api.methods;
 
                 for (const piece of method.split('.')) {
-                    assert.ok(pointer.hasOwnProperty(piece), `Method ${method} is missing`);
+                    expect(pointer.hasOwnProperty(piece)).to.be.ok(`Method ${method} is missing`);
                     pointer = pointer[piece];
                 }
 
-                assert.equal(typeof pointer, 'function', `Method ${method} does not end in a function`);
+                expect(pointer).to.be.a('function', `Method ${method} does not end in a function`);
             }
         });
     });
@@ -86,7 +86,7 @@ describe('Carabiner', function () {
         });
 
         it('should return an object when making slack requests', async function () {
-            return assert(typeof (await mainClient.api.methods.api.test()) === 'object');
+            return expect(await mainClient.api.methods.api.test()).to.be.an('object');
         });
 
         it('should correctly pass all args', async function () {
@@ -97,7 +97,10 @@ describe('Carabiner', function () {
             };
 
             return mainClient.api.methods.api.test(args).then(r => {
-                assert.strictEqual(JSON.stringify(r.args), JSON.stringify(args));
+                const expectedResult = JSON.stringify(args);
+                const actualResult = JSON.stringify(r.args);
+
+                expect(expectedResult).to.equal(actualResult);
             });
         });
     });
@@ -115,7 +118,7 @@ describe('Carabiner', function () {
                 limit: 2,
                 presence: false
             }).then(res => {
-                assert.ok(Array.isArray(res.members), 'res.members is not an array');
+                expect(res.members).to.be.an('array', 'res.members is not an array');
             });
         });
     });
@@ -147,6 +150,10 @@ describe('Carabiner', function () {
     });
 
     describe('Client', async function () {
+        describe('constructor assignments', () => {
+
+        });
+
         describe('init', async function () {
             it('should successfully cache objects without RTM', async function () {
                 this.timeout(10000);
@@ -156,10 +163,11 @@ describe('Carabiner', function () {
                 await client.init();
 
                 // If length is 0 or id is null then it did not properly cache the item
-                assert.notStrictEqual(client.conversations.size, 0);
-                assert.notStrictEqual(client.users.size, 0);
-                assert.notStrictEqual(client.team.id, null);
-                assert.notStrictEqual(client.self.id, null);
+                expect(client.conversations.size).to.be.greaterThan(0);
+                expect(client.users.size).to.be.greaterThan(0);
+                expect(client.team.id).to.be.ok;
+                expect(client.self.id).to.be.ok;
+                expect(client.users.has(client.self.id)).to.be.true;
             });
 
             it('should connect to rtm automatically', async function () {
@@ -190,9 +198,9 @@ describe('Carabiner', function () {
 
                 // Yeah... this isn't ALL properties.
                 // But I'm a bit lazy at the time of writing this.
-                assert.equal(testUser.client, mainClient);
-                assert.equal(testUser.id, mockData.user['id']);
-                assert.equal(testUser.isAdmin, mockData.user['is_admin']);
+                expect(testUser.client).to.equal(mainClient);
+                expect(testUser.id).to.equal(mockData.user.id);
+                expect(testUser.isAdmin).to.equal(mockData.user.is_admin);
             });
         });
     });
@@ -209,54 +217,54 @@ describe('Carabiner', function () {
         });
 
         it('should recognize the self as a bot', function () {
-            assert.ok(testClient.self.isBot, 'User is not recognized as a bot');
+            expect(testClient.self.isBot).to.be.true('User is not recognized as a bot');
         });
 
         it('should contain slackbot in users', function () {
-            assert.ok(testClient.users.find('isSlackbot', true) != null, 'Slackbot was not found');
+            expect(testClient.users.find('isSlackbot', true)).to.be.ok('Slackbot was not found');
         });
 
         it('should contain the correct distributions of channels', function () {
-            assert.strictEqual(testClient.conversations.findAll('type', ConversationType.CHANNEL).length, 2);
-            assert.strictEqual(testClient.conversations.findAll('type', ConversationType.GROUP).length, 2);
+            expect(testClient.conversations.findAll('type', ConversationType.CHANNEL)).to.have.length(2);
+            expect(testClient.conversations.findAll('type', ConversationType.GROUP)).to.have.length(2);
         });
 
         it('should contain the correct #general', function () {
             const conversation = testClient.conversations.find('name', 'general');
 
-            assert.ok(conversation != null, '#general does not exist');
-            assert.ok(conversation.type === ConversationType.CHANNEL, '#general is not a public channel');
-            assert.strictEqual(conversation.topic.value, 'Company-wide announcements and work-based matters', 'incorrect topic');
-            assert.ok(conversation.contains(testClient.self), '#general does not contain the bot');
+            expect(conversation).to.be.ok('#general does not exist');
+            expect(conversation.type).to.equal(ConversationType.CHANNEL, '#general is not a public channel');
+            expect(conversation.topic.value).to.equal('Company-wide announcements and work-based matters', 'incorrect topic');
+            expect(conversation.contains(testClient.self)).to.be.true('#general does not contain the bot but should');
         });
 
         it('should contain the correct #random', function () {
             const conversation = testClient.conversations.find('name', 'random');
 
-            assert.ok(conversation != null, '#random does not exist');
-            assert.ok(conversation.type === ConversationType.CHANNEL, '#random is not a public channel');
-            assert.equal(conversation.topic.value, 'Non-work banter and water cooler conversation', 'incorrect topic');
-            assert.ok(!conversation.contains(testClient.self), '#random does contain the bot');
+            expect(conversation).to.be.ok('#random does not exist');
+            expect(conversation.type).to.equal(ConversationType.CHANNEL, '#random is not a public channel');
+            expect(conversation.topic.value).to.equal('Non-work banter and water cooler conversation', 'incorrect topic');
+            expect(conversation.contains(testClient.self)).to.be.false('#random does contain the bot but should not');
         });
 
         it('should contain the correct #carabiner-private', function () {
             const conversation = testClient.conversations.find('name', 'carabiner-private');
 
-            assert.ok(conversation != null, '#carabiner-private does not exist');
-            assert.ok(conversation.type === ConversationType.GROUP, '#carabiner-private is not a private channel');
-            assert.ok(conversation.contains(testClient.self), '#carabiner-private does not contain the bot');
+            expect(conversation).to.be.ok('#carabiner-private does not exist');
+            expect(conversation.type).to.equal(ConversationType.GROUP, '#carabiner-private is not a private channel');
+            expect(conversation.contains(testClient.self)).to.be.true('#carabiner-private does not contain the bot but should');
         });
 
         it('should contain the correct #carabiner-solitary', function () {
             const conversation = testClient.conversations.find('name', 'carabiner-solitary');
 
-            assert.ok(conversation != null, '#carabiner-solitary does not exist');
-            assert.ok(conversation.type === ConversationType.GROUP, '#carabiner-solitary is not a private channel');
-            assert.ok(!conversation.topic.exists, '#carabiner-solitary has a conversation topic');
-            assert.ok(conversation.contains(testClient.self), '#carabiner-solitary does not contain the bot');
+            expect(conversation).to.be.ok('#carabiner-solitary does not exist');
+            expect(conversation.type).to.equal(ConversationType.GROUP, '#carabiner-solitary is not a private channel');
+            expect(conversation.topic.exists).to.be.false('#carabiner-solitary has a conversation topic');
+            expect(conversation.contains(testClient.self)).to.be.true('#carabiner-solitary does not contain the bot but should');
 
             if (conversation.members.size !== 1) {
-                assert.strictEqual(conversation.members.size, 2, 'conversation has too many users');
+                expect(conversation.members.size).to.equal(2, 'conversation has too many users');
 
                 // Get the only other user in this conversation, i.e. the only other one whose ID is not mine
                 // since members is a map of <ID, User>
@@ -266,8 +274,8 @@ describe('Carabiner', function () {
                         .filter(id => !(id === testClient.self.id))[0]
                 );
 
-                assert.ok(other != null, 'the other user could not be found');
-                assert.ok(other === conversation.creator, 'the other user is not the creator of the conversation');
+                expect(other).to.be.ok('the other user could not be found');
+                expect(other).to.equal(conversation.creator);
             }
         });
     });
