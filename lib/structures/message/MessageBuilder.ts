@@ -1,8 +1,9 @@
 import Client from '../../client/Client';
 import Conversation from '../conversation/Conversation';
 import Message from './Message';
+import Attachment from './attachment/Attachment';
 
-class MessageBuilder {
+export default class MessageBuilder {
     readonly client: Client;
     text: string;
     attachments: Attachment[];
@@ -50,17 +51,12 @@ class MessageBuilder {
         this.conversation = conversation;
         return this;
     }
-
-    setConversation(conversation) {
-        return this.setChannel(conversation);
-    }
-
     /**
      * Alias for {@link setChannel}
      * @param conversation
      * @returns {MessageBuilder}
      */
-    setConversation(conversation) {
+    setConversation(conversation: Conversation): this {
         return this.setChannel(conversation);
     }
 
@@ -68,7 +64,7 @@ class MessageBuilder {
      * Builds and returns the {@link Message} being created.
      * @return {Message}
      */
-    build() {
+    build(): Message {
         const nessage = new Message(this.client);
         nessage.text = this.text || '';
         nessage.conversation = this.conversation;
@@ -76,5 +72,3 @@ class MessageBuilder {
         return nessage;
     }
 }
-
-module.exports = MessageBuilder;

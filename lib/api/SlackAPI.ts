@@ -17,9 +17,9 @@ type SlackWebApiMethod = (args?: ISlackWebApiArgs) => Promise<any>;
 type MethodOrNestedMethod = { [key: string]: SlackWebApiMethod|MethodOrNestedMethod };
 
 export default class SlackAPI {
-    private readonly token: string;
-    public readonly methods: ISlackWebApiMethods;
-    public readonly rtm: SlackRTM;
+    readonly token: string;
+    readonly methods: ISlackWebApiMethods;
+    readonly rtm: SlackRTM;
 
     /**
      * Create this instance of the Slack web API.

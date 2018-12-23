@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = {
+export default {
     user: {
         'id': 'W07QCRPA4',
         'team_id': 'T0G9PQBBK',
@@ -57,4 +55,3 @@ exports.default = {
         getDataReturn: 'transformed data!'
     }
 };
-//# sourceMappingURL=mockData.js.map

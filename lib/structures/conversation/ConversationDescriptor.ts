@@ -1,6 +1,7 @@
 import Client from '../../client/Client';
 import SlackUtil from '../../util/SlackUtil';
 import Structure from '../Structure';
+import User from '../user/User';
 
 export interface IConversationDescriptorData {
     value: string;
@@ -9,6 +10,11 @@ export interface IConversationDescriptorData {
 }
 
 export default class ConversationDescriptor extends Structure<IConversationDescriptorData> {
+    lastSetTimestamp: number;
+    value: string;
+    creator: User;
+    exists: boolean;
+
     /**
      * @param client {Client} - The Slack Client to use when sending messages and pulling data.
      * @param {object} [data] - The 'raw' data provided by slack if applicable.

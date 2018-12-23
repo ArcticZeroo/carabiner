@@ -128,7 +128,7 @@ export default class SlackRTM extends EventEmitter {
      * @param {number} [retryCount=0] - How many tries this rtm.connect call has made. Don't set this yourself.
      * @return {Promise.<void>}
      */
-    async connect(url: string, retryCount = 0): Promise<any> {
+    async connect(url?: string, retryCount: number = 0): Promise<any> {
         if (url) {
             this._createRtmConnection(url);
             return;
