@@ -55,7 +55,7 @@ describe('Carabiner', function () {
         mainClient = new Client(process.env.SLACK_TOKEN);
     });
 
-    describe('SlackAPI Generation', function () {
+    describe('SlackWebAPI Generation', function () {
         const split = methods.map(m => m.split('.'));
 
         it('should generate all high-level method categories', function () {
@@ -135,18 +135,18 @@ describe('Carabiner', function () {
         it('should be able to receive rtm events', async function () {
             const client = new Client(process.env.SLACK_TOKEN);
 
-            try {
-                await client.api.rtm.connect();
-            } catch (e) {
-                throw e;
-            }
-
             const promise = new Promise((resolve, reject) => {
                 client.api.rtm.once('event', resolve);
                 client.api.rtm.once('error', reject);
             });
 
-            // If anyone complains about this memory leak... stop yourself.
+            try {
+                await client.api.rtm.connect();
+            } catch (e) {
+                client.api.rtm.destroy();
+                throw e;
+            }
+
             return promiseTimeout(promise, 2000).finally(() => client.api.rtm.destroy());
         });
     });
@@ -211,9 +211,9 @@ describe('Carabiner', function () {
         let testClient: Client;
 
         before(function initClient() {
-            this.timeout(10000);
+            this.timeout(15000);
 
-            testClient = new Client(process.env.SLACK_TOKEN, { rtm: false });
+            testClient = new Client(process.env.SLACK_TOKEN, { rtm: true });
 
             return testClient.init();
         });
@@ -223,7 +223,7 @@ describe('Carabiner', function () {
         });
 
         it('should recognize the self as a bot', function () {
-            expect(testClient.self.isBot).to.be.true('User is not recognized as a bot');
+            expect(testClient.self.isBot, 'User is not recognized as a bot').to.be.true;
         });
 
         it('should contain slackbot in users', function () {
@@ -241,7 +241,7 @@ describe('Carabiner', function () {
             expect(conversation, '#general does not exist').to.be.ok;
             expect(conversation.type).to.equal(ConversationType.CHANNEL, '#general is not a public channel');
             expect(conversation.topic.value).to.equal('Company-wide announcements and work-based matters', 'incorrect topic');
-            expect(conversation.contains(testClient.self)).to.be.true('#general does not contain the bot but should');
+            expect(conversation.contains(testClient.self), '#general does not contain the bot but should').to.be.true;
         });
 
         it('should contain the correct #random', function () {
@@ -250,7 +250,7 @@ describe('Carabiner', function () {
             expect(conversation, '#random does not exist').to.be.ok;
             expect(conversation.type).to.equal(ConversationType.CHANNEL, '#random is not a public channel');
             expect(conversation.topic.value).to.equal('Non-work banter and water cooler conversation', 'incorrect topic');
-            expect(conversation.contains(testClient.self)).to.be.false('#random does contain the bot but should not');
+            expect(conversation.contains(testClient.self), '#random does contain the bot but should not').to.be.false;
         });
 
         it('should contain the correct #carabiner-private', function () {
@@ -258,7 +258,7 @@ describe('Carabiner', function () {
 
             expect(conversation, '#carabiner-private does not exist').to.be.ok;
             expect(conversation.type).to.equal(ConversationType.GROUP, '#carabiner-private is not a private channel');
-            expect(conversation.contains(testClient.self)).to.be.true('#carabiner-private does not contain the bot but should');
+            expect(conversation.contains(testClient.self), '#carabiner-private does not contain the bot but should').to.be.true;
         });
 
         it('should contain the correct #carabiner-solitary', function () {
@@ -266,8 +266,8 @@ describe('Carabiner', function () {
 
             expect(conversation, '#carabiner-solitary does not exist').to.be.ok;
             expect(conversation.type).to.equal(ConversationType.GROUP, '#carabiner-solitary is not a private channel');
-            expect(conversation.topic.exists).to.be.false('#carabiner-solitary has a conversation topic');
-            expect(conversation.contains(testClient.self)).to.be.true('#carabiner-solitary does not contain the bot but should');
+            expect(conversation.topic.exists, '#carabiner-solitary has a conversation topic').to.be.false;
+            expect(conversation.contains(testClient.self), '#carabiner-solitary does not contain the bot but should').to.be.true;
 
             if (conversation.members.size !== 1) {
                 expect(conversation.members.size).to.equal(2, 'conversation has too many users');
@@ -286,7 +286,9 @@ describe('Carabiner', function () {
         });
 
         it('should emit chat message events when they are sent', async function(done) {
-            this.timeout(5000);
+            this.timeout(10000);
+
+            expect(testClient.api.rtm.isConnected, 'RTM is not connected').to.be.true;
 
             // We should have already found that general is non-null
             const conversation = testClient.conversations.find('name', 'general');

@@ -1,3 +1,4 @@
+import InvalidStateException from '../../exception/InvalidStateException';
 import SlackUtil from '../../util/SlackUtil';
 import Structure from '../Structure';
 import User from './User';
@@ -152,7 +153,7 @@ export default class DoNotDisturb extends Structure<IDoNotDisturbData> {
      */
     async endSnooze(): Promise<any> {
         if (!this.snoozeActive) {
-            throw new Error('Snooze is not active');
+            throw new InvalidStateException('Snooze is not active');
         }
 
         return this.client.api.methods.dnd.endSnooze().then(this.setup);
@@ -167,7 +168,7 @@ export default class DoNotDisturb extends Structure<IDoNotDisturbData> {
      */
     async endDnd(): Promise<void> {
         if (!this.dndActive) {
-            throw new Error('DND is not active');
+            throw new InvalidStateException('DND is not active');
         }
 
         return this.client.api.methods.dnd.endDnd().then(() => {

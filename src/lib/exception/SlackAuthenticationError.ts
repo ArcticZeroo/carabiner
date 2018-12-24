@@ -1,5 +1,7 @@
-export default class SlackAuthenticationError extends Error {
-    constructor(extraMessage?: string) {
-        super(`Slack authentication error${extraMessage ? ` ${extraMessage}` : ''}`);
+import ExtraOptionalException from './ExtraOptionalException';
+
+export default class SlackAuthenticationError extends ExtraOptionalException {
+    constructor(extra?: string) {
+        super('Slack Authentication Error', extra);
     }
 }

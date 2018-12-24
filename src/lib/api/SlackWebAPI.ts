@@ -13,10 +13,7 @@ interface ISlackWebApiChatPostMessageArgs extends ISlackWebApiArgs {
     attachments?: any[]
 }
 
-type SlackWebApiMethod = (args?: ISlackWebApiArgs) => Promise<any>;
-type MethodOrNestedMethod = { [key: string]: SlackWebApiMethod|MethodOrNestedMethod };
-
-export default class SlackAPI {
+export default class SlackWebAPI {
     readonly token: string;
     readonly methods: ISlackWebApiMethods;
     readonly rtm: SlackRTM;
@@ -24,7 +21,7 @@ export default class SlackAPI {
     /**
      * Create this instance of the Slack web API.
      * This will also generate all methods into the
-     * SlackAPI.methods object.
+     * SlackWebAPI.methods object.
      * @param {string} token - Your slack token.
      * @param {object} [options={}] - Additional optional options to use
      * @param {boolean} [options.handleMigration=true] - The same as the one you should have given to {@link Client}

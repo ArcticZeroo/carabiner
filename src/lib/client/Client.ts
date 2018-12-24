@@ -1,7 +1,7 @@
 import EventEmitter from 'events';
 import Collection from '@arcticzeroo/collection';
 
-import SlackAPI from '../api/SlackAPI';
+import SlackWebAPI from '../api/SlackWebAPI';
 import SlackAuthenticationError from '../exception/SlackAuthenticationError';
 import IClientWebApiChatArgs from '../models/client/IClientWebApiChatArgs';
 import Conversation, { IConversationData } from '../structures/conversation/Conversation';
@@ -34,7 +34,7 @@ interface IClientOptions {
 
 export default class Client extends EventEmitter {
     private readonly options: IClientOptions;
-    public readonly api: SlackAPI;
+    public readonly api: SlackWebAPI;
     public readonly conversations: Collection<string, Conversation>;
     public readonly users: Collection<string, User>;
     public readonly members: Collection<string, User>;
@@ -83,10 +83,10 @@ export default class Client extends EventEmitter {
          * The api this Client uses.
          * This can and should be used for direct Slack API access.
          * @name Client.api
-         * @type {SlackAPI}
+         * @type {SlackWebAPI}
          * @readonly
          */
-        this.api = new SlackAPI(token, this.options);
+        this.api = new SlackWebAPI(token, this.options);
 
         /**
          * A collection of conversations the Client has access to.

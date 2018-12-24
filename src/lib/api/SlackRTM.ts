@@ -1,4 +1,6 @@
-import SlackAPI from './SlackAPI';
+import FatalRtmException from '../exception/FatalRtmException';
+import InvalidStateException from '../exception/InvalidStateException';
+import SlackWebAPI from './SlackWebAPI';
 import WebSocket from 'ws';
 import ReadyState from '../enum/WebSocketReadyState';
 import EventEmitter from 'events';
@@ -7,7 +9,7 @@ import PromiseUtil from '../util/PromiseUtil';
 import apiConfig from '../../config/api';
 
 interface ISlackRtmParams {
-    api: SlackAPI;
+    api: SlackWebAPI;
     retryIfMigrating?: boolean;
     migrationRetryAttempts?: number;
 }
@@ -15,14 +17,14 @@ interface ISlackRtmParams {
 export default class SlackRTM extends EventEmitter {
     public socket: WebSocket;
     public readonly events: EventEmitter;
-    private readonly api: SlackAPI;
+    private readonly api: SlackWebAPI;
     private readonly retryIfMigrating: boolean;
     private readonly migrationRetryAttempts: number;
 
     /**
      * Create an instance of Slack RTM, which does not actually connect to anything until {@link SlackRTM#connect} is called.
      * @param {object} [options]
-     * @param {SlackAPI} options.api - The API to use for requesting an RTM connection.
+     * @param {SlackWebAPI} options.api - The API to use for requesting an RTM connection.
      * @param {boolean} [options.retryIfMigrating=true] - Whether to retry connecting to this RTM instance if it was migrating when it called the method
      * @param {number} [options.migrationRetryAttempts=Infinity] - How many times to retry connecting if it was indeed migrating when we try to connect
      */
@@ -31,7 +33,7 @@ export default class SlackRTM extends EventEmitter {
 
         /**
          * The API to use for requesting an RTM connection.
-         * @type {SlackAPI}
+         * @type {SlackWebAPI}
          */
         this.api = api;
 
@@ -62,6 +64,10 @@ export default class SlackRTM extends EventEmitter {
          * @type {EventEmitter}
          */
         this.events = new EventEmitter();
+    }
+
+    get isConnected(): boolean {
+        return this.socket.readyState === ReadyState.OPEN;
     }
 
     /**
@@ -155,7 +161,7 @@ export default class SlackRTM extends EventEmitter {
         }
 
         if (!res.url) {
-            const error = new Error('WebSocket URL was not provided in slack\'s response.');
+            const error = new FatalRtmException('WebSocket URL was not provided in slack\'s response.');
 
             this.emit('error', error);
             throw error;
@@ -175,7 +181,7 @@ export default class SlackRTM extends EventEmitter {
      */
     async sendJson(obj: {}): Promise<any> {
         if (!this.socket) {
-            throw new Error('RTM is inactive');
+            throw new InvalidStateException('RTM is inactive');
         }
 
         return new Promise((resolve, reject) => {

@@ -12,4 +12,16 @@ export default class StringUtil {
     static capitalize(str: string): string {
         return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
     }
+
+    static appendIfExists(original: string, additional: string | null, formatter?: (s: string) => string) {
+        if (!additional) {
+            return original;
+        }
+
+        if (formatter) {
+            return original + formatter(additional);
+        }
+
+        return original + additional;
+    }
 }
