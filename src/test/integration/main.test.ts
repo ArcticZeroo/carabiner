@@ -1,47 +1,18 @@
 /* eslint-disable no-unused-vars,no-console */
 import methods from '../../config/methods';
+import SlackWebAPI from '../../lib/api/SlackWebAPI';
 import messages from '../../lib/events/messages';
+import SlackAuthenticationException from '../../lib/exception/SlackAuthenticationException';
 import Message from '../../lib/structures/message/Message';
+import AsyncHelpers from '../helpers/AsyncHelpers';
 import mockData from '../mockData/primary';
-import Client from '../../lib/client/Client';
+import Client, { IClientOptions } from '../../lib/client/Client';
 import ConversationType from '../../lib/enum/ConversationType';
 import User from '../../lib/structures/user/User';
 import { expect } from 'chai';
 
-async function backwardsResolve(promise: Promise<any>): Promise<void> {
-    const msg = 'Promise resolved normally';
-
-    try {
-        await promise;
-
-        //noinspection ExceptionCaughtLocallyJS
-        throw new Error(msg);
-    } catch (e) {
-        if (e.message === msg) {
-            throw e;
-        }
-    }
-
-    return undefined;
-}
-
-async function asyncThrows(promise: Promise<any>, error = Error) {
-    try {
-        await promise;
-    } catch (e) {
-        if (e instanceof error) {
-            return true;
-        }
-    }
-    return false;
-}
-
-function pause(ms: number) {
-    return new Promise((resolve: () => void) => setTimeout(resolve, ms));
-}
-
-function promiseTimeout(promise: Promise<any>, timeout: number): Promise<any> {
-    return Promise.race([promise, pause(timeout)]);
+function createClient(options?: IClientOptions): Client {
+    return new Client(process.env.SLACK_TOKEN, options);
 }
 
 process.on('unhandledRejection', console.error);
@@ -52,7 +23,7 @@ describe('Carabiner', function () {
     before(function () {
         expect(process.env.SLACK_TOKEN).to.be.a('string', 'Slack token should be set in environment variables');
 
-        mainClient = new Client(process.env.SLACK_TOKEN);
+        mainClient = createClient();
     });
 
     describe('SlackWebAPI Generation', function () {
@@ -82,9 +53,9 @@ describe('Carabiner', function () {
 
     describe('Requests', function () {
         it('should throw an error when slack does', async function () {
-            const nullClient = new Client('invalid slack token');
+            const nullWebApi = new SlackWebAPI('invalid slack token');
 
-            return backwardsResolve(nullClient.api.methods.auth.test());
+            return AsyncHelpers.shouldThrowAny(nullWebApi.methods.auth.test());
         });
 
         it('should return an object when making slack requests', async function () {
@@ -133,7 +104,7 @@ describe('Carabiner', function () {
         // is how we determine if it's opened) or it
         // doesn't at all.
         it('should be able to receive rtm events', async function () {
-            const client = new Client(process.env.SLACK_TOKEN);
+            const client = createClient();
 
             const promise = new Promise((resolve, reject) => {
                 client.api.rtm.once('event', resolve);
@@ -147,7 +118,7 @@ describe('Carabiner', function () {
                 throw e;
             }
 
-            return promiseTimeout(promise, 2000).finally(() => client.api.rtm.destroy());
+            return AsyncHelpers.addTimeout(promise, 2000).finally(() => client.api.rtm.destroy());
         });
     });
 
@@ -157,10 +128,22 @@ describe('Carabiner', function () {
         });
 
         describe('init', async function () {
+            it('should throw a slack authentication error when auth is invalid', async function () {
+                this.timeout(5000);
+
+                const client = new Client(mockData.client.token);
+
+                // TODO: See if chai has a better way of doing this
+                await AsyncHelpers.doesThrow(client.init(), SlackAuthenticationException);
+
+                // maybe this?
+                expect(client.init()).to.throw(SlackAuthenticationException);
+            });
+
             it('should successfully cache objects without RTM', async function () {
                 this.timeout(10000);
 
-                const client = new Client(process.env.SLACK_TOKEN, { rtm: false });
+                const client = createClient({ rtm: false });
 
                 await client.init();
 
@@ -176,7 +159,7 @@ describe('Carabiner', function () {
                 // This can take a while sometimes
                 this.timeout(10000);
 
-                const client = new Client(process.env.SLACK_TOKEN, { useRtmStart: true });
+                const client = createClient({ useRtmStart: true });
 
                 try {
                     await client.init();
@@ -188,7 +171,7 @@ describe('Carabiner', function () {
                     client.api.rtm.once('open', resolve);
                 });
 
-                return promiseTimeout(promise, 10000).finally(() => client.api.rtm.destroy());
+                return AsyncHelpers.addTimeout(promise, 10000).finally(() => client.api.rtm.destroy());
             });
         });
     });
@@ -213,7 +196,7 @@ describe('Carabiner', function () {
         before(function initClient() {
             this.timeout(15000);
 
-            testClient = new Client(process.env.SLACK_TOKEN, { rtm: true });
+            testClient = createClient({ rtm: true });
 
             return testClient.init();
         });

@@ -57,5 +57,8 @@ export default {
     message: {
         chat: 'I am a basic chat message!',
         reply: 'I am a message reply!'
+    },
+    client: {
+        token: 'MOCK_TOKEN'
     }
 };

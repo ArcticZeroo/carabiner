@@ -21,7 +21,7 @@ import UserEventHandler from '../events/users';
 import TeamEventHandler from '../events/team';
 import MessageEventHandler from '../events/messages';
 
-interface IClientOptions {
+export interface IClientOptions {
     rtm?: boolean;
     separateGroupAndMpim?: boolean;
     useRtmStart?: boolean;
