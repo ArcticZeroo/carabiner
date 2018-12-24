@@ -2,7 +2,8 @@ language: node_js
 node_js:
 - '8'
 before_script:
-- npm i -g mocha
+- npm i -g mocha typescript
+- tsc
 - mocha --version
 env:
   matrix:

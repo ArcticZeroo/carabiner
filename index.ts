@@ -1,7 +1,7 @@
-import Client from './lib/client/Client';
-import * as Structures from './lib/structures';
-import * as Enum from './lib/enum';
-import * as Util from './lib/util';
+import Client from './src/lib/client/Client';
+import * as Structures from './src/lib/structures';
+import * as Enum from './src/lib/enum';
+import * as Util from './src/lib/util';
 
 export default {
     Client,
