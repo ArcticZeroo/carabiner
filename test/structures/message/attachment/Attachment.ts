@@ -7,13 +7,12 @@ describe('Structures', () => {
         it('should have working getters and setters', () => {
             const attachment = new Attachment();
 
-            const expectedText = 'I am text!';
-            attachment.setText(expectedText);
+            attachment.setText(mockData.text);
 
             const actualResult = attachment.getText();
             expect(actualResult)
                 .to.not.be.null
-                .and.to.equal(expectedText);
+                .and.to.equal(mockData.text);
         });
 
         it('should not have a markdown field property until the method is first called', () => {

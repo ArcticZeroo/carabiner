@@ -1,7 +1,7 @@
 export interface IFieldProperties {
-    title: string;
-    value: string;
-    short: boolean;
+    title?: string;
+    value?: string;
+    short?: boolean;
 }
 
 export default class Field implements IFieldProperties {

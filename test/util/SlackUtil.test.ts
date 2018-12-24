@@ -1,6 +1,5 @@
 import { expect } from 'chai';
 
-import assert from 'assert';
 import SlackUtil from '../../lib/util/SlackUtil';
 import mockData from '../mockData/primary';
 
@@ -46,7 +45,7 @@ describe('SlackUtil', function () {
 
             // Slack dates are the same as Date.now() / 1000 basically
             // this is simple math yes, but could become more complex in the future somehow. idunno
-            assert.strictEqual(SlackUtil.dateToSlack(new Date(msAtTheTimeOfWritingThisTest)), msAtTheTimeOfWritingThisTest / 1000);
+            expect(SlackUtil.dateToSlack(new Date(msAtTheTimeOfWritingThisTest))).to.equal(msAtTheTimeOfWritingThisTest / 1000);
         });
     });
 
