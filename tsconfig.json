@@ -6,7 +6,8 @@
     "lib": ["es2018"],
     "esModuleInterop": true,
     "allowJs": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "skipLibCheck": true
   },
   "exclude": [
     "node_modules"

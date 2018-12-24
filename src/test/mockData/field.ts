@@ -1,4 +1,4 @@
-import { IFieldProperties } from '../../src/lib/structures/message/attachment/Field';
+import { IFieldProperties } from '../../lib/structures/message/attachment/Field';
 
 const mockAttachmentData: IFieldProperties = {
     title: 'I am a title!',
