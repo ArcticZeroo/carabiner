@@ -67,7 +67,7 @@ export default class SlackRTM extends EventEmitter {
     }
 
     get isConnected(): boolean {
-        return this.socket.readyState === ReadyState.OPEN;
+        return !!this.socket && this.socket.readyState === ReadyState.OPEN;
     }
 
     /**
@@ -176,11 +176,12 @@ export default class SlackRTM extends EventEmitter {
      * Send JSON to the current RTM socket, if any.
      * If RTM is not currently running this will throw
      * an error.
+     * @throws InvalidStateException - RTM is inactive when this is called
      * @param {object} obj - The JSON object to send. This will be directly JSON stringified, so no circular refs!
      * @return {Promise<void>}
      */
     async sendJson(obj: {}): Promise<any> {
-        if (!this.socket) {
+        if (!this.isConnected) {
             throw new InvalidStateException('RTM is inactive');
         }
 

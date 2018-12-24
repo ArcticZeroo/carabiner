@@ -1,4 +1,5 @@
 import Client from '../../client/Client';
+import IllegalOperationException from '../../exception/IllegalOperationException';
 import SlackUtil from '../../util/SlackUtil';
 import Structure from '../Structure';
 import ConversationType from '../../enum/ConversationType';
@@ -297,7 +298,7 @@ export default class Conversation extends Structure<IConversationData> {
      */
     async remove(user: User): Promise<void> {
         if (user.equals(this.client.self)) {
-            throw new Error('Can\'t kick self form a conversation');
+            throw new IllegalOperationException('Can\'t kick self from a conversation');
         }
 
         return this.client.api.methods.conversations.kick({

@@ -1,3 +1,4 @@
+import ArgumentsException from '../exception/ArgumentsException';
 import ISlackWebApiArgs from '../models/web-api/ISlackWebApiArgs';
 import ISlackWebApiMethods from '../models/web-api/ISlackWebApiMethods';
 import SlackRTM from './SlackRTM';
@@ -77,7 +78,7 @@ export default class SlackWebAPI {
                 // And there are no attachments being added...
                 if (!args.attachments || !(args.attachments.length === 0)) {
                     // The field is required.
-                    throw new Error('Text is required in chat.postMessage');
+                    throw new ArgumentsException('Text is required in chat.postMessage');
                 }
             }
 

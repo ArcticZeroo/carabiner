@@ -1,3 +1,4 @@
+import IllegalOperationException from '../../exception/IllegalOperationException';
 import InvalidStateException from '../../exception/InvalidStateException';
 import SlackUtil from '../../util/SlackUtil';
 import Structure from '../Structure';
@@ -138,7 +139,7 @@ export default class DoNotDisturb extends Structure<IDoNotDisturbData> {
      */
     async setSnooze(minutes: number): Promise<any> {
         if (!this.user.equals(this.client.self)) {
-            throw new Error('Cannot set snooze for non-self user');
+            throw new IllegalOperationException('Cannot set snooze for non-self user');
         }
 
 

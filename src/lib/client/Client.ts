@@ -2,7 +2,7 @@ import EventEmitter from 'events';
 import Collection from '@arcticzeroo/collection';
 
 import SlackWebAPI from '../api/SlackWebAPI';
-import SlackAuthenticationError from '../exception/SlackAuthenticationError';
+import SlackAuthenticationException from '../exception/SlackAuthenticationException';
 import IClientWebApiChatArgs from '../models/client/IClientWebApiChatArgs';
 import Conversation, { IConversationData } from '../structures/conversation/Conversation';
 import Team, { ITeamData } from '../structures/Team';
@@ -279,7 +279,7 @@ export default class Client extends EventEmitter {
         try {
             this.self.id = (await this.api.methods.auth.test()).user_id;
         } catch (e) {
-            throw new SlackAuthenticationError(e);
+            throw new SlackAuthenticationException(e);
         }
 
         let url;
