@@ -1,5 +1,5 @@
-import Attachment from '../../../../lib/structures/message/attachment/Attachment';
-import mockData from '../../../mockData/attachment';
+import Attachment from '../../../../../lib/structures/message/attachment/Attachment';
+import mockData from '../../../../mockData/attachment';
 import { expect } from 'chai';
 
 describe('Structures', () => {

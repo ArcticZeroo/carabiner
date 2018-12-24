@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import StringUtil from '../../lib/util/StringUtil';
+import StringUtil from '../../../lib/util/StringUtil';
 
 describe('StringUtil', function () {
     describe('#capitalize', function () {

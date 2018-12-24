@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import ObjectUtil from '../../lib/util/ObjectUtil';
+import ObjectUtil from '../../../lib/util/ObjectUtil';
 
 describe('ObjectUtil', function () {
     describe('#generateSetters', function () {

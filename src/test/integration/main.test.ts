@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars,no-console */
-import methods from '../config/methods';
-import messages from '../lib/events/messages';
-import Message from '../lib/structures/message/Message';
-import mockData from './mockData/primary';
-import Client from '../lib/client/Client';
-import ConversationType from '../lib/enum/ConversationType';
-import User from '../lib/structures/user/User';
+import methods from '../../config/methods';
+import messages from '../../lib/events/messages';
+import Message from '../../lib/structures/message/Message';
+import mockData from '../mockData/primary';
+import Client from '../../lib/client/Client';
+import ConversationType from '../../lib/enum/ConversationType';
+import User from '../../lib/structures/user/User';
 import { expect } from 'chai';
 
 async function backwardsResolve(promise: Promise<any>): Promise<void> {
@@ -71,7 +71,7 @@ describe('Carabiner', function () {
                 let pointer: any = mainClient.api.methods;
 
                 for (const piece of method.split('.')) {
-                    expect(pointer.hasOwnProperty(piece)).to.be.ok(`Method ${method} is missing`);
+                    expect(pointer.hasOwnProperty(piece), `Method ${method} is missing`).to.be.ok;
                     pointer = pointer[piece];
                 }
 
@@ -227,7 +227,7 @@ describe('Carabiner', function () {
         });
 
         it('should contain slackbot in users', function () {
-            expect(testClient.users.find('isSlackbot', true)).to.be.ok('Slackbot was not found');
+            expect(testClient.users.find('isSlackbot', true), 'Slackbot was not found').to.not.be.null;
         });
 
         it('should contain the correct distributions of channels', function () {
@@ -238,7 +238,7 @@ describe('Carabiner', function () {
         it('should contain the correct #general', function () {
             const conversation = testClient.conversations.find('name', 'general');
 
-            expect(conversation).to.be.ok('#general does not exist');
+            expect(conversation, '#general does not exist').to.be.ok;
             expect(conversation.type).to.equal(ConversationType.CHANNEL, '#general is not a public channel');
             expect(conversation.topic.value).to.equal('Company-wide announcements and work-based matters', 'incorrect topic');
             expect(conversation.contains(testClient.self)).to.be.true('#general does not contain the bot but should');
@@ -247,7 +247,7 @@ describe('Carabiner', function () {
         it('should contain the correct #random', function () {
             const conversation = testClient.conversations.find('name', 'random');
 
-            expect(conversation).to.be.ok('#random does not exist');
+            expect(conversation, '#random does not exist').to.be.ok;
             expect(conversation.type).to.equal(ConversationType.CHANNEL, '#random is not a public channel');
             expect(conversation.topic.value).to.equal('Non-work banter and water cooler conversation', 'incorrect topic');
             expect(conversation.contains(testClient.self)).to.be.false('#random does contain the bot but should not');
@@ -256,7 +256,7 @@ describe('Carabiner', function () {
         it('should contain the correct #carabiner-private', function () {
             const conversation = testClient.conversations.find('name', 'carabiner-private');
 
-            expect(conversation).to.be.ok('#carabiner-private does not exist');
+            expect(conversation, '#carabiner-private does not exist').to.be.ok;
             expect(conversation.type).to.equal(ConversationType.GROUP, '#carabiner-private is not a private channel');
             expect(conversation.contains(testClient.self)).to.be.true('#carabiner-private does not contain the bot but should');
         });
@@ -264,7 +264,7 @@ describe('Carabiner', function () {
         it('should contain the correct #carabiner-solitary', function () {
             const conversation = testClient.conversations.find('name', 'carabiner-solitary');
 
-            expect(conversation).to.be.ok('#carabiner-solitary does not exist');
+            expect(conversation, '#carabiner-solitary does not exist').to.be.ok;
             expect(conversation.type).to.equal(ConversationType.GROUP, '#carabiner-solitary is not a private channel');
             expect(conversation.topic.exists).to.be.false('#carabiner-solitary has a conversation topic');
             expect(conversation.contains(testClient.self)).to.be.true('#carabiner-solitary does not contain the bot but should');
@@ -280,7 +280,7 @@ describe('Carabiner', function () {
                         .find(id => !(id === testClient.self.id))
                 );
 
-                expect(other).to.be.ok('the other user could not be found');
+                expect(other, 'the other user could not be found').to.be.ok;
                 expect(other).to.equal(conversation.creator);
             }
         });

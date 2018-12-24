@@ -1,5 +1,5 @@
-import Field from '../../../../lib/structures/message/attachment/Field';
-import mockData from '../../../mockData/field';
+import Field from '../../../../../lib/structures/message/attachment/Field';
+import mockData from '../../../../mockData/field';
 import { expect } from 'chai';
 
 function assertGetterCorrect<T>(expectedValue: T, actualValue: T): void {

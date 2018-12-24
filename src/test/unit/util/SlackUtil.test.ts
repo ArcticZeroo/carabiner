@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
-import SlackUtil from '../../lib/util/SlackUtil';
-import mockData from '../mockData/primary';
+import SlackUtil from '../../../lib/util/SlackUtil';
+import mockData from '../../mockData/primary';
 
 describe('SlackUtil', function () {
     describe('#convertProperties', function () {

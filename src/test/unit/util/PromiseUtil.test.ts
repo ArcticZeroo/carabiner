@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import PromiseUtil from '../../lib/util/PromiseUtil';
+import PromiseUtil from '../../../lib/util/PromiseUtil';
 
 describe('PromiseUtil', function () {
     describe('#pause', function () {
