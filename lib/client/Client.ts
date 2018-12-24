@@ -422,12 +422,13 @@ export default class Client extends EventEmitter {
      * Destroy this client.
      * This performs the following actions:
      * - Calls SlackRTM#destroy
-     * - Removes all listeners on this rtm
+     * - Removes all listeners on this rtm and itself
      * - Clears all conversations
      * - Clears all users
      * - Nulls the team
      */
     destroy() {
+        this.removeAllListeners();
         this.api.rtm.destroy();
         this.api.rtm.removeAllListeners();
         this.conversations.clear();

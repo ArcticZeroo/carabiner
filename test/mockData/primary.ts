@@ -53,5 +53,9 @@ export default {
     },
     pages: {
         getDataReturn: 'transformed data!'
+    },
+    message: {
+        chat: 'I am a basic chat message!',
+        reply: 'I am a message reply!'
     }
 };

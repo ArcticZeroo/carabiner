@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars,no-console */
 import methods from '../config/methods';
+import messages from '../lib/events/messages';
+import Message from '../lib/structures/message/Message';
 import mockData from './mockData/primary';
 import Client from '../lib/client/Client';
 import ConversationType from '../lib/enum/ConversationType';
@@ -48,7 +50,7 @@ describe('Carabiner', function () {
     let mainClient: Client;
 
     before(function () {
-        expect(process.env.SLACK_TOKEN).to.be.ok('Slack token should be set in environment variables');
+        expect(process.env.SLACK_TOKEN).to.be.a('string', 'Slack token should be set in environment variables');
 
         mainClient = new Client(process.env.SLACK_TOKEN);
     });
@@ -216,6 +218,10 @@ describe('Carabiner', function () {
             return testClient.init();
         });
 
+        after(() => {
+            testClient.destroy();
+        });
+
         it('should recognize the self as a bot', function () {
             expect(testClient.self.isBot).to.be.true('User is not recognized as a bot');
         });
@@ -271,11 +277,31 @@ describe('Carabiner', function () {
                 const other = conversation.members.get(
                     conversation.members
                         .keyArray()
-                        .filter(id => !(id === testClient.self.id))[0]
+                        .find(id => !(id === testClient.self.id))
                 );
 
                 expect(other).to.be.ok('the other user could not be found');
                 expect(other).to.equal(conversation.creator);
+            }
+        });
+
+        it('should emit chat message events when they are sent', async function(done) {
+            this.timeout(5000);
+
+            // We should have already found that general is non-null
+            const conversation = testClient.conversations.find('name', 'general');
+
+            testClient.api.rtm.once('message', (message: Message) => {
+                expect(message).to.be.an.instanceOf(Message);
+                expect(message.conversation).to.equal(conversation);
+                expect(message.text).to.equal(mockData.message.chat);
+                done();
+            });
+
+            try {
+                await conversation.send(mockData.message.chat);
+            } catch (e) {
+                throw e;
             }
         });
     });
