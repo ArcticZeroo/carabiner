@@ -1,4 +1,5 @@
 import Client from '../../client/Client';
+import SlackTime from '../../models/SlackTime';
 import SlackUtil from '../../util/SlackUtil';
 import Structure from '../Structure';
 import User from '../user/User';
@@ -6,7 +7,7 @@ import User from '../user/User';
 export interface IConversationDescriptorData {
     value: string;
     creator: string;
-    last_set: string;
+    last_set: SlackTime;
 }
 
 export default class ConversationDescriptor extends Structure<IConversationDescriptorData> {

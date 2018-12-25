@@ -42,7 +42,7 @@ export default class AsyncHelpers {
             ]).then(resolve, reject);
         });
     }
-    static resolveWhenEmitterEmits({ emitter, event, expectedData } : { emitter: EventEmitter, event: string, expectedData?: any[] }) {
+    static resolveWhenEmitterEmits({ emitter, event, expectedData } : { emitter: EventEmitter, event: string, expectedData?: any[] }): Promise<any[]> {
         return new Promise((resolve, reject) => {
             emitter.once(event, (...data) => {
                 if (expectedData && expectedData.length) {

@@ -1,16 +1,18 @@
 /* eslint-disable no-unused-vars,no-console */
 import methods from '../../config/methods';
 import SlackWebAPI from '../../lib/api/SlackWebAPI';
-import messages from '../../lib/events/messages';
 import SlackAuthenticationException from '../../lib/exception/SlackAuthenticationException';
 import Message from '../../lib/structures/message/Message';
 import AsyncHelpers from '../helpers/AsyncHelpers';
 import mockData from '../mockData/primary';
+import mockMessageData from '../mockData/message';
+import mockConversationData from '../mockData/conversation';
 import Client, { IClientOptions } from '../../lib/client/Client';
 import ConversationType from '../../lib/enum/ConversationType';
 import User from '../../lib/structures/user/User';
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
+import { Conversation } from '../../lib/structures';
 
 chai.use(chaiAsPromised);
 
@@ -201,6 +203,11 @@ describe('Carabiner', function () {
             before(function() {
                 client = createClient({ rtm: false });
 
+                client.conversations.set(
+                    mockMessageData.chatMessage.channel,
+                    new Conversation(client, mockConversationData.channel)
+                );
+
                 // @ts-ignore - We need to force this to test whether the extension works as expected.
                 // this is normally a private method because no outside user should be allowed to accidentally
                 // register all the handlers twice, and this method makes no checks against doing so.
@@ -214,9 +221,29 @@ describe('Carabiner', function () {
                         event: 'message'
                     });
 
-                    client.api.rtm.emit('message', {  });
+                    client.api.rtm.emit('message', mockMessageData.chatMessage);
 
-                    return promise;
+                    return AsyncHelpers.addTimeout(promise, 10);
+                });
+
+                it('should construct a basic chat message when emitted', async function () {
+                    // @ts-ignore
+                    const promise: Promise<[Message]> = AsyncHelpers.resolveWhenEmitterEmits({
+                        emitter: client,
+                        event: 'message'
+                    });
+
+                    const expectedMessage: Message = new Message(client, mockMessageData.chatMessage);
+
+                    client.api.rtm.emit('message', mockMessageData.chatMessage);
+
+                    const [emittedMessage] = await promise;
+
+                    expect(emittedMessage)
+                        .to.be.ok
+                        .and.to.be.instanceOf(Message);
+
+                    expect(emittedMessage.isSameAs(expectedMessage)).to.be.true;
                 });
             });
         });

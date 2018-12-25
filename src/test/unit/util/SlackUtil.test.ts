@@ -45,7 +45,7 @@ describe('SlackUtil', function () {
 
             // Slack dates are the same as Date.now() / 1000 basically
             // this is simple math yes, but could become more complex in the future somehow. idunno
-            expect(SlackUtil.dateToSlack(new Date(msAtTheTimeOfWritingThisTest))).to.equal(msAtTheTimeOfWritingThisTest / 1000);
+            expect(SlackUtil.dateToSlack(new Date(msAtTheTimeOfWritingThisTest))).to.equal((msAtTheTimeOfWritingThisTest / 1000).toFixed(6));
         });
     });
 

@@ -1,3 +1,4 @@
+import SlackTime from '../models/SlackTime';
 import SlackWebApiMethod from '../models/web-api/SlackWebApiMethod';
 import StringUtil from './StringUtil';
 
@@ -23,8 +24,12 @@ export default class SlackUtil {
      * @param slackTimestamp {string} - A unix epoch divided by 1000.
      * @returns {Date}
      */
-    static slackToDate(slackTimestamp: string): Date {
-        return new Date(parseFloat(slackTimestamp) * 1000);
+    static slackToDate(slackTimestamp: SlackTime): Date {
+        if (typeof slackTimestamp === 'string') {
+            slackTimestamp = parseFloat(slackTimestamp);
+        }
+
+        return new Date(slackTimestamp * 1000);
     }
 
     /**

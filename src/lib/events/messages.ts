@@ -2,7 +2,7 @@ import Client from '../client/Client';
 import EventHandler from './handler';
 import Message from '../structures/message/Message';
 
-export default class TeamEventHandler extends EventHandler {
+export default class MessageEventHandler extends EventHandler {
     constructor(client: Client, options = {}) {
         super(client, { ...options, name: 'message' });
     }

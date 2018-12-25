@@ -1,5 +1,6 @@
 import Client from '../../client/Client';
 import IllegalOperationException from '../../exception/IllegalOperationException';
+import SlackTime from '../../models/SlackTime';
 import SlackUtil from '../../util/SlackUtil';
 import Structure from '../Structure';
 import ConversationType from '../../enum/ConversationType';
@@ -11,13 +12,12 @@ import MessageBuilder from '../message/MessageBuilder';
 import Attachment from '../message/attachment/Attachment';
 
 export interface IConversationData {
-    id: number;
+    id: string;
     creator: string;
-    createdTimestamp: string;
     name: string;
     is_member: boolean;
     members?: string[];
-    last_read: string;
+    last_read?: SlackTime;
     latest?: IMessageData;
     unread_count?: number;
     is_archived?: boolean;
@@ -27,10 +27,10 @@ export interface IConversationData {
     is_mpim: boolean;
     is_group: boolean;
     is_private: boolean;
-    created: number;
-    purpose: IConversationDescriptorData;
-    topic: IConversationDescriptorData;
-    unread_count_display: any;
+    created: SlackTime;
+    purpose?: IConversationDescriptorData;
+    topic?: IConversationDescriptorData;
+    unread_count_display?: any;
 }
 
 export default class Conversation extends Structure<IConversationData> {
@@ -38,12 +38,12 @@ export default class Conversation extends Structure<IConversationData> {
     readonly users: Collection<string, User>;
     id: string;
     creator: User;
-    createdTimestamp: string;
+    createdTimestamp: SlackTime;
     name: string;
     topic: ConversationDescriptor;
     purpose: ConversationDescriptor;
     isMember: boolean;
-    lastReadTimestamp: string;
+    lastReadTimestamp: SlackTime;
     latest: Message;
     unreadCount: number;
     unreadCountDisplay: any;

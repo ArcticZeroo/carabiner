@@ -456,4 +456,8 @@ export default class Message extends Structure<IMessageData> {
             return d;
         });
     }
+
+    isSameAs(other: Message): boolean {
+        return other.conversation.id === this.conversation.id && this.sentTimestamp === other.sentTimestamp;
+    }
 }
