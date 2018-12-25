@@ -29,13 +29,13 @@ describe('SlackUtil', function () {
         });
     });
 
-    describe('#getDate', function () {
+    describe('#slackToDate', function () {
         it('converts a date properly', function () {
             const msAtTheTimeOfWritingThisTest = 1530817774278;
 
             // Slack dates are the same as Date.now() / 1000 basically
             // this is simple math yes, but could become more complex in the future somehow. idunno
-            expect(msAtTheTimeOfWritingThisTest).to.equal(SlackUtil.getDate(msAtTheTimeOfWritingThisTest / 1000).getTime());
+            expect(msAtTheTimeOfWritingThisTest).to.equal(SlackUtil.slackToDate((msAtTheTimeOfWritingThisTest / 1000).toFixed(6)).getTime());
         });
     });
 

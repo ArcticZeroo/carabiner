@@ -126,7 +126,7 @@ export default class Client extends EventEmitter {
      * @returns {Promise.<void>}
      * @private
      */
-    async _populateChannelInfo(conversations: IConversationData[] = []) {
+    private async _populateChannelInfo(conversations: IConversationData[] = []) {
         if (!conversations || !conversations.length) {
             try {
                 conversations = await SlackUtil.getPages({
@@ -161,7 +161,7 @@ export default class Client extends EventEmitter {
      * @return {Promise.<void>}
      * @private
      */
-    async _populateUserInfo(users: IUserData[]) {
+    private async _populateUserInfo(users: IUserData[]) {
         if (!users) {
             try {
                 users = (await this.api.methods.users.list({ presence: this.options.getUserPresence })).members;
@@ -198,7 +198,7 @@ export default class Client extends EventEmitter {
      * @return {Promise<void>}
      * @private
      */
-    async _populateTeamInfo(team: ITeamData[]) {
+    private async _populateTeamInfo(team: ITeamData[]) {
         if (!team) {
             try {
                 team = (await this.api.methods.team.info()).team;
@@ -217,7 +217,7 @@ export default class Client extends EventEmitter {
      * to this client.
      * @private
      */
-    _extendRtmEvents() {
+    private _extendRtmEvents() {
         const emitter = this.api.rtm.events;
 
         const forward = (event: any) => {

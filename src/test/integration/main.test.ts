@@ -194,6 +194,32 @@ describe('Carabiner', function () {
                 return AsyncHelpers.addTimeout(promise, 10000).finally(() => client.api.rtm.destroy());
             });
         });
+
+        describe('RTM event extension', function() {
+            let client: Client;
+
+            before(function() {
+                client = createClient({ rtm: false });
+
+                // @ts-ignore - We need to force this to test whether the extension works as expected.
+                // this is normally a private method because no outside user should be allowed to accidentally
+                // register all the handlers twice, and this method makes no checks against doing so.
+                client._extendRtmEvents();
+            });
+
+            describe('Messages', async function () {
+                it('should properly extend basic chat messages', function () {
+                    const promise = AsyncHelpers.resolveWhenEmitterEmits({
+                        emitter: client,
+                        event: 'message'
+                    });
+
+                    client.api.rtm.emit('message', {  });
+
+                    return promise;
+                });
+            });
+        });
     });
 
     describe('Structures', function () {
@@ -214,7 +240,7 @@ describe('Carabiner', function () {
         let testClient: Client;
 
         before(function initClient() {
-            this.timeout(15000);
+            this.timeout(20000);
 
             testClient = createClient({ rtm: true });
 
@@ -297,12 +323,12 @@ describe('Carabiner', function () {
             testClient.api.rtm.once('message', (message: Message) => {
                 expect(message).to.be.an.instanceOf(Message);
                 expect(message.conversation).to.equal(conversation);
-                expect(message.text).to.equal(mockData.message.chat);
+                expect(message.text).to.equal(mockData.text.chat);
                 done();
             });
 
             try {
-                await conversation.send(mockData.message.chat);
+                await conversation.send(mockData.text.chat);
             } catch (e) {
                 throw e;
             }

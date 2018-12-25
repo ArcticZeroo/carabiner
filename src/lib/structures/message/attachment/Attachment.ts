@@ -1,4 +1,5 @@
 import Field from './Field';
+import SlackUtil from '../../../util/SlackUtil';
 
 export interface IAttachmentProperties {
     fields?: Field[];
@@ -16,7 +17,7 @@ export interface IAttachmentProperties {
     thumb_url?: string;
     footer?: string;
     footer_icon?: string;
-    ts?: number;
+    ts?: string;
 }
 
 export default class Attachment implements IAttachmentProperties {
@@ -35,7 +36,7 @@ export default class Attachment implements IAttachmentProperties {
     thumb_url: string;
     footer: string;
     footer_icon: string;
-    ts: number;
+    ts: string;
 
     /**
      * Create a slack attachment object.
@@ -238,20 +239,23 @@ export default class Attachment implements IAttachmentProperties {
         return this;
     }
 
-    getTs(): number {
-        return this.ts;
-    }
+    setTimestamp(value: string | Date | number): this {
+        if (value instanceof Date) {
+            this.ts = SlackUtil.dateToSlack(value);
+        } else {
+            if (typeof value === 'string') {
+                this.ts = value;
+            } else if (typeof value === 'number') {
+                this.ts = SlackUtil.dateToSlack(new Date(value));
+            } else {
+                throw new TypeError('value is not of type string, date or number');
+            }
+        }
 
-    setTs(value: number): this {
-        this.ts = value;
         return this;
     }
 
-    setTimestamp(value: number): this {
-        return this.setTs(value);
-    }
-
-    getTimestamp(): number {
-        return this.getTs();
+    getTimestamp(): Date {
+        return SlackUtil.slackToDate(this.ts);
     }
 }

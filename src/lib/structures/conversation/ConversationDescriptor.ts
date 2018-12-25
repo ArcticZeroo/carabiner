@@ -6,11 +6,11 @@ import User from '../user/User';
 export interface IConversationDescriptorData {
     value: string;
     creator: string;
-    last_set: number;
+    last_set: string;
 }
 
 export default class ConversationDescriptor extends Structure<IConversationDescriptorData> {
-    lastSetTimestamp: number;
+    lastSetTimestamp: string;
     value: string;
     creator: User;
     exists: boolean;
@@ -62,7 +62,7 @@ export default class ConversationDescriptor extends Structure<IConversationDescr
      * @readonly
      */
     get set(): Date {
-        return SlackUtil.getDate(this.lastSetTimestamp);
+        return SlackUtil.slackToDate(this.lastSetTimestamp);
     }
 
     /**

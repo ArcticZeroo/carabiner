@@ -7,10 +7,10 @@ import Client from '../../client/Client';
 
 interface IDoNotDisturbData {
     snooze_enabled: boolean;
-    snooze_endtime: number;
+    snooze_endtime: string;
     dnd_enabled: boolean;
-    next_dnd_start_ts: number;
-    next_dnd_end_ts: number;
+    next_dnd_start_ts: string;
+    next_dnd_end_ts: string;
 }
 
 export default class DoNotDisturb extends Structure<IDoNotDisturbData> {
@@ -48,7 +48,7 @@ export default class DoNotDisturb extends Structure<IDoNotDisturbData> {
              * The Date at which snooze ends for this user.
              * @type {Date}
              */
-            this.snoozeEnd = SlackUtil.getDate(data.snooze_endtime);
+            this.snoozeEnd = SlackUtil.slackToDate(data.snooze_endtime);
         }
 
         return data;
@@ -78,13 +78,13 @@ export default class DoNotDisturb extends Structure<IDoNotDisturbData> {
              * The next time at which this user's DND begins.
              * @type {Date}
              */
-            this.dndStart = SlackUtil.getDate(data.next_dnd_start_ts);
+            this.dndStart = SlackUtil.slackToDate(data.next_dnd_start_ts);
 
             /**
              * The next time at which this user's DND ends.
              * @type {Date}
              */
-            this.dndEnd = SlackUtil.getDate(data.next_dnd_end_ts);
+            this.dndEnd = SlackUtil.slackToDate(data.next_dnd_end_ts);
         }
 
         this._setupSnooze(data);

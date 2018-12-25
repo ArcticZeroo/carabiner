@@ -13,11 +13,11 @@ import Attachment from '../message/attachment/Attachment';
 export interface IConversationData {
     id: number;
     creator: string;
-    createdTimestamp: number;
+    createdTimestamp: string;
     name: string;
     is_member: boolean;
     members?: string[];
-    last_read: number;
+    last_read: string;
     latest?: IMessageData;
     unread_count?: number;
     is_archived?: boolean;
@@ -38,12 +38,12 @@ export default class Conversation extends Structure<IConversationData> {
     readonly users: Collection<string, User>;
     id: string;
     creator: User;
-    createdTimestamp: number;
+    createdTimestamp: string;
     name: string;
     topic: ConversationDescriptor;
     purpose: ConversationDescriptor;
     isMember: boolean;
-    lastReadTimestamp: number;
+    lastReadTimestamp: string;
     latest: Message;
     unreadCount: number;
     unreadCountDisplay: any;
@@ -242,7 +242,7 @@ export default class Conversation extends Structure<IConversationData> {
             return null;
         }
 
-        return SlackUtil.getDate(this.lastReadTimestamp || 0);
+        return SlackUtil.slackToDate(this.lastReadTimestamp);
     }
 
     /**
@@ -252,7 +252,7 @@ export default class Conversation extends Structure<IConversationData> {
      * @readonly
      */
     get created() {
-        return SlackUtil.getDate(this.createdTimestamp || 0);
+        return this.createdTimestamp ? SlackUtil.slackToDate(this.createdTimestamp) : null;
     }
 
     /**

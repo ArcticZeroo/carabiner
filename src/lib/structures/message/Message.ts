@@ -9,7 +9,7 @@ import MessageBuilder from './MessageBuilder';
 import Collection from '@arcticzeroo/collection';
 
 export interface IMessageData {
-    ts: number;
+    ts: string;
     user: string;
     channel: string;
     text: string;
@@ -17,9 +17,9 @@ export interface IMessageData {
     reactions?: Array<{ name: string, users: string[] }>
     pinnedTo?: string[];
     is_starred?: boolean;
-    deleted_timestamp?: number;
+    deleted_timestamp?: string;
     attachments?: any[];
-    thread_ts?: number;
+    thread_ts?: string;
 
 }
 
@@ -29,9 +29,9 @@ export default class Message extends Structure<IMessageData> {
 
     readonly editHistory: any[];
     readonly reactions: Collection<string, User[]>;
-    sentTimestamp: number;
-    threadTimestamp?: number;
-    deletedTimestamp?: number;
+    sentTimestamp: string;
+    threadTimestamp?: string;
+    deletedTimestamp?: string;
     isDeleted: boolean;
     text: string;
     attachments: Attachment[];
@@ -165,7 +165,7 @@ export default class Message extends Structure<IMessageData> {
      * @returns {Date}
      */
     get ts() {
-        return SlackUtil.getDate(this.sentTimestamp);
+        return SlackUtil.slackToDate(this.sentTimestamp);
     }
 
     /**
@@ -188,7 +188,7 @@ export default class Message extends Structure<IMessageData> {
             return null;
         }
 
-        return SlackUtil.getDate(this.deletedTimestamp);
+        return SlackUtil.slackToDate(this.deletedTimestamp);
     }
 
     /**

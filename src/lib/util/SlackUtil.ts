@@ -20,11 +20,11 @@ export default class SlackUtil {
 
     /**
      * Returns a Date converted from slack time (ms since epoch / 1000)
-     * @param slackTimestamp {number} - A unix epoch divided by 1000.
+     * @param slackTimestamp {string} - A unix epoch divided by 1000.
      * @returns {Date}
      */
-    static getDate(slackTimestamp: number): Date {
-        return new Date(slackTimestamp * 1000);
+    static slackToDate(slackTimestamp: string): Date {
+        return new Date(parseFloat(slackTimestamp) * 1000);
     }
 
     /**
@@ -32,8 +32,8 @@ export default class SlackUtil {
      * @param date {Date} - The date to convert.
      * @return {number}
      */
-    static dateToSlack(date: Date): number {
-        return (date.getTime() / 1000);
+    static dateToSlack(date: Date): string {
+        return (date.getTime() / 1000).toFixed(6);
     }
 
     /**

@@ -5,5 +5,5 @@ export default interface IClientWebApiChatArgs {
     ephemeral?: boolean;
     invisible?: boolean;
     user?: User | string;
-    thread_ts?: number;
+    thread_ts?: string;
 }
