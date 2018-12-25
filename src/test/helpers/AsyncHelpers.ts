@@ -1,3 +1,5 @@
+import { EventEmitter } from 'events';
+
 export default class AsyncHelpers {
     static async shouldThrowAny(promise: Promise<any>): Promise<void> {
         const msg = 'Promise resolved normally';
@@ -8,7 +10,7 @@ export default class AsyncHelpers {
             //noinspection ExceptionCaughtLocallyJS
             throw new Error(msg);
         } catch (e) {
-            if (e.message === msg) {
+            if (e && e.message === msg) {
                 throw e;
             }
         }
@@ -40,6 +42,25 @@ export default class AsyncHelpers {
             ]).then(resolve, reject);
         });
     }
+    static resolveWhenEmitterEmits({ emitter, event, expectedData } : { emitter: EventEmitter, event: string, expectedData?: any[] }) {
+        return new Promise((resolve, reject) => {
+            emitter.once(event, (...data) => {
+                if (expectedData && expectedData.length) {
+                    if (data.length != expectedData.length) {
+                        reject(new Error(`Data lengths differ; Actual has ${data.length} but expected has ${expectedData.length}`));
+                        return;
+                    }
 
-    private static _timeoutSymbol = Symbol();
+                    for (const item of expectedData) {
+                        if (!data.includes(item)) {
+                            reject(new Error(`Data is missing element ${item}`));
+                            return;
+                        }
+                    }
+                }
+
+                resolve(data);
+            });
+        });
+    }
 }

@@ -9,7 +9,10 @@ import mockData from '../mockData/primary';
 import Client, { IClientOptions } from '../../lib/client/Client';
 import ConversationType from '../../lib/enum/ConversationType';
 import User from '../../lib/structures/user/User';
-import { expect } from 'chai';
+import chai, { expect } from 'chai';
+import chaiAsPromised from 'chai-as-promised';
+
+chai.use(chaiAsPromised);
 
 function createClient(options?: IClientOptions): Client {
     return new Client(process.env.SLACK_TOKEN, options);
@@ -134,10 +137,8 @@ describe('Carabiner', function () {
                 const client = new Client(mockData.client.token);
 
                 // TODO: See if chai has a better way of doing this
-                await AsyncHelpers.doesThrow(client.init(), SlackAuthenticationException);
-
-                // maybe this?
-                expect(client.init()).to.throw(SlackAuthenticationException);
+                // await AsyncHelpers.doesThrow(client.init(), SlackAuthenticationException);
+                expect(client.init()).to.eventually.be.rejectedWith(SlackAuthenticationException);
             });
 
             it('should successfully cache objects without RTM', async function () {
@@ -155,11 +156,30 @@ describe('Carabiner', function () {
                 expect(client.users.has(client.self.id)).to.be.true;
             });
 
-            it('should connect to rtm automatically', async function () {
+            it('should connect to rtm automatically with rtm.start', async function () {
                 // This can take a while sometimes
                 this.timeout(10000);
 
                 const client = createClient({ useRtmStart: true });
+
+                try {
+                    await client.init();
+                } catch (e) {
+                    throw e;
+                }
+
+                const promise = new Promise(resolve => {
+                    client.api.rtm.once('open', resolve);
+                });
+
+                return AsyncHelpers.addTimeout(promise, 10000).finally(() => client.api.rtm.destroy());
+            });
+
+            it('should connect to rtm automatically with rtm.connect', async function () {
+                // This can take a while sometimes
+                this.timeout(10000);
+
+                const client = createClient({ rtm: true, useRtmStart: false });
 
                 try {
                     await client.init();
@@ -201,9 +221,7 @@ describe('Carabiner', function () {
             return testClient.init();
         });
 
-        after(() => {
-            testClient.destroy();
-        });
+        after(() => testClient.destroy());
 
         it('should recognize the self as a bot', function () {
             expect(testClient.self.isBot, 'User is not recognized as a bot').to.be.true;

@@ -10,9 +10,7 @@ describe('Structures', () => {
             attachment.setText(mockData.text);
 
             const actualResult = attachment.getText();
-            expect(actualResult)
-                .to.not.be.null
-                .and.to.equal(mockData.text);
+            expect(actualResult).to.equal(mockData.text);
         });
 
         it('should not have a markdown field property until the method is first called', () => {
