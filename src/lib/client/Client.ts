@@ -42,7 +42,7 @@ export default class Client extends EventEmitter {
     public self: User;
 
     /**
-     * Create a single-team Slack Client.
+     * Create a single-team Slack Client!
      * @param token {string} - The slack token to use for all operations.
      * @param {object} [options={}] - Options to use.
      * @param {boolean} [options.rtm=true] - Whether the client should connect to RTM.
