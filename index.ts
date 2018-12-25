@@ -3,9 +3,9 @@ import * as Structures from './dist/lib/structures';
 import * as Enum from './dist/lib/enum';
 import * as Util from './dist/lib/util';
 
-export default {
+export {
     Client,
-    ...Structures,
-    ...Enum,
-    ...Util
+    Structures,
+    Enum,
+    Util
 };

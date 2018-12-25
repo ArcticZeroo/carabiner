@@ -1,5 +1,6 @@
 import Client from '../../client/Client';
 import IClientWebApiChatArgs from '../../models/client/IClientWebApiChatArgs';
+import SlackTime from '../../models/SlackTime';
 import SlackUtil from '../../util/SlackUtil';
 import Structure from '../Structure';
 import User from '../user/User';
@@ -30,8 +31,8 @@ export default class Message extends Structure<IMessageData> {
     readonly editHistory: any[];
     readonly reactions: Collection<string, User[]>;
     sentTimestamp: string;
-    threadTimestamp?: string;
-    deletedTimestamp?: string;
+    threadTimestamp?: SlackTime;
+    deletedTimestamp?: SlackTime;
     isDeleted: boolean;
     text: string;
     attachments: Attachment[];
@@ -440,6 +441,8 @@ export default class Message extends Structure<IMessageData> {
      * @return {Promise}
      */
     thread(reply: Message, args = {}) {
+        // slack docs say to use the timestamp of the original parent if possible,
+        // which should be the thread ts (and fall back to the sent timestamp if this is not available)
         const threadIdentifier = this.threadTimestamp || this.sentTimestamp;
 
         return reply.send(Object.assign({
