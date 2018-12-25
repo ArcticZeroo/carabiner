@@ -42,7 +42,7 @@ export default abstract class EventHandler {
      * @param eventName
      * @param data
      */
-    emit(eventName: string, ...data: any[]): void {
+    protected emit(eventName: string, ...data: any[]): void {
         const event = (this.name) ? this.name + StringUtil.capitalize(eventName) : eventName;
 
         this.client.emit(event, ...data);
@@ -51,9 +51,10 @@ export default abstract class EventHandler {
     /**
      * Get this client's emitter.
      * @return {EventEmitter}
+     * @private
      */
-    get emitter(): EventEmitter {
-        return this.client.api.rtm.events;
+    private get emitter(): EventEmitter {
+        return this.client.api.rtm;
     }
 
     /**
@@ -68,11 +69,19 @@ export default abstract class EventHandler {
      * @param {function} handler - A class method to bind to this and use as an event handler
      * @param {...string} events - An arbitrary set of events to listen for with the given handler
      */
-    setListeners(handler: (...args: any[]) => void, ...events: string[]): void {
+    protected setListeners(handler: (...args: any[]) => void, ...events: string[]): void {
         handler = handler.bind(this);
 
         for (const event of events) {
-            this.emitter.on(event, handler);
+            this.emitter.on(EventHandler.getEventName(event), handler);
         }
+    }
+
+    private static getEventName(event: string): string {
+        if (event.startsWith('events.')) {
+            return event;
+        }
+
+        return `events.${event}`;
     }
 }

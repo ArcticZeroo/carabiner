@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars,no-console */
+import { rejects } from 'assert';
 import methods from '../../config/methods';
 import SlackWebAPI from '../../lib/api/SlackWebAPI';
 import SlackAuthenticationException from '../../lib/exception/SlackAuthenticationException';
@@ -266,12 +267,27 @@ describe('Carabiner', function () {
     describe('Test slack organization', function () {
         let testClient: Client;
 
-        before(function initClient() {
+        before(async function initClient() {
             this.timeout(20000);
 
-            testClient = createClient({ rtm: true });
+            testClient = createClient({ rtm: true, useRtmStart: false });
 
-            return testClient.init();
+            const eventEmitterPromise = AsyncHelpers.resolveWhenEmitterEmits({
+                emitter: testClient.api.rtm,
+                event: 'event'
+            });
+
+            try {
+                await testClient.init();
+            } catch (e) {
+                throw e;
+            }
+
+            try {
+                await eventEmitterPromise;
+            } catch (e) {
+                throw e;
+            }
         });
 
         after(() => testClient.destroy());
@@ -339,7 +355,7 @@ describe('Carabiner', function () {
             }
         });
 
-        it('should emit chat message events when they are sent', async function(done) {
+        it('should emit chat message events when they are sent', async function() {
             this.timeout(10000);
 
             expect(testClient.api.rtm.isConnected, 'RTM is not connected').to.be.true;
@@ -347,11 +363,9 @@ describe('Carabiner', function () {
             // We should have already found that general is non-null
             const conversation = testClient.conversations.find('name', 'general');
 
-            testClient.api.rtm.once('message', (message: Message) => {
-                expect(message).to.be.an.instanceOf(Message);
-                expect(message.conversation).to.equal(conversation);
-                expect(message.text).to.equal(mockData.text.chat);
-                done();
+            const emittedMessagePromise = AsyncHelpers.resolveWhenEmitterEmits({
+                emitter: testClient,
+                event: 'message'
             });
 
             try {
@@ -359,6 +373,13 @@ describe('Carabiner', function () {
             } catch (e) {
                 throw e;
             }
+            // @ts-ignore
+            const [message]: [Message] = await emittedMessagePromise;
+
+            expect(message).to.be.an.instanceOf(Message);
+            expect(message.conversation).to.equal(conversation);
+            expect(message.text).to.equal(mockData.text.chat);
+            expect(message.user.equals(testClient.self), 'Sender is not self for some reason').to.be.true;
         });
     });
 });

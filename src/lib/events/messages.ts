@@ -24,7 +24,7 @@ export default class MessageEventHandler extends EventHandler {
          * @event Client#message
          * @param {Message} message - The message that was sent.
          */
-        this.emitter.on('message', data => {
+        this.setListeners(data => {
             const message = new Message(this.client, data);
 
             this.client.emit('message', message);
@@ -43,7 +43,7 @@ export default class MessageEventHandler extends EventHandler {
                  */
                 this.client.emit('message.chat', message);
             }
-        });
+        }, 'message');
     }
 
     _listenRelated() {
@@ -55,12 +55,12 @@ export default class MessageEventHandler extends EventHandler {
          * @param {User} data.reactingTo - The user they are reacting to
          * @param {string} data.reaction - The emoji they reacted with
          */
-        this.emitter.on('reaction_added', ({ user: reactingUser, item_user: reactingTo, reaction }) => {
+        this.setListeners(({ user: reactingUser, item_user: reactingTo, reaction }) => {
             reactingUser = this.client.users.get(reactingUser);
             reactingTo = this.client.users.get(reactingTo);
 
             this.client.emit('reactionAdded', { reactingUser, reactingTo, reaction });
-        });
+        }, 'reaction_added');
 
         /**
          * Emitted when a user adds a reaction to a message
@@ -70,11 +70,11 @@ export default class MessageEventHandler extends EventHandler {
          * @param {User} data.reactingTo - The user they are reacting to
          * @param {string} data.reaction - The emoji they reacted with
          */
-        this.emitter.on('reaction_removed', ({ user: reactingUser, item_user: reactingTo, reaction }) => {
+        this.setListeners(({ user: reactingUser, item_user: reactingTo, reaction }) => {
             reactingUser = this.client.users.get(reactingUser);
             reactingTo = this.client.users.get(reactingTo);
 
             this.client.emit('reactionRemoved', { reactingUser, reactingTo, reaction });
-        });
+        }, 'reaction_removed');
     }
 }

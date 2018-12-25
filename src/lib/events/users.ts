@@ -39,7 +39,7 @@ export default class UserEventHandler extends EventHandler {
          * @param {string} data.old - The old user.
          * @param {string} data.new - The new user.
          */
-        this.emitter.on('user_change', data => {
+        this.setListeners(data => {
             // TODO: 2fa, admin, owner change detection
             const oldUser = this.client.users.get(data.user.id);
             const newUser = new User(this.client, data.user);
@@ -83,7 +83,7 @@ export default class UserEventHandler extends EventHandler {
                  */
                 this.emit('activated', newUser);
             }
-        });
+        }, 'user_change');
 
         /**
          * Emitted when a user starts typing.
@@ -92,12 +92,12 @@ export default class UserEventHandler extends EventHandler {
          * @param {string} data.channel - The channel in which the user is typing.
          * @param {string} data.user - The user that is typing.
          */
-        this.emitter.on('user_typing', data => {
+        this.setListeners(data => {
             const channel = this.client.conversations.get(data.channel);
             const user = this.client.users.get(data.user);
 
             this.emit('typing', { channel, user });
-        });
+        }, 'user_typing');
     }
 
     _listenRelated(): void {
@@ -111,17 +111,17 @@ export default class UserEventHandler extends EventHandler {
          * @event Client#dndUpdatedSelf
          * @param {DoNotDisturb} dnd - The user's DND status (contains a reference to the user)
          */
-        this.emitter.on('dnd_updated', ({ dnd_status: dndStatus }) => {
+        this.setListeners(({ dnd_status: dndStatus }) => {
             this.client.self.dnd.setup(dndStatus);
             this.client.emit('dndUpdatedSelf', this.client.self.dnd);
             this.client.emit('dndUpdated', this.client.self.dnd);
-        });
+        }, 'dnd_updated');
 
-        this.emitter.on('dnd_updated_user', ({ user: id, dnd_status: dndStatus }) => {
+        this.setListeners(({ user: id, dnd_status: dndStatus }) => {
             const user = this.client.users.get(id);
 
             user.dnd.setup(dndStatus);
             this.client.emit('dndUpdated', user.dnd);
-        });
+        }, 'dnd_updated_user');
     }
 }

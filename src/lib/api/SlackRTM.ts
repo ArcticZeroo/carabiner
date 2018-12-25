@@ -122,6 +122,7 @@ export default class SlackRTM extends EventEmitter {
             }
 
             this.emit('event', event.type, event);
+            this.emit(`events.${event.type}`, event);
         });
     }
 
