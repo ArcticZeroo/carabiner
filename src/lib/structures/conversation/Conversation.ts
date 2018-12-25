@@ -1,6 +1,6 @@
 import Client from '../../client/Client';
 import IllegalOperationException from '../../exception/IllegalOperationException';
-import SlackTime from '../../models/SlackTime';
+import SlackTime from '../../models/types/SlackTime';
 import SlackUtil from '../../util/SlackUtil';
 import Structure from '../Structure';
 import ConversationType from '../../enum/ConversationType';
@@ -36,6 +36,7 @@ export interface IConversationData {
 export default class Conversation extends Structure<IConversationData> {
     readonly members: Collection<string, User>;
     readonly users: Collection<string, User>;
+    readonly messages: Collection<SlackTime, Message>;
     id: string;
     creator: User;
     createdTimestamp: SlackTime;
@@ -70,6 +71,7 @@ export default class Conversation extends Structure<IConversationData> {
          * @type {Collection<number, User>}
          */
         this.members = this.users = new Collection();
+        this.messages = new Collection<SlackTime, Message>();
 
         if (data) {
             this.setup(data);
@@ -362,5 +364,25 @@ export default class Conversation extends Structure<IConversationData> {
         }
 
         return this.members.has(user.id);
+    }
+
+    /**
+     * Cache a message in this conversation.
+     * If there are too many messages being cached,
+     * @param message
+     * @param overrideClientSetting
+     */
+    cacheMessage(message: Message, overrideClientSetting: boolean = false): void {
+        if (!this.client.options.cacheMessages && !overrideClientSetting) {
+            return;
+        }
+
+        // If Number.isFinite returns false just don't bother to check if we have too many messages cached...
+        if (Number.isFinite(this.client.options.messageCacheLimitPerConversation)
+            && this.messages.size >= this.client.options.messageCacheLimitPerConversation) {
+            this.messages.delete(this.messages.lastKey());
+        }
+
+        this.messages.set(message.sentTimestamp, message);
     }
 }

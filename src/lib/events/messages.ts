@@ -55,11 +55,18 @@ export default class MessageEventHandler extends EventHandler {
          * @param {User} data.reactingTo - The user they are reacting to
          * @param {string} data.reaction - The emoji they reacted with
          */
-        this.setListeners(({ user: reactingUser, item_user: reactingTo, reaction }) => {
+        this.setListeners(({ user: reactingUser, item_user: itemUser, reaction, item: reactingItem }) => {
             reactingUser = this.client.users.get(reactingUser);
-            reactingTo = this.client.users.get(reactingTo);
+            itemUser = this.client.users.get(itemUser);
 
-            this.client.emit('reactionAdded', { reactingUser, reactingTo, reaction });
+            // only support message reactions for now
+            if (reactingItem.type !== 'message') {
+                return;
+            }
+
+            reactingItem = new Message(this.client, reactingItem);
+
+            this.client.emit('reactionAdded', { reactingUser, itemUser, reaction, reactingItem });
         }, 'reaction_added');
 
         /**

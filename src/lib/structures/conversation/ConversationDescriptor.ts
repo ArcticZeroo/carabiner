@@ -1,5 +1,5 @@
 import Client from '../../client/Client';
-import SlackTime from '../../models/SlackTime';
+import SlackTime from '../../models/types/SlackTime';
 import SlackUtil from '../../util/SlackUtil';
 import Structure from '../Structure';
 import User from '../user/User';

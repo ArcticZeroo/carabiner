@@ -1,4 +1,4 @@
-import SlackTime from '../models/SlackTime';
+import SlackTime from '../models/types/SlackTime';
 import SlackWebApiMethod from '../models/web-api/SlackWebApiMethod';
 import StringUtil from './StringUtil';
 

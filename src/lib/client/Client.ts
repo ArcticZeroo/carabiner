@@ -30,10 +30,13 @@ export interface IClientOptions {
     handleMigration?: boolean;
     handleGoodbye?: boolean;
     subscribeToUserPresence?: boolean;
+    cacheMessages?: boolean;
+    messageCacheLimitPerConversation?: number;
+    messageCacheLimitTotal?: number;
 }
 
 export default class Client extends EventEmitter {
-    private readonly options: IClientOptions;
+    public readonly options: IClientOptions;
     public readonly api: SlackWebAPI;
     public readonly conversations: Collection<string, Conversation>;
     public readonly users: Collection<string, User>;
@@ -65,19 +68,23 @@ export default class Client extends EventEmitter {
             getDndStatus = false,
             handleMigration = true,
             handleGoodbye = true,
-            subscribeToUserPresence = true
+            subscribeToUserPresence = true,
+            cacheMessages = true,
+            // Magic numbers that seem good to me
+            messageCacheLimitPerConversation = 1000,
+            messageCacheLimitTotal = 10000
         } = options;
 
-        // noinspection JSValidateTypes
         /**
          * The client's options.
          * Default values are documented in the constructor.
          * @type {object}
          */
-        this.options = {
+        this.options = Object.freeze({
             rtm, separateGroupAndMpim, useRtmStart, getUserPresence,
-            getDndStatus, handleMigration, handleGoodbye, subscribeToUserPresence
-        };
+            getDndStatus, handleMigration, handleGoodbye, subscribeToUserPresence,
+            cacheMessages, messageCacheLimitPerConversation, messageCacheLimitTotal
+        });
 
         /**
          * The api this Client uses.
