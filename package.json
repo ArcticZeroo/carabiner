@@ -2,7 +2,7 @@
   "name": "carabiner",
   "description": "Easy to use, high level slack lib!",
   "repository": "https://github.com/ArcticZeroo/carabiner",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "dependencies": {
     "@arcticzeroo/collection": "^1.0.2",
     "bluebird": "^3.5.1",
