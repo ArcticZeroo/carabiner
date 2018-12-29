@@ -54,7 +54,7 @@ export default abstract class EventHandler {
      * @private
      */
     private get emitter(): EventEmitter {
-        return this.client.api.rtm;
+        return this.client.api.rtm.events;
     }
 
     /**
@@ -73,15 +73,7 @@ export default abstract class EventHandler {
         handler = handler.bind(this);
 
         for (const event of events) {
-            this.emitter.on(EventHandler.getEventName(event), handler);
+            this.emitter.on(event, handler);
         }
-    }
-
-    private static getEventName(event: string): string {
-        if (event.startsWith('events.')) {
-            return event;
-        }
-
-        return `events.${event}`;
     }
 }

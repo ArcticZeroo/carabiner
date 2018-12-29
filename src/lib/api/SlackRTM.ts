@@ -63,7 +63,7 @@ export default class SlackRTM extends EventEmitter {
          * in rtm...
          * @type {EventEmitter}
          */
-        this.events = this;
+        this.events = new EventEmitter();
     }
 
     get isConnected(): boolean {
@@ -122,7 +122,7 @@ export default class SlackRTM extends EventEmitter {
             }
 
             this.emit('event', event.type, event);
-            this.emit(`events.${event.type}`, event);
+            this.events.emit(event.type, event);
         });
     }
 

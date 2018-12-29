@@ -222,7 +222,7 @@ describe('Carabiner', function () {
                         event: 'message'
                     });
 
-                    client.api.rtm.emit('events.message', mockMessageData.chatMessage);
+                    client.api.rtm.events.emit('message', mockMessageData.chatMessage);
 
                     return AsyncHelpers.addTimeout(promise, 10);
                 });
@@ -236,7 +236,7 @@ describe('Carabiner', function () {
 
                     const expectedMessage: Message = new Message(client, mockMessageData.chatMessage);
 
-                    client.api.rtm.emit('events.message', mockMessageData.chatMessage);
+                    client.api.rtm.events.emit('message', mockMessageData.chatMessage);
 
                     const [emittedMessage] = await promise;
 
