@@ -1,4 +1,5 @@
 import SlackWebApiMethod from './SlackWebApiMethod';
+import ISlackDeleteMessageArgs from "./methods/chat/ISlackDeleteMessageArgs";
 
 export default interface ISlackWebApiMethods {
 	api: {
@@ -30,7 +31,7 @@ export default interface ISlackWebApiMethods {
 	}
 	chat: {
 		command: SlackWebApiMethod;
-		delete: SlackWebApiMethod;
+		delete: SlackWebApiMethod<ISlackDeleteMessageArgs>;
 		postEphemeral: SlackWebApiMethod;
 		postMessage: SlackWebApiMethod;
 		unfurl: SlackWebApiMethod;

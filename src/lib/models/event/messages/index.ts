@@ -1,5 +1,5 @@
-import IReactionData from './IReactionData';
+import IReactionEvent from './IReactionEvent';
 
 export {
-    IReactionData
+    IReactionEvent
 };

@@ -213,7 +213,7 @@ export default class Message extends Structure<IMessageData> {
      * @type {boolean}
      * @readonly
      */
-    get isThreadParent() {
+    get isThreadParent(): boolean {
         return this.isThread && (this.sentTimestamp === this.threadTimestamp);
     }
 
@@ -223,7 +223,7 @@ export default class Message extends Structure<IMessageData> {
      * does not exist.
      * @return {boolean}
      */
-    get isChat() {
+    get isChat(): boolean {
         return this.subtype == null;
     }
 
@@ -232,7 +232,7 @@ export default class Message extends Structure<IMessageData> {
      * @type {User}
      * @return {User}
      */
-    get user() {
+    get user(): User {
         return this._user;
     }
 
@@ -240,7 +240,7 @@ export default class Message extends Structure<IMessageData> {
      * Same as Message.user
      * @return {User}
      */
-    get author() {
+    get author(): User {
         return this.user;
     }
 
@@ -249,7 +249,7 @@ export default class Message extends Structure<IMessageData> {
      * this message.
      * @param {User} sender
      */
-    set user(sender) {
+    set user(sender: User) {
         if (!(sender instanceof User)) {
             throw new TypeError('Expected a User to be set as the message sender');
         }
@@ -261,7 +261,7 @@ export default class Message extends Structure<IMessageData> {
      * Same as Message.user's setter
      * @param {User} author
      */
-    set author(author) {
+    set author(author: User) {
         this.user = author;
     }
 
@@ -272,7 +272,7 @@ export default class Message extends Structure<IMessageData> {
      * @type {Conversation}
      * @return {Conversation}
      */
-    get channel() {
+    get channel(): Conversation {
         return this._channel;
     }
 
@@ -280,7 +280,7 @@ export default class Message extends Structure<IMessageData> {
      * Same as Message.channel
      * @return {Conversation}
      */
-    get conversation() {
+    get conversation(): Conversation {
         return this.channel;
     }
 
@@ -289,7 +289,7 @@ export default class Message extends Structure<IMessageData> {
      * was sent in.
      * @param {Conversation} origin
      */
-    set channel(origin) {
+    set channel(origin: Conversation) {
         if (!(origin instanceof Conversation)) {
             throw new TypeError('Expected a Conversation given as the origin');
         }
@@ -302,7 +302,7 @@ export default class Message extends Structure<IMessageData> {
      * Message.channel
      * @param {Conversation} origin
      */
-    set conversation(origin) {
+    set conversation(origin: Conversation) {
         this.channel = origin;
     }
 
@@ -312,7 +312,7 @@ export default class Message extends Structure<IMessageData> {
      * @param {object} [args={}] - Additional args.
      * @return {Promise}
      */
-    send(args: IClientWebApiChatArgs = {}) {
+    send(args: IClientWebApiChatArgs = {}): Promise<any> {
         return this.client.chat(this.channel, this.text, Object.assign({ attachments: this.attachments }, args));
     }
 

@@ -1,6 +1,7 @@
 import Client from '../client/Client';
 import EventHandler from './handler';
 import Message from '../structures/message/Message';
+import IReactionEvent from "../models/event/messages/IReactionEvent";
 
 export default class MessageEventHandler extends EventHandler {
     constructor(client: Client, options = {}) {
@@ -35,6 +36,8 @@ export default class MessageEventHandler extends EventHandler {
 
                 //TODO: switch on subtype for special handling
             } else {
+                message.conversation.cacheMessage(message);
+
                 /**
                  * Emitted when a user sends a chat message.
                  * These are messages without subtypes.
@@ -52,7 +55,7 @@ export default class MessageEventHandler extends EventHandler {
          * @event Client#reactionAdded
          * @param {object} data - Event data
          * @param {User} data.reactingUser - The user reacting
-         * @param {User} data.reactingTo - The user they are reacting to
+         * @param {User} data.itemUser - The user they are reacting to
          * @param {string} data.reaction - The emoji they reacted with
          */
         this.setListeners(({ user: reactingUser, item_user: itemUser, reaction, item: reactingItem }) => {
@@ -64,9 +67,11 @@ export default class MessageEventHandler extends EventHandler {
                 return;
             }
 
-            reactingItem = new Message(this.client, reactingItem);
+            const item = new Message(this.client, reactingItem);
 
-            this.client.emit('reactionAdded', { reactingUser, itemUser, reaction, reactingItem });
+            const reactionData: IReactionEvent = { reactingUser, itemUser, reaction, item };
+
+            this.client.emit('reactionAdded', reactionData);
         }, 'reaction_added');
 
         /**
@@ -74,14 +79,23 @@ export default class MessageEventHandler extends EventHandler {
          * @event Client#reactionRemoved
          * @param {object} data - Event data
          * @param {User} data.reactingUser - The user reacting
-         * @param {User} data.reactingTo - The user they are reacting to
+         * @param {User} data.itemUser - The user they are reacting to
          * @param {string} data.reaction - The emoji they reacted with
          */
-        this.setListeners(({ user: reactingUser, item_user: reactingTo, reaction }) => {
+        this.setListeners(({ user: reactingUser, item_user: itemUser, reaction, item: reactingItem }) => {
             reactingUser = this.client.users.get(reactingUser);
-            reactingTo = this.client.users.get(reactingTo);
+            itemUser = this.client.users.get(itemUser);
 
-            this.client.emit('reactionRemoved', { reactingUser, reactingTo, reaction });
+            // only support message reactions for now
+            if (reactingItem.type !== 'message') {
+                return;
+            }
+
+            const item = new Message(this.client, reactingItem);
+
+            const reactionData: IReactionEvent = { reactingUser, itemUser, reaction, item };
+
+            this.client.emit('reactionRemoved', reactionData);
         }, 'reaction_removed');
     }
 }
