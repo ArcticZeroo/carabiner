@@ -20,6 +20,8 @@ import ConversationEventHandler from '../events/conversations';
 import UserEventHandler from '../events/users';
 import TeamEventHandler from '../events/team';
 import MessageEventHandler from '../events/messages';
+import PromiseUtil from "../util/PromiseUtil";
+import apiConfig from '../../config/api';
 
 export interface IClientOptions {
     rtm?: boolean;
@@ -227,8 +229,8 @@ export default class Client extends EventEmitter {
     private _extendRtmEvents() {
         const emitter = this.api.rtm.events;
 
-        const forward = (event: any) => {
-            emitter.on(event, (...data) => {
+        const forward = (event: string, source: EventEmitter = emitter) => {
+            source.on(event, (...data) => {
                 this.emit(event, ...data);
             });
         };
@@ -257,6 +259,14 @@ export default class Client extends EventEmitter {
             // begin listening because we're
             // not setting the option to false...
             new EventHandler(this);
+        }
+
+        if (this.options.handleGoodbye) {
+            emitter.on('goodbye', () => {
+                PromiseUtil.pause(apiConfig.rtm.goodbyeWaitTime)
+                    .then(() => this.api.rtm.connect())
+                    .catch(e => this.emit('error', e));
+            });
         }
     }
 
