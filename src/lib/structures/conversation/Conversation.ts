@@ -31,6 +31,7 @@ export interface IConversationData {
     purpose?: IConversationDescriptorData;
     topic?: IConversationDescriptorData;
     unread_count_display?: any;
+    user?: string;
 }
 
 export default class Conversation extends Structure<IConversationData> {
@@ -57,6 +58,9 @@ export default class Conversation extends Structure<IConversationData> {
     isPrivate: boolean;
     isDeleted: boolean;
     isGeneral: boolean;
+
+    // Only if IM!
+    user: User;
 
     /**
      * This class represents a channel in slack where users can post messages, files, etc.
@@ -203,6 +207,12 @@ export default class Conversation extends Structure<IConversationData> {
          * @type {boolean}
          */
         this.isDeleted = false;
+
+        if (data.user) {
+            this.user = this.client.users.get(data.user);
+
+            this.members.set(data.user, this.user);
+        }
     }
 
     /**
