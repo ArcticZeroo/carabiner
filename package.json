@@ -23,7 +23,7 @@
     "build-docs": "./node_modules/.bin/jsdoc -c ./jsdoc.json -R README.md -r ./lib",
     "test": "mocha src/test/**/*.test.js",
     "ts-clean": "del /S \"lib\\*.js*\"",
-    "build-release": "tsc --outDir dist --declaration"
+    "build": "tsc --outDir dist --declaration"
   },
   "devDependencies": {
     "@arcticzeroo/eslint-config": "^1.0.4",
