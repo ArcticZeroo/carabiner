@@ -376,6 +376,18 @@ export default class Message extends Structure<IMessageData> {
     }
 
     /**
+     * React to a message, then reply to it in a thread.
+     * @param {string} emoji - Emoji to react with.
+     * @param {string} text - Text to reply with.
+     * @param {boolean} [mention] - Whether or not to mention.
+     * @param {object} [args] - Additional args to send.
+     * @returns {Promise.<object>} - The response to the .threadReply call.
+     */
+    reactThreadReply(emoji: string, text: string, mention?: boolean, args?: IClientWebApiChatArgs) {
+        return this.react(emoji).then(() => this.threadReply(text, mention, args));
+    }
+
+    /**
      * Edits the message.
      * @param newText {string} - The new text in the message.
      * @param args {object} - Any additional args you want to pass, like an attachment.
