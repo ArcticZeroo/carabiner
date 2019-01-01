@@ -29,6 +29,7 @@ export interface IClientOptions {
     useRtmStart?: boolean;
     getUserPresence?: boolean;
     getDndStatus?: boolean;
+    getConversationMembers?: boolean;
     handleMigration?: boolean;
     handleGoodbye?: boolean;
     subscribeToUserPresence?: boolean;
@@ -58,6 +59,7 @@ export default class Client extends EventEmitter {
      * @param {boolean} [options.handleMigration=true] - Whether the client should automatically take care of all migration related issues, e.g. the rtm failing to connect during migration and the migration event + disconnection
      * @param {boolean} [options.handleGoodbye=true] - Whether the client should automatically restart RTM when 'goodbye' is emitted (events may be missed between reconnects)
      * @param {boolean} [options.subscribeToUserPresence=true] - Whether the client should subscribe to user presence of all users.
+     * @param {boolean} [options.getConversationMembers=false} - Whether to retrieve conversation members in init. This can significantly slow down startup in larger slack teams for instance, it takes about 30 seconds to load for a team with about 100 users and 200 total channels)
      */
     constructor(token: string, options: IClientOptions = {}) {
         super();
@@ -72,6 +74,7 @@ export default class Client extends EventEmitter {
             handleGoodbye = true,
             subscribeToUserPresence = true,
             cacheMessages = true,
+            getConversationMembers = false,
             // Magic numbers that seem good to me
             messageCacheLimitPerConversation = 1000,
             messageCacheLimitTotal = 10000
@@ -83,7 +86,7 @@ export default class Client extends EventEmitter {
          * @type {object}
          */
         this.options = Object.freeze({
-            rtm, separateGroupAndMpim, useRtmStart, getUserPresence,
+            rtm, separateGroupAndMpim, useRtmStart, getUserPresence, getConversationMembers,
             getDndStatus, handleMigration, handleGoodbye, subscribeToUserPresence,
             cacheMessages, messageCacheLimitPerConversation, messageCacheLimitTotal
         });
@@ -158,7 +161,9 @@ export default class Client extends EventEmitter {
         for (const data of conversations) {
             const conversation = new Conversation(this, data);
 
-            await conversation.retrieveMembers();
+            if (this.options.getConversationMembers) {
+                await conversation.retrieveMembers();
+            }
 
             this.conversations.set(conversation.id, conversation);
         }
@@ -300,7 +305,6 @@ export default class Client extends EventEmitter {
         }
 
         let url;
-
         try {
             let self, team, users, channels, groups, mpims, ims;
 

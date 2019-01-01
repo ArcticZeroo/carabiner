@@ -29,14 +29,19 @@ export default class MessageEventHandler extends EventHandler {
             const message = new Message(this.client, data);
 
             this.client.emit('message', message);
-            this.client.emit(`message.type.${message.channel.type}`, message);
+
+            if (message.conversation) {
+                this.client.emit(`message.type.${message.conversation.type}`, message);
+            }
 
             if (message.subtype) {
                 this.client.emit(`message.subtype.${message.subtype}`, message);
 
                 //TODO: switch on subtype for special handling
             } else {
-                message.conversation.cacheMessage(message);
+                if (message.conversation) {
+                    message.conversation.cacheMessage(message);
+                }
 
                 /**
                  * Emitted when a user sends a chat message.
