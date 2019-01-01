@@ -461,7 +461,10 @@ export default class Message extends Structure<IMessageData> {
         });
     }
 
-    isSameAs(other: Message, textMustMatch: boolean = false): boolean {
-        return other.conversation.id === this.conversation.id && other.sentTimestamp === this.sentTimestamp && (!textMustMatch || other.text === this.text);
+    isSameAs(other: any, textMustMatch: boolean = false): boolean {
+        return (other instanceof Message)
+            && (other.conversation.id === this.conversation.id)
+            && (other.sentTimestamp === this.sentTimestamp)
+            && (!textMustMatch || other.text === this.text);
     }
 }

@@ -453,6 +453,99 @@ describe('Carabiner', function () {
                     expect(event.item.isSameAs(returnedMessage)).to.be.true;
                 }
             });
+
+            it('should be able to send message replies from emitted messages', async function() {
+                this.timeout(10000);
+
+                expect(testClient.api.rtm.isConnected, 'RTM is not connected').to.be.true;
+
+                // We should have already found that general is non-null
+                const conversation = testClient.conversations.find('name', 'general');
+
+                expect(conversation).to.be.ok;
+
+                const emittedMessagePromise = AsyncHelpers.resolveWhenEmitterEmits({
+                    emitter: testClient,
+                    event: 'message'
+                });
+
+                const text = `${mockData.text.chat} (reply)`;
+
+                let returnedMessage: Message;
+                try {
+                    returnedMessage = await conversation.send(text);
+                } catch (e) {
+                    throw e;
+                }
+                // @ts-ignore
+                const [message]: [Message] = await emittedMessagePromise;
+
+                expect(message.isSameAs(returnedMessage, true)).to.be.true;
+
+                const emittedReplyPromise = AsyncHelpers.resolveWhenEmitterEmits({
+                    emitter: testClient,
+                    event: 'message'
+                });
+
+                try {
+                    await message.reply(mockData.text.reply);
+                } catch (e) {
+                    throw e;
+                }
+
+                // @ts-ignore
+                const [replyMessage]: [Message] = await emittedReplyPromise;
+
+                expect(replyMessage.text.endsWith(mockData.text.reply)).to.be.true;
+                expect(replyMessage.text.startsWith(message.user.mention)).to.be.true;
+            });
+
+            it('should be able to send thread replies from emitted messages', async function() {
+                this.timeout(10000);
+
+                expect(testClient.api.rtm.isConnected, 'RTM is not connected').to.be.true;
+
+                // We should have already found that general is non-null
+                const conversation = testClient.conversations.find('name', 'general');
+
+                expect(conversation).to.be.ok;
+
+                const emittedMessagePromise = AsyncHelpers.resolveWhenEmitterEmits({
+                    emitter: testClient,
+                    event: 'message'
+                });
+
+                const text = `${mockData.text.chat} (thread)`;
+
+                let returnedMessage: Message;
+                try {
+                    returnedMessage = await conversation.send(text);
+                } catch (e) {
+                    throw e;
+                }
+                // @ts-ignore
+                const [message]: [Message] = await emittedMessagePromise;
+
+                expect(message.isSameAs(returnedMessage, true)).to.be.true;
+
+                const emittedReplyPromise = AsyncHelpers.resolveWhenEmitterEmits({
+                    emitter: testClient,
+                    event: 'message'
+                });
+
+                try {
+                    await message.threadReply(mockData.text.reply, false);
+                } catch (e) {
+                    throw e;
+                }
+
+                // @ts-ignore
+                const [replyMessage]: [Message] = await emittedReplyPromise;
+
+                expect(replyMessage.isThread).to.be.true;
+                expect(replyMessage.threadTimestamp).to.equal(message.sentTimestamp);
+                expect(replyMessage.text).to.equal(mockData.text.reply);
+            });
         });
     });
 });
