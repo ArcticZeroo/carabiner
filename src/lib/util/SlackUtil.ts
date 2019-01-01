@@ -124,7 +124,7 @@ export default class SlackUtil {
      * @param {number} limit - The maximum number of results to return.
      * @return {*}
      */
-    static async getNextPage({ res, method, limit } : { res: ISlackResponseWithCursor, method: SlackWebApiMethod<ISlackWebApiPagedMethodArgs>, limit: number }) {
+    static async getNextPage({ res, method, limit, args } : { res: ISlackResponseWithCursor, method: SlackWebApiMethod<ISlackWebApiPagedMethodArgs>, limit: number, args?: {} }) {
         const cursor = SlackUtil.getNextCursor(res);
 
         if (!cursor) {
@@ -133,7 +133,7 @@ export default class SlackUtil {
 
         let data;
         try {
-            data = await method({ limit, cursor });
+            data = await method({ limit, cursor, ...args });
         } catch (e) {
             throw e;
         }
@@ -171,7 +171,7 @@ export default class SlackUtil {
         // should contain the cursor for the next page
         for (let i = 1; i < pageLimit; i++) {
             try {
-                res = await SlackUtil.getNextPage({ res, method, limit: singlePageLimit });
+                res = await SlackUtil.getNextPage({ res, method, limit: singlePageLimit, args });
             } catch (e) {
                 throw e;
             }

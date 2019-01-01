@@ -459,8 +459,9 @@ describe('Carabiner', function () {
 
                 expect(testClient.api.rtm.isConnected, 'RTM is not connected').to.be.true;
 
-                // We should have already found that general is non-null
-                const conversation = testClient.conversations.find('name', 'general');
+                // We should have already found that carabiner-private is non-null
+                // Using something other than general to cover multiple channel types
+                const conversation = testClient.conversations.find('name', 'carabiner-private');
 
                 expect(conversation).to.be.ok;
 
