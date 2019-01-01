@@ -1,5 +1,6 @@
 import SlackWebApiMethod from './SlackWebApiMethod';
-import ISlackDeleteMessageArgs from "./methods/chat/ISlackDeleteMessageArgs";
+import IDeleteMessageArgs from "./methods/chat/IDeleteMessageArgs";
+import IReactionsAddArgs from "./methods/reactions/IReactionsAddArgs";
 
 export default interface ISlackWebApiMethods {
 	api: {
@@ -31,7 +32,7 @@ export default interface ISlackWebApiMethods {
 	}
 	chat: {
 		command: SlackWebApiMethod;
-		delete: SlackWebApiMethod<ISlackDeleteMessageArgs>;
+		delete: SlackWebApiMethod<IDeleteMessageArgs>;
 		postEphemeral: SlackWebApiMethod;
 		postMessage: SlackWebApiMethod;
 		unfurl: SlackWebApiMethod;
@@ -120,7 +121,7 @@ export default interface ISlackWebApiMethods {
 		remove: SlackWebApiMethod;
 	}
 	reactions: {
-		add: SlackWebApiMethod;
+		add: SlackWebApiMethod<IReactionsAddArgs>;
 		get: SlackWebApiMethod;
 		list: SlackWebApiMethod;
 		remove: SlackWebApiMethod;

@@ -430,7 +430,8 @@ export default class Message extends Structure<IMessageData> {
     react(emoji: string) {
         return this.client.api.methods.reactions.add({
             channel: this.channel.id,
-            name: emoji
+            timestamp: this.sentTimestamp,
+            name: emoji,
         });
     }
 

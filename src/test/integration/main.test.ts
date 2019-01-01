@@ -426,7 +426,7 @@ describe('Carabiner', function () {
                     event: 'reactionAdded'
                 });
 
-                const text = `${mockData.text.chat} (emitter)`;
+                const text = `${mockData.text.chat} (reaction)`;
 
                 let returnedMessage: Message;
                 try {

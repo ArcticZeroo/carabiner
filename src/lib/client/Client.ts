@@ -22,7 +22,7 @@ import TeamEventHandler from '../events/team';
 import MessageEventHandler from '../events/messages';
 import PromiseUtil from "../util/PromiseUtil";
 import apiConfig from '../../config/api';
-import Message from "../structures/message/Message";
+import Message, { IMessageData } from "../structures/message/Message";
 
 export interface IClientOptions {
     rtm?: boolean;
@@ -445,7 +445,10 @@ export default class Client extends EventEmitter {
             throw e;
         }
 
-        return new Message(this, response.message);
+        const messageData: IMessageData = response.message;
+        messageData.channel = response.channel;
+
+        return new Message(this, messageData);
     }
 
     /**
