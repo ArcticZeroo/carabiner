@@ -272,7 +272,7 @@ describe('Carabiner', function () {
         before(async function initClient() {
             this.timeout(20000);
 
-            testClient = createClient({ rtm: true, useRtmStart: false });
+            testClient = createClient({ rtm: true, useRtmStart: false, getConversationMembers: true });
 
             const eventEmitterPromise = AsyncHelpers.resolveWhenEmitterEmits({
                 emitter: testClient.api.rtm,
