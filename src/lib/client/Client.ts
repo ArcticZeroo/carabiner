@@ -22,6 +22,7 @@ import TeamEventHandler from '../events/team';
 import MessageEventHandler from '../events/messages';
 import PromiseUtil from "../util/PromiseUtil";
 import apiConfig from '../../config/api';
+import Message from "../structures/message/Message";
 
 export interface IClientOptions {
     rtm?: boolean;
@@ -417,7 +418,7 @@ export default class Client extends EventEmitter {
      * @param {*} [args.invisible] - If this is truthy, the message will be sent ephemerally
      * @return {Promise}
      */
-    chat(conversation: Conversation | User | string, text: string, args: IClientWebApiChatArgs = {}) {
+    chat(conversation: Conversation | User | string, text: string, args: IClientWebApiChatArgs = {}): Promise<Message> {
         let method = 'Message';
 
         if (args.postEphemeral || args.ephemeral || args.invisible) {
@@ -432,12 +433,19 @@ export default class Client extends EventEmitter {
             args.user = args.user.id;
         }
 
-        // @ts-ignore - This does exactly what I want it to do.
-        return this.api.methods.chat[`post${method}`](Object.assign({
-            text,
-            channel: (typeof conversation === 'string') ? conversation : conversation.id,
-            as_user: true
-        }, args));
+        let response;
+        try {
+            // @ts-ignore - This does exactly what I want it to do.
+            response = await this.api.methods.chat[`post${method}`](Object.assign({
+                text,
+                channel: (typeof conversation === 'string') ? conversation : conversation.id,
+                as_user: true
+            }, args));
+        } catch (e) {
+            throw e;
+        }
+
+        return new Message(this, response.message);
     }
 
     /**

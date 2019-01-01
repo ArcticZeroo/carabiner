@@ -14,6 +14,8 @@ import User from '../../lib/structures/user/User';
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Conversation } from '../../lib/structures';
+import IReactionData from "../../../dist/lib/models/event/messages/IReactionData";
+import IReactionEvent from "../../lib/models/event/messages/IReactionEvent";
 
 chai.use(chaiAsPromised);
 
@@ -355,31 +357,104 @@ describe('Carabiner', function () {
             }
         });
 
-        it('should emit chat message events when they are sent', async function() {
-            this.timeout(10000);
+        describe('message handling', function () {
+            it('should return a message object when sending a message', async function () {
+                // We should have already found that general is non-null
+                const conversation = testClient.conversations.find('name', 'general');
 
-            expect(testClient.api.rtm.isConnected, 'RTM is not connected').to.be.true;
+                expect(conversation).to.be.ok;
 
-            // We should have already found that general is non-null
-            const conversation = testClient.conversations.find('name', 'general');
+                const text = `${mockData.text.chat} (rtype)`;
 
-            const emittedMessagePromise = AsyncHelpers.resolveWhenEmitterEmits({
-                emitter: testClient,
-                event: 'message'
+                let message: Message;
+                try {
+                    message = await conversation.send(text);
+                } catch (e) {
+                    throw e;
+                }
+
+                expect(message).to.be.an.instanceOf(Message);
+                expect(message.text).to.equal(text);
+                expect(message.conversation.equals(conversation)).to.be.true;
+                expect(message.user.equals(testClient.self), 'Sender is not self for some reason').to.be.true;
             });
 
-            try {
-                await conversation.send(mockData.text.chat);
-            } catch (e) {
-                throw e;
-            }
-            // @ts-ignore
-            const [message]: [Message] = await emittedMessagePromise;
+            it('should emit chat message events when they are sent', async function() {
+                this.timeout(10000);
 
-            expect(message).to.be.an.instanceOf(Message);
-            expect(message.conversation).to.equal(conversation);
-            expect(message.text).to.equal(mockData.text.chat);
-            expect(message.user.equals(testClient.self), 'Sender is not self for some reason').to.be.true;
+                expect(testClient.api.rtm.isConnected, 'RTM is not connected').to.be.true;
+
+                // We should have already found that general is non-null
+                const conversation = testClient.conversations.find('name', 'general');
+
+                expect(conversation).to.be.ok;
+
+                const emittedMessagePromise = AsyncHelpers.resolveWhenEmitterEmits({
+                    emitter: testClient,
+                    event: 'message'
+                });
+
+                const text = `${mockData.text.chat} (emitter)`;
+
+                let returnedMessage: Message;
+                try {
+                    returnedMessage = await conversation.send(text);
+                } catch (e) {
+                    throw e;
+                }
+                // @ts-ignore
+                const [message]: [Message] = await emittedMessagePromise;
+
+                expect(message.isSameAs(returnedMessage, true)).to.be.true;
+
+                expect(message).to.be.an.instanceOf(Message);
+                expect(message.conversation).to.equal(conversation);
+                expect(message.text).to.equal(text);
+                expect(message.user.equals(testClient.self), 'Sender is not self for some reason').to.be.true;
+            });
+
+            it('should be able to react to and receive reactions for messages', async function() {
+                this.timeout(10000);
+
+                expect(testClient.api.rtm.isConnected, 'RTM is not connected').to.be.true;
+
+                // We should have already found that general is non-null
+                const conversation = testClient.conversations.find('name', 'general');
+
+                expect(conversation).to.be.ok;
+
+                const emittedEvent = AsyncHelpers.resolveWhenEmitterEmits({
+                    emitter: testClient,
+                    event: 'reactionAdded'
+                });
+
+                const text = `${mockData.text.chat} (emitter)`;
+
+                let returnedMessage: Message;
+                try {
+                    returnedMessage = await conversation.send(text);
+                } catch (e) {
+                    throw e;
+                }
+
+                const emoji = 'penguin';
+
+                try {
+                    await returnedMessage.react(emoji);
+                } catch (e) {
+                    throw e;
+                }
+
+                // @ts-ignore
+                const [event]: [IReactionEvent] = await emittedEvent;
+
+                expect(event.reaction).to.equal(emoji);
+                expect(event.reactingUser.equals(testClient.self)).to.be.true;
+
+                if (event.item) {
+                    expect(event.item.isSameAs(returnedMessage)).to.be.true;
+                }
+            });
         });
     });
 });

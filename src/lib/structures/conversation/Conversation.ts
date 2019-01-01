@@ -263,7 +263,7 @@ export default class Conversation extends Structure<IConversationData> {
      * @param {object} [args={}] - Additional args to send
      * @return {Promise}
      */
-    async send(message: string | Message | Attachment | Attachment[], args: object = {}): Promise<any> {
+    async send(message: string | Message | Attachment | Attachment[], args: object = {}): Promise<Message> {
         if (this.isArchived) {
             return Promise.reject(new Error('conversation is archived.'));
         }
@@ -384,5 +384,13 @@ export default class Conversation extends Structure<IConversationData> {
         }
 
         this.messages.set(message.sentTimestamp, message);
+    }
+
+    equals(other: any): boolean {
+        if (!(other instanceof Conversation)) {
+            return false;
+        }
+
+        return other.id === this.id;
     }
 }

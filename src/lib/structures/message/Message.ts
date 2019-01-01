@@ -312,7 +312,7 @@ export default class Message extends Structure<IMessageData> {
      * @param {object} [args={}] - Additional args.
      * @return {Promise}
      */
-    send(args: IClientWebApiChatArgs = {}): Promise<any> {
+    send(args: IClientWebApiChatArgs = {}): Promise<Message> {
         return this.client.chat(this.channel, this.text, Object.assign({ attachments: this.attachments }, args));
     }
 
@@ -325,7 +325,7 @@ export default class Message extends Structure<IMessageData> {
      * @param {Object} args - Additional args to send. The user and ephemeral properties will be overwritten.
      * @return {Promise}
      */
-    sendEphemeral(user: User, args: IClientWebApiChatArgs = {}) {
+    sendEphemeral(user: User, args: IClientWebApiChatArgs = {}): Promise<Message> {
         // Set the recipient
         args.user = user.id;
         // Set the fact that this will be ephemeral
@@ -342,7 +342,7 @@ export default class Message extends Structure<IMessageData> {
      * @param {object} [args={}] - Additional args to send.
      * @return {Promise}
      */
-    reply(text: string, mention: boolean = true, args: IClientWebApiChatArgs = {}) {
+    reply(text: string, mention: boolean = true, args: IClientWebApiChatArgs = {}): Promise<Message> {
         return this.channel.send((mention) ? `${this.user.mention} ${text}` : text, args);
     }
 
@@ -353,7 +353,7 @@ export default class Message extends Structure<IMessageData> {
      * @param {object} [args={}] - Additional args to send.
      * @returns {Promise}
      */
-    threadReply(text: string, mention: boolean = true, args: IClientWebApiChatArgs = {}) {
+    threadReply(text: string, mention: boolean = true, args: IClientWebApiChatArgs = {}): Promise<Message> {
         return this.thread(
             new MessageBuilder(this.client)
                 .setText(mention ? `${this.author.mention} ${text}` : text)
@@ -440,7 +440,7 @@ export default class Message extends Structure<IMessageData> {
      * @param {Object} args - Arguments to use when sending this threaded reply
      * @return {Promise}
      */
-    thread(reply: Message, args = {}) {
+    thread(reply: Message, args = {}): Promise<Message> {
         // slack docs say to use the timestamp of the original parent if possible,
         // which should be the thread ts (and fall back to the sent timestamp if this is not available)
         const threadIdentifier = this.threadTimestamp || this.sentTimestamp;
@@ -460,7 +460,7 @@ export default class Message extends Structure<IMessageData> {
         });
     }
 
-    isSameAs(other: Message): boolean {
-        return other.conversation.id === this.conversation.id && this.sentTimestamp === other.sentTimestamp;
+    isSameAs(other: Message, textMustMatch: boolean = false): boolean {
+        return other.conversation.id === this.conversation.id && other.sentTimestamp === this.sentTimestamp && (!textMustMatch || other.text === this.text);
     }
 }
