@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars,no-console */
-import { rejects } from 'assert';
 import methods from '../../config/methods';
 import SlackWebAPI from '../../lib/api/SlackWebAPI';
 import SlackAuthenticationException from '../../lib/exception/SlackAuthenticationException';
@@ -14,7 +13,6 @@ import User from '../../lib/structures/user/User';
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { Conversation } from '../../lib/structures';
-import IReactionData from "../../../dist/lib/models/event/messages/IReactionData";
 import IReactionEvent from "../../lib/models/event/messages/IReactionEvent";
 
 chai.use(chaiAsPromised);

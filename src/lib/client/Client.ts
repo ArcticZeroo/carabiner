@@ -418,7 +418,7 @@ export default class Client extends EventEmitter {
      * @param {*} [args.invisible] - If this is truthy, the message will be sent ephemerally
      * @return {Promise}
      */
-    chat(conversation: Conversation | User | string, text: string, args: IClientWebApiChatArgs = {}): Promise<Message> {
+    async chat(conversation: Conversation | User | string, text: string, args: IClientWebApiChatArgs = {}): Promise<Message> {
         let method = 'Message';
 
         if (args.postEphemeral || args.ephemeral || args.invisible) {

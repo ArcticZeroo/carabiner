@@ -2,6 +2,7 @@ import Client from '../../client/Client';
 import SlackUtil from '../../util/SlackUtil';
 import DoNotDisturb from './DoNotDisturb';
 import Structure from '../Structure';
+import Message from "../message/Message";
 
 export interface IUserData {
 
@@ -90,7 +91,7 @@ export default class User extends Structure<IUserData> {
      * @param {object} [args={}] - Additional args to send.
      * @return {Promise}
      */
-    send(text: string, args: any = {}): Promise<void> {
+    send(text: string, args: any = {}): Promise<Message> {
         return this.client.chat(this, text, args);
     }
 
