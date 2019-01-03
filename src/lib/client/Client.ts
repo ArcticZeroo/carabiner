@@ -1,5 +1,6 @@
 import EventEmitter from 'events';
 import Collection from '@arcticzeroo/collection';
+import Duration from '@arcticzeroo/duration';
 
 import SlackWebAPI from '../api/SlackWebAPI';
 import SlackAuthenticationException from '../exception/SlackAuthenticationException';
@@ -37,6 +38,8 @@ export interface IClientOptions {
     cacheMessages?: boolean;
     messageCacheLimitPerConversation?: number;
     messageCacheLimitTotal?: number;
+    restartRtmInactivityDuration?: Duration | number;
+    restartRtmInactivityCheckDuration?: Duration | number;
 }
 
 export default class Client extends EventEmitter {
@@ -47,6 +50,7 @@ export default class Client extends EventEmitter {
     public readonly members: Collection<string, User>;
     public readonly team: Team;
     public self: User;
+    private _lastRtmEvent?: number;
 
     /**
      * Create a single-team Slack Client!
@@ -78,7 +82,9 @@ export default class Client extends EventEmitter {
             getConversationMembers = false,
             // Magic numbers that seem good to me
             messageCacheLimitPerConversation = 1000,
-            messageCacheLimitTotal = 10000
+            messageCacheLimitTotal = 10000,
+            restartRtmInactivityDuration,
+            restartRtmInactivityCheckDuration
         } = options;
 
         /**
@@ -89,7 +95,8 @@ export default class Client extends EventEmitter {
         this.options = Object.freeze({
             rtm, separateGroupAndMpim, useRtmStart, getUserPresence, getConversationMembers,
             getDndStatus, handleMigration, handleGoodbye, subscribeToUserPresence,
-            cacheMessages, messageCacheLimitPerConversation, messageCacheLimitTotal
+            cacheMessages, messageCacheLimitPerConversation, messageCacheLimitTotal,
+            restartRtmInactivityDuration, restartRtmInactivityCheckDuration
         });
 
         /**
@@ -226,6 +233,35 @@ export default class Client extends EventEmitter {
         this.team.setup(team);
     }
 
+    private _setupRtmInactivityRestart() {
+        const passedInactivityValue = this.options.restartRtmInactivityDuration;
+
+        let inactivityDuration: Duration;
+        if (typeof passedInactivityValue === 'number') {
+            inactivityDuration = new Duration({ milliseconds: passedInactivityValue });
+        }
+
+        // If a check duration was not passed, make it double the inactivity period
+        let passedCheckInterval = this.options.restartRtmInactivityCheckDuration
+            || inactivityDuration.add({ milliseconds: inactivityDuration.inMilliseconds });
+
+        if (typeof passedCheckInterval === 'number') {
+            passedCheckInterval = new Duration({ milliseconds: passedCheckInterval });
+        }
+
+        setInterval(() => {
+            if (Date.now() - this._lastRtmEvent >= inactivityDuration.inMilliseconds) {
+                this.emit('rtmInactivityRestart');
+
+                this.api.rtm.connect()
+                    .then(() => this.emit('rtmInactivityRestartComplete'))
+                    .catch(e => this.emit('error', e));
+            }
+        }, passedCheckInterval.inMilliseconds);
+
+        this.api.rtm.on('event', () => this._lastRtmEvent = Date.now());
+    }
+
     /**
      * Once RTM has started, listen to all
      * of slack's emitted events and extend them
@@ -273,6 +309,10 @@ export default class Client extends EventEmitter {
                     .then(() => this.api.rtm.connect())
                     .catch(e => this.emit('error', e));
             });
+        }
+
+        if (this.options.restartRtmInactivityDuration) {
+            this._setupRtmInactivityRestart();
         }
     }
 

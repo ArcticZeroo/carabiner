@@ -5,6 +5,7 @@
   "version": "0.6.0",
   "dependencies": {
     "@arcticzeroo/collection": "^1.0.2",
+    "@arcticzeroo/duration": "^1.0.0",
     "bluebird": "^3.5.1",
     "chai": "^4.1.2",
     "deep-equal": "^1.0.1",
