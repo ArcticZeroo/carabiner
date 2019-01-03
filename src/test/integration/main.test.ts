@@ -403,11 +403,11 @@ describe('Carabiner', function () {
                 // @ts-ignore
                 const [message]: [Message] = await emittedMessagePromise;
 
-                expect(message.isSameAs(returnedMessage, true)).to.be.true;
+                expect(message.isSameAs(returnedMessage, true), 'messages are not the same').to.be.true;
 
-                expect(message).to.be.an.instanceOf(Message);
-                expect(message.conversation).to.equal(conversation);
-                expect(message.text).to.equal(text);
+                expect(message, 'emitted data is not a Message').to.be.an.instanceOf(Message);
+                expect(message.conversation.equals(conversation), 'conversations do not match between returned and emitted messages').to.be.true;
+                expect(message.text, 'message text does not match expected text').to.equal(text);
                 expect(message.user.equals(testClient.self), 'Sender is not self for some reason').to.be.true;
             });
 
