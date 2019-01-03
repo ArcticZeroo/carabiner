@@ -248,8 +248,15 @@ export default class ConversationEventHandler extends EventHandler {
             });
     }
 
-    onArchive({ channel: id } : { channel: string }) {
+    onArchive(data: { channel: string | Conversation }) {
+        const id = ConversationEventHandler.getConversationId(data);
+
         const conversation = this.client.conversations.get(id);
+
+        if (!conversation) {
+            // Apparently this can happen. Not really sure how.
+            return;
+        }
 
         conversation.isArchived = true;
 
