@@ -239,6 +239,8 @@ export default class Client extends EventEmitter {
         let inactivityDuration: Duration;
         if (typeof passedInactivityValue === 'number') {
             inactivityDuration = new Duration({ milliseconds: passedInactivityValue });
+        } else {
+            inactivityDuration = passedInactivityValue;
         }
 
         // If a check duration was not passed, make it double the inactivity period
